@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Neural-Vault.md",
+                "file": "01_Dev/03_Database/DBMS/Database Languages.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Neural-Vault"
+              "title": "Database Languages"
             }
           }
         ],
@@ -199,8 +199,13 @@
   },
   "active": "746c55ae9cd0a604",
   "lastOpenFiles": [
+    "01_Dev/03_Database/DBMS/Architecture of DB.md",
+    "01_Dev/03_Database/DBMS/Data Models.md",
+    "01_Dev/03_Database/DBMS/Database Languages.md",
     "02_Devops/YAML/01_yaml aint a markup language.md",
     "Neural-Vault.md",
+    "01_Dev/03_Database/DBMS",
+    "01_Dev/03_Database/Untitled.md",
     "_templates/Obsidian-Daily-Themes-main/README.md",
     "_templates/Untitled.md",
     "_templates/Obsidian-Daily-Themes-main/example_full.png",
@@ -233,12 +238,7 @@
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/04_Delta Rule , LMS.md",
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/03_Gradient Decent.md",
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/02_Information Theory.md",
-    "03_Ai_ml/01_Machinelearning/03_Learningtheory/01_Inductive Biase and infrence.md",
-    "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/05_Bayes Optimal Classifier.md",
-    "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/04_SVM.md",
-    "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/03_RBFN.md",
     "Untitled.base",
-    "home/mukul/Main/Notes/LICENSE",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113174851.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251111133040.png",
