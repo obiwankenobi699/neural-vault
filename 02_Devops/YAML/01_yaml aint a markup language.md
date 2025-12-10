@@ -574,15 +574,3 @@ config:
 
 ---
 
-If you want, I can give you:
-
-- **YAML Cheatsheet**
-    
-- **All YAML data types** (float, bool, null, timestamp, map merge, anchors)
-    
-- **Kubernetes YAML examples**
-    
-- **GitHub Actions YAML examples**
-    
-
-Just tell me!

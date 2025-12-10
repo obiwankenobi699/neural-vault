@@ -89,9 +89,11 @@ $$
 ### **Step 2: Compute Error at Output Layer**
 
 Compare the predicted output with the actual target using a loss function:  
+$$
 [  
 E = \frac{1}{2} (t - y)^2  
 ]
+$$
 
 This measures how far the network’s output is from the true label.
 

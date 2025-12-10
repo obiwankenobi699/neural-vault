@@ -7,6 +7,7 @@ created: 2025-11-27
 updated:
   "{ date }":
 ---
+Regression Formula
 
 ---
 
