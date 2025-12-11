@@ -182,4 +182,139 @@ The internal schema describes the **physical storage** of the database. It defin
 +--------------------+----------------------+--------------------------------------------+
 ```
 
+# **Internal Architecture of DBMS**
+
+A DBMS is divided into major components that handle query processing, storage, metadata, and transaction management. These components work together to provide efficient data retrieval, security, consistency, and recovery.
+
 ---
+
+# **ASCII Architecture Diagram**
+
+```
+                    +--------------------------+
+                    |        Query Processor   |
+                    |--------------------------|
+                    | - DDL Interpreter        |
+User Queries  --->  | - DML Compiler           |
+(SQL)               | - Query Optimizer        |
+                    +-----------+--------------+
+                                |
+                                v
+                    +--------------------------+
+                    |      Execution Engine    |
+                    +-----------+--------------+
+                                |
+                                v
+                    +--------------------------+
+                    |      Storage Manager     |
+                    |--------------------------|
+                    | - File Manager           |
+                    | - Buffer Manager         |
+                    | - Authorization Manager  |
+                    | - Index/Record Manager   |
+                    +-----------+--------------+
+                                |
+                                v
+                    +--------------------------+
+                    |   Data Files + Indices   |
+                    +--------------------------+
+
+                    +--------------------------+
+                    |  Transaction Manager     |
+                    |--------------------------|
+                    | - Concurrency Control    |
+                    | - Recovery Manager       |
+                    +--------------------------+
+```
+
+---
+
+# **1. Query Processor**
+
+**Topic:** Query Processor  
+**Paragraph:**  
+The query processor interprets and executes SQL queries. It converts high-level SQL commands into low-level instructions the DBMS can execute. It ensures optimized and efficient execution by parsing, validating, translating, and optimizing the query.
+
+### **Components of Query Processor:**
+
+1. **DDL Interpreter**  
+    Interprets DDL commands (CREATE, ALTER, DROP) and stores schema definitions in the data dictionary.
+    
+2. **DML Compiler**  
+    Translates DML commands (SELECT, INSERT, UPDATE, DELETE) into low-level evaluation plans.
+    
+3. **Query Optimizer**  
+    Selects the most efficient execution plan using algorithms, cost-based optimization, and index usage.
+    
+4. **Query Executor**  
+    Executes the physical plan using operators like joins, scans, and sorting.
+    
+
+---
+
+# **2. Storage Manager**
+
+**Topic:** Storage Manager  
+**Paragraph:**  
+The storage manager provides the interface between the low-level data stored on disk and the higher-level logical structures used by the DBMS. It manages how data is physically stored, accessed, indexed, and cached. It ensures efficient storage, retrieval, and memory management.
+
+### **Components of Storage Manager:**
+
+1. **File Manager**  
+    Manages space allocation on disk, file organization, and physical record placement.
+    
+2. **Buffer Manager**  
+    Handles data transfer between disk and main memory using buffers (pages). Uses replacement algorithms like LRU.
+    
+3. **Index Manager**  
+    Maintains index structures (B+ trees, hashing) for fast data access.
+    
+4. **Record Manager**  
+    Manages how individual records are stored, retrieved, or updated.
+    
+5. **Authorization & Integrity Manager**  
+    Ensures user permissions, constraints, and integrity rules.
+    
+
+---
+
+# **3. Transaction Manager**
+
+**Topic:** Transaction Manager  
+**Paragraph:**  
+The transaction manager ensures the ACID (Atomicity, Consistency, Isolation, Durability) properties of transactions. It coordinates concurrent users and ensures the database remains consistent even if failures occur.
+
+### **Components:**
+
+1. **Concurrency Control Manager**  
+    Uses locking, timestamp ordering, and isolation levels to prevent conflicts between concurrent transactions.
+    
+2. **Recovery Manager**  
+    Uses logs, checkpoints, and undo/redo operations to restore the database after system crashes.
+    
+
+---
+
+# **4. Data Dictionary (Catalog Manager)**
+
+**Topic:** Data Dictionary  
+**Paragraph:**  
+The data dictionary contains metadata about database objects such as tables, columns, constraints, users, indexes, and views. DBMS uses it to validate queries, enforce constraints, and manage access control. It is automatically updated by the DBMS.
+
+---
+
+# **Summary Table**
+
+```
++----------------------+-----------------------------------------------+
+| Component            | Purpose                                       |
++----------------------+-----------------------------------------------+
+| Query Processor      | Parses, optimizes, and executes SQL queries   |
+| Storage Manager      | Manages physical storage, indexes, and buffers|
+| Transaction Manager  | Ensures ACID properties and recovery          |
+| Data Dictionary      | Stores metadata/schemas                       |
++----------------------+-----------------------------------------------+
+```
+
+---
+

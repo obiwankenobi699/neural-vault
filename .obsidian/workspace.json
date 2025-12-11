@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Dev/03_Database/DBMS/Database Languages.md",
+                "file": "01_Dev/03_Database/DBMS/Relational Database Management System and SQL.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Database Languages"
+              "title": "Relational Database Management System and SQL"
             }
           }
         ],
@@ -79,7 +79,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 302.5
   },
   "right": {
     "id": "b365440ec7ba5e95",
@@ -200,6 +200,8 @@
   "active": "746c55ae9cd0a604",
   "lastOpenFiles": [
     "01_Dev/03_Database/DBMS/Architecture of DB.md",
+    "01_Dev/03_Database/DBMS/Relational Database Management System and SQL.md",
+    "01_Dev/03_Database/DBMS/Constrains.md",
     "01_Dev/03_Database/DBMS/Data Models.md",
     "01_Dev/03_Database/DBMS/Database Languages.md",
     "02_Devops/YAML/01_yaml aint a markup language.md",
@@ -236,8 +238,6 @@
     "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/02_KNN , LWR ,KDE.md",
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/05_Backpropogation.md",
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/04_Delta Rule , LMS.md",
-    "03_Ai_ml/01_Machinelearning/03_Learningtheory/03_Gradient Decent.md",
-    "03_Ai_ml/01_Machinelearning/03_Learningtheory/02_Information Theory.md",
     "Untitled.base",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113174851.png",
