@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "4d0429ddfeb8cdc9",
+        "id": "40e8c68fbc04209a",
         "type": "tabs",
         "children": [
           {
-            "id": "e235c2129c6ff8dd",
+            "id": "9e8cc5fd6a40afaf",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "03_Ai_ml/03_Datanalytics/01_Data Collection/01_Data Streams.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "01_Data Streams"
             }
           }
         ],
@@ -177,8 +181,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 265.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -193,7 +196,7 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "e235c2129c6ff8dd",
+  "active": "9e8cc5fd6a40afaf",
   "lastOpenFiles": [
     "06_Maths/Soon...md",
     "05_OS & Systems/Soon....md",
