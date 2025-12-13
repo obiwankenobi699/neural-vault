@@ -11,12 +11,14 @@
             "id": "9e8cc5fd6a40afaf",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "02_Devops/Internet/OSI.gif"
+                "file": "02_Devops/Internet/02_ISO Model.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "OSI"
+              "icon": "lucide-file",
+              "title": "02_ISO Model"
             }
           }
         ],
@@ -194,11 +196,11 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "9f84e04eaeb9662e",
+  "active": "9e8cc5fd6a40afaf",
   "lastOpenFiles": [
+    "02_Devops/Internet/OSI.gif",
     "02_Devops/Internet/02_ISO Model.md",
     "02_Devops/Internet/03_Detailed layers and workings of internet.md",
-    "02_Devops/Internet/OSI.gif",
     "02_Devops/Internet/01_WWW.md",
     "02_Devops/01_git/01_Git and GitHub.md",
     "02_Devops/02_github actions/01_History.md",
