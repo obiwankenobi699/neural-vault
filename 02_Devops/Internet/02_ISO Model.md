@@ -1,4 +1,14 @@
-# Comprehensive Networking Guide for DevOps Engineers
+---
+title: ISO Model
+tags:
+  - DevOps
+  - Internet
+created:
+  "{ date }":
+updated:
+  "{ date }":
+---
+
 
 ## Table of Contents
 
@@ -808,8 +818,8 @@ ping 8.8.8.8
 
 **Devices:**
 
-- **Switch** (primary device)
-- **Bridge**
+- **Switch** (primary device) Multi Port Bridge 
+- **Bridge**:- A Repeator 
 - **NIC (Network Interface Card)**
 
 **MAC Address:**

@@ -1,3 +1,14 @@
+---
+title: www
+tags:
+  - DevOps
+  - Internet
+created:
+  "{ date }":
+updated:
+  "{ date }":
+---
+
 
 ---
 
@@ -78,7 +89,14 @@ Before WWW:
 This made the internet accessible to **everyone**, not just scientists.
 
 ---
+- **Subdomain**: `www` is a traditional subdomain (short for "World Wide Web") used to identify web servers. For example, in `https://www.example.com`, `www` is a subdomain of `example.com`.
+    
+- **Not a Folder**: While URLs like `https://www.example.com/folder/page.html` have paths (`/folder/page.html`) that resemble file directories, `www` itself is not a folder—it's part of the domain structure.
+    
+- **Domain**: The main domain here is `example.com`. `www` simply points to the same website as the root domain, often configured via DNS to work alongside or redirect to `example.com`.
+    
 
+Modern websites often treat `www.example.com` and `example.com` as equivalent, but technically, `www` is a subdomain.
 #  **Simple Summary**
 
 |Technology|Year|Created By|Purpose|
@@ -89,6 +107,3 @@ This made the internet accessible to **everyone**, not just scientists.
 
 ---
 
-DHCP ,NAT , PORT ,IP Types , ISP  ,Sonet and Frame relay , MAN LAN WAN ,Modem and routers ,TOPOLOGY ;-Bus,Ring,OSI Model 7 layer 
-application , presentation,session , transport , network , data link , physical and there internal sublayers and protocol and tcp , udp , checksum where router present in layer and logical addressing 
-what is packet with subnetmask , logical address and mac address, ipv4 vs ipv6
