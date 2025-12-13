@@ -709,7 +709,7 @@ sequenceDiagram
 **Key Responsibilities:**
 
 - Packet forwarding
-- Routing (path selection)
+- Routing (path selection:Forwarding Table)
 - Logical addressing (IP addresses)
 - Packet fragmentation and reassembly
 
