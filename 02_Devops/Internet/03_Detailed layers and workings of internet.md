@@ -478,22 +478,6 @@ The client receives the SYN-ACK and sends an ACK segment. The acknowledgment num
 
 Initial sequence numbers are random for security reasons. Predictable sequence numbers allowed connection hijacking attacks. Random ISNs prevent attackers# Networking Protocols and Concepts - Comprehensive Guide
 
-## Table of Contents
-
-1. [Network Devices](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#network-devices)
-2. [Client-Server and P2P Models](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#client-server-and-p2p-models)
-3. [Network Utilities](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#network-utilities)
-4. [Process Identification](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#process-identification)
-5. [HTTP Protocol](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#http-protocol)
-6. [Cookies and Session Management](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#cookies-and-session-management)
-7. [SSH and Shell Access](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#ssh-and-shell-access)
-8. [Email Protocols](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#email-protocols)
-9. [DNS System](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#dns-system)
-10. [Error Detection](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#error-detection)
-11. [Timers in Networking](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#timers-in-networking)
-12. [Transport Layer Protocols](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#transport-layer-protocols)
-13. [TCP Three-Way Handshake](https://claude.ai/chat/2bb45d7a-775d-4e65-b19f-b464be367530#tcp-three-way-handshake)
-
 ---
 
 ## Network Devices
