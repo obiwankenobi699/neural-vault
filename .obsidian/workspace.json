@@ -13,10 +13,10 @@
             "state": {
               "type": "image",
               "state": {
-                "file": "02_Devops/Internet/cb913fc0b9a806f68f7fef5b4c0be919.gif"
+                "file": "02_Devops/Internet/OSI.gif"
               },
               "icon": "lucide-image",
-              "title": "cb913fc0b9a806f68f7fef5b4c0be919"
+              "title": "OSI"
             }
           }
         ],
@@ -194,14 +194,14 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "9e8cc5fd6a40afaf",
+  "active": "9f84e04eaeb9662e",
   "lastOpenFiles": [
     "02_Devops/Internet/02_ISO Model.md",
     "02_Devops/Internet/03_Detailed layers and workings of internet.md",
+    "02_Devops/Internet/OSI.gif",
     "02_Devops/Internet/01_WWW.md",
     "02_Devops/01_git/01_Git and GitHub.md",
     "02_Devops/02_github actions/01_History.md",
-    "02_Devops/Internet/cb913fc0b9a806f68f7fef5b4c0be919.gif",
     "02_Devops/Internet/Unconfirmed 144107.crdownload",
     "03_Ai_ml/03_Datanalytics/01_Data Collection/01_Data Streams.md",
     "06_Maths/Soon...md",
@@ -229,7 +229,6 @@
     "_templates/Obsidian-Daily-Themes-main/(TEMPLATE) Daily (Vanilla).md",
     "_templates/Obsidian-Daily-Themes-main/(TEMPLATE) Daily.md",
     "_templates/Obsidian-Daily-Themes-main/title.png",
-    "_templates/Obsidian-Daily-Themes/README.md",
     "_templates/Obsidian-Daily-Themes-main/LICENSE",
     "_templates/Obsidian-Daily-Themes-main/Daily Note Themes.css",
     "_templates/Obsidian-Daily-Themes-main",
