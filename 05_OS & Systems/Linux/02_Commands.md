@@ -123,7 +123,3 @@ Bash is a **specific type of shell**, widely used as default on Linux and macOS.
     
 
 ---
-
-If you want, I can **merge this with your Hyperland / Wayland / Linux stack notes**, so you have **one comprehensive Obsidian DevOps + Linux desktop note**.
-
-Do you want me to do that?
