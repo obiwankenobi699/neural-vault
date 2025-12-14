@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "533d71671937a5d3",
+        "id": "f0e2e5cd8605aff6",
         "type": "tabs",
         "children": [
           {
-            "id": "5e2e36302397534c",
+            "id": "1689ca134fddb061",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "05_OS & Systems/Linux/01_Linux Destop.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "01_Linux Destop"
             }
           }
         ],
@@ -192,14 +196,16 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "9f84e04eaeb9662e",
+  "active": "1689ca134fddb061",
   "lastOpenFiles": [
-    "05_OS & Systems/01_Core OS/ce8f8127fbec79d88a0823d4b2a4af18.gif",
+    "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
+    "05_OS & Systems/Linux/01_Linux Destop.md",
+    "05_OS & Systems/Linux",
+    "05_OS & Systems/01_Core OS/File_system.gif",
+    "05_OS & Systems/01_Core OS/03_Virtual memory.md",
+    "05_OS & Systems/01_Core OS/02_Process Scheduling and management PID.md",
     "05_OS & Systems/01_Core OS/Pasted image.png",
     "05_OS & Systems/01_Core OS/Unconfirmed 428200.crdownload",
-    "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
-    "05_OS & Systems/01_Core OS/Virtual memory.md",
-    "05_OS & Systems/01_Core OS/Process Scheduling and management PID.md",
     "05_OS & Systems/Soon....md",
     "05_OS & Systems/01_Core OS",
     "02_Devops/Internet/OSI.gif",
@@ -233,13 +239,11 @@
     "_templates/Obsidian-Daily-Themes-main/title.png",
     "_templates/Obsidian-Daily-Themes-main/LICENSE",
     "_templates/Obsidian-Daily-Themes-main/Daily Note Themes.css",
-    "_templates/Obsidian-Daily-Themes-main",
     "_templates/Obsidian-Daily-Themes/example_full.png",
     "_templates/Obsidian-Daily-Themes/title.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113174851.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251111133040.png",
-    "02_Devops/02_github actions/2025-11-24_20-44-54_grim.png",
     "03_Ai_ml/02_Deeplearning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",

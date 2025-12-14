@@ -526,3 +526,272 @@ Resume User Program
 4. **Resource Management**: Controlled access to resources
 
 ---
+Below are **clean, core-CSE interview-ready notes** on **Types of File Systems**, structured so you can directly place this inside  
+`05_OS & Systems / 09_File_Systems`.
+
+No emojis, clear categorization.
+
+---
+
+# **Types of File Systems (OS – Core CSE)**
+
+A **file system** defines how data is stored, organized, accessed, and managed on storage devices.
+
+---
+
+## **1. Disk File Systems**
+
+Used on physical storage devices like hard disks and SSDs.
+
+### **Types:**
+
+- **FAT (File Allocation Table)**
+    
+    - FAT16, FAT32
+        
+- **NTFS**
+    
+- **ext2 / ext3 / ext4**
+    
+- **XFS**
+    
+- **Btrfs**
+    
+- **HFS+ / APFS**
+    
+
+**Key Characteristics:**
+
+- Persistent storage
+    
+- Directory-based structure
+    
+- Supports permissions, metadata, and indexing
+    
+
+---
+
+## **2. Network File Systems**
+
+Allow files to be accessed over a network as if they were local.
+
+### **Types:**
+
+- **NFS (Network File System)**
+    
+- **SMB / CIFS**
+    
+- **AFS**
+    
+- **DFS**
+    
+
+**Key Characteristics:**
+
+- Client–server model
+    
+- Centralized storage
+    
+- Used in distributed systems
+    
+
+---
+
+## **3. Distributed File Systems**
+
+Files are distributed across multiple machines for scalability and fault tolerance.
+
+### **Types:**
+
+- **HDFS (Hadoop Distributed File System)**
+    
+- **Ceph**
+    
+- **GlusterFS**
+    
+- **GFS (Google File System)**
+    
+
+**Key Characteristics:**
+
+- High availability
+    
+- Replication
+    
+- Used in big data and cloud systems
+    
+
+---
+
+## **4. Virtual File Systems (VFS)**
+
+An abstraction layer that provides a common interface to different file systems.
+
+### **Examples:**
+
+- **Linux VFS**
+    
+- **procfs (/proc)**
+    
+- **sysfs (/sys)**
+    
+
+**Key Characteristics:**
+
+- Not real storage
+    
+- Kernel-level abstraction
+    
+- Allows multiple FS types to coexist
+    
+
+---
+
+## **5. Journaling File Systems**
+
+Maintain a log (journal) of changes to ensure consistency after crashes.
+
+### **Types:**
+
+- **ext3**
+    
+- **ext4**
+    
+- **NTFS**
+    
+- **XFS**
+    
+
+**Key Characteristics:**
+
+- Faster recovery
+    
+- Crash consistency
+    
+- Reduced corruption
+    
+
+---
+
+## **6. Flash File Systems**
+
+Optimized for flash memory like SSDs and embedded devices.
+
+### **Types:**
+
+- **JFFS2**
+    
+- **YAFFS**
+    
+- **F2FS**
+    
+
+**Key Characteristics:**
+
+- Wear leveling
+    
+- Low write amplification
+    
+- Used in embedded systems
+    
+
+---
+
+## **7. Read-Only File Systems**
+
+Designed for read-only access.
+
+### **Types:**
+
+- **ISO 9660**
+    
+- **SquashFS**
+    
+
+**Key Characteristics:**
+
+- No modification allowed
+    
+- Used in boot media and live CDs
+    
+
+---
+
+## **8. Memory-Based File Systems**
+
+Files are stored in RAM instead of disk.
+
+### **Types:**
+
+- **tmpfs**
+    
+- **ramfs**
+    
+
+**Key Characteristics:**
+
+- Very fast
+    
+- Volatile (data lost on reboot)
+    
+- Used for temporary storage
+    
+
+---
+
+## **9. Object-Based File Systems**
+
+Store data as objects instead of blocks.
+
+### **Examples:**
+
+- **Ceph Object Store**
+    
+- **Amazon S3 (conceptually)**
+    
+
+**Key Characteristics:**
+
+- Scalability
+    
+- Metadata-rich
+    
+- Used in cloud storage
+    
+
+---
+
+# **Interview-Oriented Classification (Very Important)**
+
+```
+File Systems
+│
+├── Disk File Systems
+├── Network File Systems
+├── Distributed File Systems
+├── Journaling File Systems
+├── Virtual File Systems
+├── Flash File Systems
+├── Memory File Systems
+├── Read-Only File Systems
+└── Object-Based File Systems
+```
+
+---
+
+# **Most Asked in Interviews**
+
+Focus especially on:
+
+- FAT vs NTFS vs ext4
+    
+- Journaling file systems
+    
+- Distributed file systems (HDFS)
+    
+- Virtual file system (VFS)
+    
+- inode-based systems (Linux)
+    
+
+---
