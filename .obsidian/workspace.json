@@ -11,12 +11,14 @@
             "id": "9e8cc5fd6a40afaf",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "02_Devops/Internet/OSI.gif"
+                "file": "05_OS & Systems/01_Core OS/Virtual memory.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "OSI"
+              "icon": "lucide-file",
+              "title": "Virtual memory"
             }
           }
         ],
@@ -196,16 +198,20 @@
   },
   "active": "9e8cc5fd6a40afaf",
   "lastOpenFiles": [
+    "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
+    "05_OS & Systems/01_Core OS/Virtual memory.md",
+    "05_OS & Systems/01_Core OS/Process Scheduling and management PID.md",
+    "05_OS & Systems/Soon....md",
+    "05_OS & Systems/01_Core OS",
+    "02_Devops/Internet/OSI.gif",
     "02_Devops/Internet/02_ISO Model.md",
     "02_Devops/Internet/03_Detailed layers and workings of internet.md",
-    "02_Devops/Internet/OSI.gif",
     "02_Devops/Internet/01_WWW.md",
     "02_Devops/01_git/01_Git and GitHub.md",
     "02_Devops/02_github actions/01_History.md",
     "02_Devops/Internet/Unconfirmed 144107.crdownload",
     "03_Ai_ml/03_Datanalytics/01_Data Collection/01_Data Streams.md",
     "06_Maths/Soon...md",
-    "05_OS & Systems/Soon....md",
     "06_Tools&setup/CLI/01_.md",
     "06_Maths",
     "05_OS & Systems",
@@ -226,14 +232,11 @@
     "_templates/Obsidian-Daily-Themes-main/README.md",
     "_templates/Untitled.md",
     "_templates/Obsidian-Daily-Themes-main/example_full.png",
-    "_templates/Obsidian-Daily-Themes-main/(TEMPLATE) Daily (Vanilla).md",
-    "_templates/Obsidian-Daily-Themes-main/(TEMPLATE) Daily.md",
     "_templates/Obsidian-Daily-Themes-main/title.png",
     "_templates/Obsidian-Daily-Themes-main/LICENSE",
     "_templates/Obsidian-Daily-Themes-main/Daily Note Themes.css",
     "_templates/Obsidian-Daily-Themes-main",
     "_templates/Obsidian-Daily-Themes-main.zip",
-    "_templates/Unconfirmed 162304.crdownload",
     "_templates/Obsidian-Daily-Themes/example_full.png",
     "_templates/Obsidian-Daily-Themes/title.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
