@@ -2,9 +2,8 @@
 title:
   "{ Title }":
 tags:
-  - theory
-  - "{ Subject }":
-  - semester_notes
+  - OS
+  - Linux
 created:
   "{ date }":
 updated:

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "05_OS & Systems/Linux/01_Linux Destop.md",
+                "file": "05_OS & Systems/Linux/02_Commands.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Linux Destop"
+              "title": "02_Commands"
             }
           }
         ],
@@ -198,8 +198,10 @@
   },
   "active": "1689ca134fddb061",
   "lastOpenFiles": [
-    "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
     "05_OS & Systems/Linux/01_Linux Destop.md",
+    "05_OS & Systems/Linux/03_Bash Script.md",
+    "05_OS & Systems/Linux/02_Commands.md",
+    "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
     "05_OS & Systems/Linux",
     "05_OS & Systems/01_Core OS/File_system.gif",
     "05_OS & Systems/01_Core OS/03_Virtual memory.md",
@@ -233,8 +235,6 @@
     "02_Devops/YAML/01_yaml aint a markup language.md",
     "Neural-Vault.md",
     "01_Dev/03_Database/DBMS",
-    "01_Dev/03_Database/Untitled.md",
-    "_templates/Obsidian-Daily-Themes-main/README.md",
     "_templates/Obsidian-Daily-Themes-main/example_full.png",
     "_templates/Obsidian-Daily-Themes-main/title.png",
     "_templates/Obsidian-Daily-Themes-main/LICENSE",
