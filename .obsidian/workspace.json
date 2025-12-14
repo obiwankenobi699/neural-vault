@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "f0e2e5cd8605aff6",
+        "id": "e122105bd6ba1787",
         "type": "tabs",
         "children": [
           {
-            "id": "1689ca134fddb061",
+            "id": "05b84cab88e4b48b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "05_OS & Systems/Linux/01_Linux Destop.md",
+                "file": "05_OS & Systems/01_Linux/02_Commands.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Linux Destop"
+              "title": "02_Commands"
             }
           }
         ],
@@ -164,7 +164,7 @@
         "currentTab": 4
       },
       {
-        "id": "d03e00a0f8788646",
+        "id": "c01acba179a4cd6b",
         "type": "tabs",
         "children": [
           {
@@ -196,16 +196,17 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "1689ca134fddb061",
+  "active": "9f84e04eaeb9662e",
   "lastOpenFiles": [
-    "05_OS & Systems/Linux/02_Commands.md",
-    "05_OS & Systems/Linux/01_Linux Destop.md",
-    "05_OS & Systems/Linux/03_Bash Script.md",
+    "05_OS & Systems/01_Linux/01_Linux Destop.md",
+    "05_OS & Systems/01_Linux/02_Commands.md",
+    "05_OS & Systems/01_Linux/Path.png",
     "05_OS & Systems/01_Core OS/File_system.gif",
+    "05_OS & Systems/01_Linux/03_Bash Script.md",
     "05_OS & Systems/01_Core OS/03_Virtual memory.md",
     "05_OS & Systems/01_Core OS/02_Process Scheduling and management PID.md",
     "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
-    "05_OS & Systems/Linux",
+    "05_OS & Systems/01_Linux",
     "05_OS & Systems/01_Core OS/Pasted image.png",
     "05_OS & Systems/01_Core OS/Unconfirmed 428200.crdownload",
     "05_OS & Systems/Soon....md",
@@ -242,7 +243,6 @@
     "_templates/Obsidian-Daily-Themes/title.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113174851.png",
-    "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251111133040.png",
     "03_Ai_ml/02_Deeplearning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",
