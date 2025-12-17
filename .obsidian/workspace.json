@@ -11,12 +11,14 @@
             "id": "ba38686953ad9ef1",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "05_OS & Systems/01_Linux/commands.jpg"
+                "file": "05_OS & Systems/01_Linux/02_Commands.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "commands"
+              "icon": "lucide-file",
+              "title": "02_Commands"
             }
           }
         ],
@@ -195,10 +197,12 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "ba38686953ad9ef1",
+  "active": "9f84e04eaeb9662e",
   "lastOpenFiles": [
-    "05_OS & Systems/01_Linux/Path.png",
+    "02_Devops/03_Docker",
+    "main.py",
     "05_OS & Systems/01_Linux/commands.jpg",
+    "05_OS & Systems/01_Linux/Path.png",
     "02_Devops/01_git/git_sheet.jpg",
     "05_OS & Systems/01_Linux/Unconfirmed 919400.crdownload",
     "05_OS & Systems/01_Core OS/boot.jpg",
@@ -234,7 +238,6 @@
     "06_Maths",
     "05_OS & Systems",
     "03_Ai_ml/03_Datanalytics/01_Data Collection/03_ Handling Large Datasets With headoop.md",
-    "06_Tools&setup/CLI",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/02_Hierarchical,K,CLIQUE,proCLUS Clustering.md",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/01_Market Based Modelling.md",
     "03_Ai_ml/03_Datanalytics/01_Data Collection/02_Sampling Data,Filtering,Distinct element in Stream.md",
@@ -242,7 +245,6 @@
     "_templates/Obsidian-Daily-Themes-main/example_full.png",
     "_templates/Obsidian-Daily-Themes-main/title.png",
     "_templates/Obsidian-Daily-Themes/example_full.png",
-    "_templates/Obsidian-Daily-Themes/title.png",
     "03_Ai_ml/02_Deeplearning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",
