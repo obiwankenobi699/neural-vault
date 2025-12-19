@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_Devops/03_Docker/01_Multi Use Server.md",
+                "file": "02_Devops/03_Docker/02_Docker Architecture.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Multi Use Server"
+              "title": "02_Docker Architecture"
             }
           }
         ],
@@ -199,9 +199,10 @@
   },
   "active": "be4773b714f7cd70",
   "lastOpenFiles": [
-    "02_Devops/03_Docker/Docker Architecture.md",
-    "02_Devops/03_Docker/Docker_Component.gif",
+    "02_Devops/03_Docker/03_Docker CLI.md",
+    "02_Devops/03_Docker/02_Docker Architecture.md",
     "02_Devops/03_Docker/01_Multi Use Server.md",
+    "02_Devops/03_Docker/Docker_Component.gif",
     "02_Devops/03_Docker/Docker_Architecture.gif",
     "02_Devops/03_Docker/07c04dbd6041c90bdffa362cdc870a2e.gif",
     "02_Devops/03_Docker/Unconfirmed 981200.crdownload",
