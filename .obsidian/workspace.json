@@ -197,8 +197,11 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "be4773b714f7cd70",
+  "active": "9f84e04eaeb9662e",
   "lastOpenFiles": [
+    "02_Devops/03_Docker/Docker_Architecture.gif",
+    "02_Devops/03_Docker/07c04dbd6041c90bdffa362cdc870a2e.gif",
+    "02_Devops/03_Docker/Unconfirmed 981200.crdownload",
     "Neural-Vault.md",
     "02_Devops/03_Docker/Multi Use Server.md",
     "02_Devops/Internet/03_Detailed layers and workings of internet.md",
@@ -238,13 +241,10 @@
     "02_Devops/Internet/Unconfirmed 144107.crdownload",
     "03_Ai_ml/03_Datanalytics/01_Data Collection/01_Data Streams.md",
     "06_Tools&setup/CLI/01_.md",
-    "06_Maths",
     "03_Ai_ml/03_Datanalytics/01_Data Collection/03_ Handling Large Datasets With headoop.md",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/02_Hierarchical,K,CLIQUE,proCLUS Clustering.md",
-    "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/01_Market Based Modelling.md",
     "_templates/Obsidian-Daily-Themes-main/example_full.png",
     "_templates/Obsidian-Daily-Themes-main/title.png",
-    "_templates/Obsidian-Daily-Themes/example_full.png",
     "03_Ai_ml/02_Deeplearning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",
