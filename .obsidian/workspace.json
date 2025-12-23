@@ -11,10 +11,14 @@
             "id": "1047c08aa844d0ab",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "05_OS & Systems/01_Linux/03_Networking.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "03_Networking"
             }
           }
         ],
@@ -195,6 +199,7 @@
   },
   "active": "1047c08aa844d0ab",
   "lastOpenFiles": [
+    "05_OS & Systems/01_Linux/commands.jpg",
     "02_Devops/04_Kubernetes/k8s.canvas",
     "02_Devops/04_Kubernetes/01_k8s.md",
     "05_OS & Systems/01_Linux/02_Commands.md",
@@ -202,7 +207,6 @@
     "02_Devops/Internet/01_WWW.md",
     "05_OS & Systems/01_Linux/03_Networking.md",
     "05_OS & Systems/01_Linux/01_Linux Destop.md",
-    "05_OS & Systems/01_Linux/commands.jpg",
     "02_Devops/04_Kubernetes/assets/k8s.gif",
     "02_Devops/04_Kubernetes/assets/k8s_Workflow.gif",
     "02_Devops/04_Kubernetes/assets/k8s_Architecture.jpg",
