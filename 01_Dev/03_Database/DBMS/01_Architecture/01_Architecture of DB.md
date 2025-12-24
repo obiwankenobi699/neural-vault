@@ -302,19 +302,3 @@ The transaction manager ensures the ACID (Atomicity, Consistency, Isolation, Dur
 The data dictionary contains metadata about database objects such as tables, columns, constraints, users, indexes, and views. DBMS uses it to validate queries, enforce constraints, and manage access control. It is automatically updated by the DBMS.
 
 ---
-
-# **Summary Table**
-
-```
-+----------------------+-----------------------------------------------+
-| Component            | Purpose                                       |
-+----------------------+-----------------------------------------------+
-| Query Processor      | Parses, optimizes, and executes SQL queries   |
-| Storage Manager      | Manages physical storage, indexes, and buffers|
-| Transaction Manager  | Ensures ACID properties and recovery          |
-| Data Dictionary      | Stores metadata/schemas                       |
-+----------------------+-----------------------------------------------+
-```
-
----
-

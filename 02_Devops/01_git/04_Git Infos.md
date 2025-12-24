@@ -2,9 +2,8 @@
 title:
   "{ Title }":
 tags:
-  - theory
-  - "{ Subject }":
-  - semester_notes
+  - DevOps
+  - Git
 created:
   "{ date }":
 updated:

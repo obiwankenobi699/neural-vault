@@ -1,6 +1,7 @@
 ---
 title: Compile Time Vs Run Time
-tags: [coding, {{Language}}, {{Topic}}, notes]
+tags:
+  - java
 created: 2025-11-19
 updated: 2025-11-19
 ---
