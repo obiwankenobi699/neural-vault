@@ -93,3 +93,25 @@ If you want, I can also provide:
 • Short 2–3 marks notes  
 • Difference table between DDL vs DML vs DCL vs TCL  
 • Sample SQL commands for each type
+
+
+## Procedural DML 
+1. the focus is on the execution and result 
+2. what data is needed and how it is retreived
+3. the user have more control of process as we have to define the steps od retreival 
+
+Example
+```
+DECLAIR
+BEGIN
+process
+END
+```
+sql , Relational Algebra
+## Non Procedural DML
+1. the focus is on the result not in execution
+2. what data is needed not how it is retreived it depend on internal of Data Base
+3. the user have less control of process as we have 
+
+Example
+tuple, Relational Calculus

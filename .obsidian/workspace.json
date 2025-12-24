@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Dev/03_Database/DBMS/01_Architecture/01_Architecture of DB.md",
+                "file": "01_Dev/03_Database/DBMS/01_Architecture/Database Languages.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Architecture of DB"
+              "title": "Database Languages"
             }
           }
         ],
@@ -199,8 +199,8 @@
   },
   "active": "804b1a6b0ec9d192",
   "lastOpenFiles": [
+    "01_Dev/03_Database/DBMS/01_Architecture/02_Data Models.md",
     "01_Dev/03_Database/DBMS/01_Architecture/Constrains.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/Data Models.md",
     "01_Dev/03_Database/DBMS/01_Architecture/01_Architecture of DB.md",
     "01_Dev/03_Database/DBMS/01_Architecture",
     "02_Devops/04_Kubernetes/02_k8s KIND,kubeadm.md",
