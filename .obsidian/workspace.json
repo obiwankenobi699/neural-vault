@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Dev/03_Database/DBMS/01_Architecture/04_Architecture Of DB.md",
+                "file": "01_Dev/03_Database/DBMS/01_Architecture/05_Relations & Constrain.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "04_Architecture Of DB"
+              "title": "05_Relations & Constrain"
             }
           }
         ],
@@ -199,11 +199,13 @@
   },
   "active": "bc9b03f4deefb75e",
   "lastOpenFiles": [
+    "01_Dev/03_Database/DBMS/01_Architecture/Relational Database Management System and SQL.md",
+    "01_Dev/03_Database/DBMS/01_Architecture/05_Relations & Constrain.md",
+    "01_Dev/03_Database/DBMS/01_Architecture/04_Architecture Of DB.md",
     "01_Dev/03_Database/DBMS/ER_Diagram.jpg",
     "01_Dev/03_Database/DBMS/ER_Diagram rule.jpg",
     "01_Dev/03_Database/DBMS/ER_Diagram(1).jpg",
     "01_Dev/03_Database/DBMS/Unconfirmed 368359.crdownload",
-    "01_Dev/03_Database/DBMS/01_Architecture/04_Architecture Of DB.md",
     "01_Dev/03_Database/DBMS/Unconfirmed 569701.crdownload",
     "01_Dev/03_Database/DBMS/d2a3e3e9aa25768e3511dd86d4d0cc3b.jpg",
     "01_Dev/03_Database/DBMS/Unconfirmed 682295.crdownload",
@@ -214,9 +216,7 @@
     "02_Devops/02_github actions/01_History.md",
     "02_Devops/04_Kubernetes/02_k8s KIND,kubeadm.md",
     "02_Devops/04_Kubernetes/01_k8s.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/Constrains.md",
     "01_Dev/03_Database/DBMS/01_Architecture/03_Database Languages.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/Relational Database Management System and SQL.md",
     "01_Dev/03_Database/DBMS/01_Architecture/01_Architecture of Applications.md",
     "01_Dev/03_Database/DBMS/01_Architecture/02_Data Models.md",
     "01_Dev/03_Database/DBMS/01_Architecture",
@@ -245,7 +245,6 @@
     "02_Devops/04_Kubernetes/Unconfirmed 416232.crdownload",
     "02_Devops/03_Docker/Docker_Component.gif",
     "02_Devops/04_Kubernetes",
-    "02_Devops/systemdesign.gif",
     "03_Ai_ml/02_Deeplearning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",
