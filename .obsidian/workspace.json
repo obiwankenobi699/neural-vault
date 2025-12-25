@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "d536386faef7d067",
+        "id": "64f3f7cb5278d528",
         "type": "tabs",
         "children": [
           {
-            "id": "7eb361845b73614a",
+            "id": "99b15b55b2409f81",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Neural-Vault.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Neural-Vault"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
         ],
@@ -197,8 +193,13 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "7eb361845b73614a",
+  "active": "9f84e04eaeb9662e",
   "lastOpenFiles": [
+    "02_Devops/03_Docker/05_Docker Network.md",
+    "01_Dev/03_Database/02_SqlDB/Sql Basics/03_Constrain & Data Types.md",
+    "01_Dev/03_Database/02_SqlDB/Sql Basics/02_CRUD.md",
+    "01_Dev/03_Database/02_SqlDB/Sql Basics/01_PostgreSQL.md",
+    "Neural-Vault.md",
     "01_Dev/03_Database/DBMS/Relational Database Management System and SQL.md",
     "02_Devops/YAML/01_yaml aint a markup language.md",
     "02_Devops/01_git/06_Streams & Remote.md",
@@ -216,16 +217,11 @@
     "02_Devops/03_Docker/07_Docker Builds.md",
     "02_Devops/03_Docker/Docker_Component.gif",
     "02_Devops/03_Docker/06_Docker Volume and storage.md",
-    "02_Devops/03_Docker/05_Docker Network.md",
     "02_Devops/03_Docker/04_DockerFile & Compose.md",
     "02_Devops/03_Docker/03_Docker CLI.md",
     "02_Devops/03_Docker/02_Docker Architecture.md",
     "02_Devops/03_Docker/01_Multi Use Server.md",
     "01_Dev/03_Database/DBMS/01_Architecture/01_Architecture of Applications.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/02_Data Models.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/03_Database Languages.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/04_Architecture Of DB.md",
-    "01_Dev/03_Database/DBMS/01_Architecture/05_Relations & Constrain and Keys.md",
     "01_Dev/03_Database/02_SqlDB/Sql Basics",
     "01_Dev/03_Database/DBMS/ER_Diagram.jpg",
     "01_Dev/03_Database/DBMS/ER_Diagram rule.jpg",
