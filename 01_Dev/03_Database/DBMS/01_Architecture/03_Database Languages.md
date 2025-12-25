@@ -115,3 +115,8 @@ sql , Relational Algebra
 
 Example
 tuple, Relational Calculus
+
+
+# Note
+
+> We can Delete row but we need to drop table and column .
