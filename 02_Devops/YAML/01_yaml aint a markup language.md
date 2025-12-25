@@ -2,6 +2,7 @@
 title:
   "{ Title }":
 tags:
+  - DevOps
 created:
   "{ date }":
 updated:

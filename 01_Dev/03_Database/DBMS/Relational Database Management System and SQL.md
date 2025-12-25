@@ -2,9 +2,8 @@
 title:
   "{ Title }":
 tags:
-  - theory
-  - "{ Subject }":
-  - semester_notes
+  - database
+  - DBMS
 created:
   "{ date }":
 updated:
@@ -141,7 +140,7 @@ Integrity constraints are rules that ensure data accuracy, consistency, and vali
                                               |
                                     ENTITY INTEGRITY
 ```
-
+ 
 ### 1. Domain Constraints
 
 Domain constraints specify the permissible values for an attribute.
