@@ -17,13 +17,6 @@ updated:
 4. [Transaction States](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#4-transaction-states)
 5. [Logs and Recovery](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#5-logs-and-recovery)
 6. [Rollback Mechanism](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#6-rollback-mechanism)
-7. [Schedules](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#7-schedules)
-8. [Serial vs Non-Serial Schedules](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#8-serial-vs-non-serial-schedules)
-9. [Serializability](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#9-serializability)
-10. [Conflict Serializability](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#10-conflict-serializability)
-11. [View Serializability](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#11-view-serializability)
-12. [Summary & Quick Reference](https://claude.ai/chat/171e538e-8ef9-4961-ae03-68ed1ef41d58#12-summary--quick-reference)
-
 ---
 
 # 1. TRANSACTION SYSTEM
@@ -53,12 +46,12 @@ Result: Either ALL 6 operations execute OR NONE execute
 
 ## 1.3 Why Transactions Are Needed
 
-|Requirement|Description|
-|---|---|
-|**Consistency**|Database should remain in consistent state|
-|**Reliability**|Handle system failures gracefully|
-|**Concurrency**|Multiple users accessing database simultaneously|
-|**Isolation**|Transactions don't interfere with each other|
+| Requirement     | Description                                      |
+| --------------- | ------------------------------------------------ |
+| **Consistency** | Database should remain in consistent state       |
+| **Reliability** | Handle system failures gracefully                |
+| **Concurrency** | Multiple users accessing database simultaneously |
+| **Isolation**   | Transactions don't interfere with each other     |
 
 ---
 
@@ -87,10 +80,10 @@ Transaction is treated as a single, indivisible unit. Either ALL operations comp
 
 **Scenario:** Transfer $500 from Account A to Account B
 
-|Account|Initial Balance|
-|---|---|
-|Account A|$1000|
-|Account B|$500|
+| Account   | Initial Balance |
+| --------- | --------------- |
+| Account A | $1000           |
+| Account B | $500            |
 
 **Transaction Execution:**
 
@@ -134,11 +127,11 @@ Transaction must take database from one **consistent state** to another consiste
 
 **Business Rule:** Total money in bank = constant
 
-|Stage|Account A|Account B|Total|
-|---|---|---|---|
-|**Before Transaction**|$1000|$500|$1500|
-|**Operation:** Transfer $200 from A to B||||
-|**After Transaction**|$800|$700|$1500 ✓|
+| Stage                                    | Account A | Account B | Total   |
+| ---------------------------------------- | --------- | --------- | ------- |
+| **Before Transaction**                   | $1000     | $500      | $1500   |
+| **Operation:** Transfer $200 from A to B |           |           |         |
+| **After Transaction**                    | $800      | $700      | $1500 ✓ |
 
 **Consistency Maintained!** Total remains $1500
 
@@ -171,28 +164,28 @@ Multiple transactions execute concurrently without interfering with each other. 
 
 #### Without Isolation (INCORRECT)
 
-|Time|T1|T2|Comment|
-|---|---|---|---|
-|t1|Read X = 1000|||
-|t2||Read X = 1000|Both read same value|
-|t3|X = 1000 - 100|||
-|t4||X = 1000 + 200||
-|t5|Write X = 900|||
-|t6||Write X = 1200|Overwrites T1's change|
+| Time | T1             | T2             | Comment                |
+| ---- | -------------- | -------------- | ---------------------- |
+| t1   | Read X = 1000  |                |                        |
+| t2   |                | Read X = 1000  | Both read same value   |
+| t3   | X = 1000 - 100 |                |                        |
+| t4   |                | X = 1000 + 200 |                        |
+| t5   | Write X = 900  |                |                        |
+| t6   |                | Write X = 1200 | Overwrites T1's change |
 
 **Final X = $1200** (Lost $100 withdrawal!) ✗
 
 #### With Isolation (CORRECT)
 
-|Time|T1|T2|Comment|
-|---|---|---|---|
-|t1|Read X = 1000|WAIT|T2 waits for T1|
-|t2|X = 1000 - 100|WAIT||
-|t3|Write X = 900|WAIT||
-|t4|COMMIT|Read X = 900|T2 reads updated value|
-|t5||X = 900 + 200||
-|t6||Write X = 1100||
-|t7||COMMIT||
+| Time | T1             | T2             | Comment                |
+| ---- | -------------- | -------------- | ---------------------- |
+| t1   | Read X = 1000  | WAIT           | T2 waits for T1        |
+| t2   | X = 1000 - 100 | WAIT           |                        |
+| t3   | Write X = 900  | WAIT           |                        |
+| t4   | COMMIT         | Read X = 900   | T2 reads updated value |
+| t5   |                | X = 900 + 200  |                        |
+| t6   |                | Write X = 1100 |                        |
+| t7   |                | COMMIT         |                        |
 
 **Final X = $1100** ✓
 
@@ -212,15 +205,15 @@ Once a transaction is **committed**, its effects are **permanent** in the databa
 
 **Transaction:** Update Employee Salary
 
-|Time|Event|
-|---|---|
-|10:00|BEGIN TRANSACTION|
-|10:01|Read Employee record (Salary = $50,000)|
-|10:02|Update Salary = $55,000|
-|10:03|Write to buffer (in RAM)|
-|10:04|**COMMIT**|
-|10:05|Write to disk (permanent storage)|
-|10:06|**SYSTEM CRASH**|
+| Time  | Event                                   |
+| ----- | --------------------------------------- |
+| 10:00 | BEGIN TRANSACTION                       |
+| 10:01 | Read Employee record (Salary = $50,000) |
+| 10:02 | Update Salary = $55,000                 |
+| 10:03 | Write to buffer (in RAM)                |
+| 10:04 | **COMMIT**                              |
+| 10:05 | Write to disk (permanent storage)       |
+| 10:06 | **SYSTEM CRASH**                        |
 
 **After Recovery:**
 
@@ -240,12 +233,12 @@ Once a transaction is **committed**, its effects are **permanent** in the databa
 
 ## 2.6 ACID Properties Summary
 
-|Property|Ensures|
-|---|---|
-|**Atomicity**|All or Nothing execution|
-|**Consistency**|Database integrity maintained|
-|**Isolation**|Concurrent transactions don't clash|
-|**Durability**|Changes survive failures|
+| Property        | Ensures                             |
+| --------------- | ----------------------------------- |
+| **Atomicity**   | All or Nothing execution            |
+| **Consistency** | Database integrity maintained       |
+| **Isolation**   | Concurrent transactions don't clash |
+| **Durability**  | Changes survive failures            |
 
 ---
 
@@ -553,17 +546,17 @@ ROLLBACK         ← ABORTED state
 
 ### Scenario 1: Successful Transaction
 
-|Time|State|Action|
-|---|---|---|
-|t1|BEGIN|START transaction|
-|t2|ACTIVE|READ(A)|
-|t3|ACTIVE|A = A - 100|
-|t4|ACTIVE|WRITE(A)|
-|t5|ACTIVE|READ(B)|
-|t6|ACTIVE|B = B + 100|
-|t7|ACTIVE|WRITE(B)|
-|t8|PARTIALLY COMMITTED|Last operation done|
-|t9|COMMITTED|Changes written to disk|
+| Time | State               | Action                  |
+| ---- | ------------------- | ----------------------- |
+| t1   | BEGIN               | START transaction       |
+| t2   | ACTIVE              | READ(A)                 |
+| t3   | ACTIVE              | A = A - 100             |
+| t4   | ACTIVE              | WRITE(A)                |
+| t5   | ACTIVE              | READ(B)                 |
+| t6   | ACTIVE              | B = B + 100             |
+| t7   | ACTIVE              | WRITE(B)                |
+| t8   | PARTIALLY COMMITTED | Last operation done     |
+| t9   | COMMITTED           | Changes written to disk |
 
 ---
 
@@ -906,503 +899,5 @@ Rollback Action:
     - Where it was changed (RAM/Disk)
     - What the old value was
 - Then reverts changes in BOTH places
-
----
-
-# 7. SCHEDULES
-
-## 7.1 What is a Schedule?
-
-**Definition:** A schedule is a **chronological sequence** of operations from multiple transactions.
-
-**Purpose:** Shows the order in which operations from concurrent transactions are executed.
-
----
-
-## 7.2 Simple Example
-
-### Two Transactions:
-
-```
-T1: READ(A), WRITE(A), READ(B), WRITE(B)
-T2: READ(A), WRITE(A)
-```
-
-### Possible Schedule:
-
-|Time|T1|T2|
-|---|---|---|
-|t1|READ(A)||
-|t2||READ(A)|
-|t3|WRITE(A)||
-|t4||WRITE(A)|
-|t5|READ(B)||
-|t6|WRITE(B)||
-
----
-
-## 7.3 Schedule Components
-
-|Component|Description|
-|---|---|
-|**1. Operations**|READ(X), WRITE(X), COMMIT, ABORT|
-|**2. Transactions**|Multiple transactions (T1, T2, T3, ...)|
-|**3. Ordering**|Chronological sequence of operations|
-
----
-
-## 7.4 Types of Schedules Overview
-
-```
-                    SCHEDULES
-                        |
-        ┌───────────────┴───────────────┐
-        ↓                               ↓
-   SERIAL SCHEDULE            NON-SERIAL SCHEDULE
-        |                               |
-   (No Concurrency)              (With Concurrency)
-   Always Correct                       |
-                            ┌───────────┴───────────┐
-                            ↓                       ↓
-                    SERIALIZABLE            NON-SERIALIZABLE
-                            |                       |
-                    (Correct Result)        (Incorrect Result)
-                            |
-                ┌───────────┴───────────┐
-                ↓                       ↓
-        CONFLICT                    VIEW
-        SERIALIZABLE             SERIALIZABLE
-```
-
----
-
-# 8. SERIAL VS NON-SERIAL SCHEDULES
-
-## 8.1 Serial Schedule
-
-### Definition
-
-Transactions execute **one after another**, with NO overlapping.
-
-### Characteristics
-
-- ✓ No concurrency
-- ✓ No interference between transactions
-- ✓ Always produces correct results
-- ✓ Easy to understand
-- ✗ Very slow (no parallelism)
-- ✗ Poor CPU utilization
-- ✗ Low throughput
-
----
-
-### Example 1: Serial Schedule S1 (T1 → T2)
-
-**Transactions:**
-
-```
-T1: READ(A), WRITE(A), READ(B), WRITE(B)
-T2: READ(A), WRITE(A), READ(B), WRITE(B)
-```
-
-**Serial Schedule S1:**
-
-|Time|T1|T2|
-|---|---|---|
-|t1|READ(A)||
-|t2|WRITE(A)||
-|t3|READ(B)||
-|t4|WRITE(B)||
-|t5||READ(A)|
-|t6||WRITE(A)|
-|t7||READ(B)|
-|t8||WRITE(B)|
-
-**Note:** T1 completes BEFORE T2 starts
-
----
-
-### Example 2: Serial Schedule S2 (T2 → T1)
-
-|Time|T1|T2|
-|---|---|---|
-|t1||READ(A)|
-|t2||WRITE(A)|
-|t3||READ(B)|
-|t4||WRITE(B)|
-|t5|READ(A)||
-|t6|WRITE(A)||
-|t7|READ(B)||
-|t8|WRITE(B)||
-
-**Note:** T2 completes BEFORE T1 starts
-
----
-
-## 8.2 Non-Serial Schedule
-
-### Definition
-
-Transactions execute **concurrently**, with overlapping operations.
-
-### Characteristics
-
-- ✓ Better performance (parallelism)
-- ✓ Higher throughput
-- ✓ Better resource utilization
-- ✗ May produce incorrect results
-- ✗ Requires careful management
-- ✗ Can cause anomalies
-
----
-
-### Example: Non-Serial Schedule S3
-
-**Transactions:**
-
-```
-T1: READ(A), WRITE(A), READ(B), WRITE(B)
-T2: READ(A), WRITE(A), READ(B), WRITE(B)
-```
-
-**Non-Serial Schedule S3:**
-
-|Time|T1|T2|
-|---|---|---|
-|t1|READ(A)||
-|t2||READ(A)|
-|t3|WRITE(A)||
-|t4|READ(B)||
-|t5||WRITE(A)|
-|t6|WRITE(B)||
-|t7||READ(B)|
-|t8||WRITE(B)|
-
-**Note:** Operations interleaved
-
----
-
-## 8.3 Comparison
-
-|Feature|Serial|Non-Serial|
-|---|---|---|
-|**Concurrency**|NO|YES|
-|**Correctness**|Always Correct|May or may not be correct|
-|**Performance**|Slow|Fast|
-|**CPU Utilization**|Low|High|
-|**Practical Use**|Not practical|Used in real systems|
-
----
-
-# 9. SERIALIZABILITY
-
-## 9.1 What is Serializability?
-
-**Definition:** A non-serial schedule is **serializable** if it produces the same result as some serial schedule.
-
-**Key Concept:** Serializable schedules are correct even though they execute concurrently.
-
----
-
-## 9.2 Serializability Benefits
-
-**Combines:**
-
-- ✓ Correctness of serial schedules
-- ✓ Performance of concurrent execution
-
-**Example:**
-
-```
-If Result(Non-Serial Schedule S3) = Result(Serial Schedule S1)
-Then S3 is serializable
-```
-
----
-
-## 9.3 Types of Serializability
-
-```
-                SERIALIZABILITY
-                       |
-        ┌──────────────┴──────────────┐
-        ↓                             ↓
-  CONFLICT                         VIEW
-  SERIALIZABILITY               SERIALIZABILITY
-        |                             |
-  Stricter condition            Broader condition
-  Easier to check               Harder to check
-```
-
----
-
-# 10. CONFLICT SERIALIZABILITY
-
-## 10.1 Understanding Conflicts
-
-### What is a Conflict?
-
-**Definition:** Two operations **conflict** if:
-
-1. They belong to **different transactions**
-2. They access the **same data item**
-3. **At least one is a WRITE operation**
-
----
-
-### Types of Conflicts
-
-|Operation Pair|Conflict?|Reason|
-|---|---|---|
-|**READ-READ**|NO ✗|Both only reading|
-|**READ-WRITE**|YES ✓|One reads, one modifies|
-|**WRITE-READ**|YES ✓|One modifies, one reads|
-|**WRITE-WRITE**|YES ✓|Both modify same data|
-
----
-
-### Conflict Examples
-
-#### 1. READ-WRITE Conflict
-
-```
-T1: READ(A)
-T2: WRITE(A)
-└─→ CONFLICT ✓
-```
-
-#### 2. WRITE-READ Conflict
-
-```
-T1: WRITE(A)
-T2: READ(A)
-└─→ CONFLICT ✓
-```
-
-#### 3. WRITE-WRITE Conflict
-
-```
-T1: WRITE(A)
-T2: WRITE(A)
-└─→ CONFLICT ✓
-```
-
-#### 4. READ-READ (No Conflict)
-
-```
-T1: READ(A)
-T2: READ(A)
-└─→ NO CONFLICT ✗
-```
-
----
-
-## 10.2 Conflict Serializability Definition
-
-**Definition:** A schedule is **conflict serializable** if it can be transformed into a serial schedule by swapping **non-conflicting operations**.
-
-### Process
-
-```
-Step 1: Identify all conflicts in schedule
-Step 2: Try to swap non-conflicting operations
-Step 3: If you can reach a serial schedule → Conflict Serializable ✓
-Step 4: If you cannot → Not Conflict Serializable ✗
-```
-
----
-
-## 10.3 Precedence Graph Method
-
-### Algorithm
-
-```
-Step 1: Create a node for each transaction
-
-Step 2: For each conflict between Ti and Tj:
-        Draw edge Ti → Tj if Ti's operation
-        comes before Tj's conflicting operation
-
-Step 3: Check for cycles
-        ├─→ NO CYCLE: Conflict Serializable ✓
-        └─→ CYCLE EXISTS: Not Conflict Serializable ✗
-```
-
----
-
-## 10.4 Example 1: Conflict Serializable Schedule
-
-### Schedule S
-
-**Transactions:**
-
-```
-T1: READ(A), WRITE(A), READ(B), WRITE(B)
-T2: READ(A), WRITE(A), READ(B), WRITE(B)
-```
-
-**Schedule S:**
-
-|Time|T1|T2|
-|---|---|---|
-|t1|READ(A)||
-|t2|WRITE(A)||
-|t3||READ(A)|
-|t4||WRITE(A)|
-|t5|READ(B)||
-|t6|WRITE(B)||
-|t7||READ(B)|
-|t8||WRITE(B)|
-
----
-
-### Step 1: Find Conflicts
-
-**Conflicts on A:**
-
-- T1:WRITE(A) at t2 before T2:READ(A) at t3 → **T1 → T2**
-- T1:WRITE(A) at t2 before T2:WRITE(A) at t4
-  → **T1 → T2**
-
-**Conflicts on B:**
-
-- T1:WRITE(B) at t6 before T2:READ(B) at t7 → **T1 → T2**
-- T1:WRITE(B) at t6 before T2:WRITE(B) at t8 → **T1 → T2**
-
----
-
-### Step 2: Draw Precedence Graph
-
-```
-    T1 ───────→ T2
-    
-    (Single direction, no cycle)
-```
-
----
-
-### Step 3: Check for Cycle
-
-**Result:** NO CYCLE → **Conflict Serializable** ✓
-
-**Equivalent Serial Schedule:** T1 → T2
-
----
-
-## 10.5 Example 2: NOT Conflict Serializable
-
-### Schedule S
-
-**Transactions:**
-
-```
-T1: READ(A), WRITE(A)
-T2: READ(A), WRITE(A)
-```
-
-**Schedule S:**
-
-|Time|T1|T2|
-|---|---|---|
-|t1|READ(A)||
-|t2||READ(A)|
-|t3||WRITE(A)|
-|t4|WRITE(A)||
-
----
-
-### Step 1: Find Conflicts
-
-**Conflicts on A:**
-
-- T1:READ(A) at t1 before T2:WRITE(A) at t3 → **T1 → T2**
-- T2:READ(A) at t2 before T1:WRITE(A) at t4 → **T2 → T1**
-- T2:WRITE(A) at t3 before T1:WRITE(A) at t4 → **T2 → T1**
-
----
-
-### Step 2: Draw Precedence Graph
-
-```
-    T1 ←────────→ T2
-    
-    (Cycle detected!)
-```
-
----
-
-### Step 3: Check for Cycle
-
-**Result:** CYCLE EXISTS → **NOT Conflict Serializable** ✗
-
----
-
-# 11. VIEW SERIALIZABILITY
-
-## 11.1 Definition
-
-**Definition:** A schedule is **view serializable** if it is view equivalent to some serial schedule.
-
----
-
-## 11.2 View Equivalence Conditions
-
-Two schedules S and S' are **view equivalent** if all three conditions hold:
-
-### Condition 1: Initial Read
-
-If T1 reads **initial value** of X in S, then T1 must read **initial value** of X in S'
-
-### Condition 2: Updated Read
-
-If T1 reads value of X **written by T2** in S, then T1 must read value of X **written by T2** in S'
-
-### Condition 3: Final Write
-
-If T1 **writes final value** of X in S, then T1 must **write final value** of X in S'
-
----
-
-## 11.3 Relationship: Conflict vs View Serializability
-
-```
-┌─────────────────────────────────────────┐
-│      ALL SCHEDULES                      │
-│  ┌───────────────────────────────────┐  │
-│  │  VIEW SERIALIZABLE                │  │
-│  │  ┌─────────────────────────────┐  │  │
-│  │  │  CONFLICT SERIALIZABLE      │  │  │
-│  │  │  ┌───────────────────────┐  │  │  │
-│  │  │  │  SERIAL SCHEDULES     │  │  │  │
-│  │  │  └───────────────────────┘  │  │  │
-│  │  └─────────────────────────────┘  │  │
-│  └───────────────────────────────────┘  │
-└─────────────────────────────────────────┘
-
-Key Points:
-├─→ Every Conflict Serializable is View Serializable
-├─→ Not every View Serializable is Conflict Serializable
-└─→ Serial schedules are both
-```
-
----
-
-## 11.4 Venn Diagram Representation
-
-```
-All Schedules
-    |
-    ├── Non-Serializable Schedules
-    |
-    └── Serializable Schedules
-            |
-            ├── View Serializable Only
-            |   (View Serializable but NOT Conflict Serializable)
-            |
-            └── Conflict Serializable
-                (Also View Serializable)
-                    |
-                    └── Serial Schedules
-```
 
 ---
