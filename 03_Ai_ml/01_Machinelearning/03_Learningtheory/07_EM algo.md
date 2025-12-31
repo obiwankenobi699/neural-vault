@@ -8,12 +8,6 @@ updated:
   "{ date }":
 ---
 
-> **Subject:** {{Subject}}  
-> **Topic Type:** Concept / Process / Architecture / Example  
-> **Related Topics:** 
-
----
-
 # **Expectation–Maximization (EM) Algorithm**
 
 ### **Introduction**
@@ -58,9 +52,11 @@ This process is repeated until the parameters stop changing significantly.
 
 Compute the expectation of the log-likelihood with respect to the unknown latent variables ( Z ):
 
+$$
 [  
 Q(\theta | \theta^{(t)}) = \mathbb{E}_{Z | X, \theta^{(t)}} [\log P(X, Z | \theta)]  
 ]
+$$
 
 Here,
 
@@ -75,9 +71,11 @@ Here,
 
 Update parameters by maximizing the expected log-likelihood:
 
+$$
 [  
 \theta^{(t+1)} = \arg\max_{\theta} Q(\theta | \theta^{(t)})  
 ]
+$$
 
 ---
 
@@ -192,17 +190,23 @@ We must estimate:
 
 Let’s choose initial values:
 
+$$
 [  
 \mu_1^{(0)} = 3,\quad \mu_2^{(0)} = 8  
 ]  
+$$
+$$
 [  
 \pi_1^{(0)} = 0.5,\quad \pi_2^{(0)} = 0.5  
 ]
+$$
 
 Variance is assumed fixed:  
+$$
 [  
 \sigma^2 = 1  
 ]
+$$
 
 ---
 
@@ -212,10 +216,12 @@ For each data point (x_i), compute the probability that it belongs to cluster 1 
 
 Formula (Gaussian density):
 
+$$
 [  
 \gamma_{ik} = \frac{\pi_k \cdot N(x_i | \mu_k, \sigma^2)}  
 {\sum_{j=1}^{2} \pi_j \cdot N(x_i | \mu_j, \sigma^2)}  
 ]
+$$
 
 We compute only the numerator because denominator is normalization.
 
@@ -226,47 +232,61 @@ We compute only the numerator because denominator is normalization.
 ### 🔹 For ( x = 2 )**
 
 Gaussian with mean 3:  
+$$
 [  
 N(2|3,1) = e^{-(2-3)^2/2} = e^{-0.5} = 0.607  
 ]
+$$
 
 Gaussian with mean 8:  
+$$
 [  
 N(2|8,1) = e^{-(2-8)^2/2} = e^{-18} \approx 0  
 ]
+$$
 
 Responsibilities:  
+$$
 [  
 \gamma_{1}(2) = 1,\quad \gamma_{2}(2) = 0  
 ]
+$$
 
 ---
 
 ### 🔹 For ( x = 4 )**
 
 Cluster 1:  
+$$
 [  
 N(4|3,1) = e^{-0.5} = 0.607  
 ]
+$$
 
 Cluster 2:  
+$$
 [  
 N(4|8,1) = e^{-8} = 0.0003  
 ]
+$$
 
 Responsibilities:  
+$$
 [  
 \gamma_{1}(4) = 0.995,\quad \gamma_{2}(4) = 0.005  
 ]
+$$
 
 ---
 
 ### 🔹 For ( x = 5 )**
 
 Cluster 1:  
+$$
 [  
 N(5|3,1) = e^{-2} = 0.135  
 ]
+$$
 
 Cluster 2:  
 [  
@@ -312,6 +332,7 @@ Formula:
 
 ### For cluster 1:
 
+$$
 [  
 \sum \gamma_{i1} x_i =  
 1\cdot2 +  
@@ -331,6 +352,7 @@ Formula:
 \mu_1^{new} = \frac{10.6085}{2.9205} \approx 3.63  
 ]
 
+$$
 ---
 
 ### For cluster 2:
@@ -393,17 +415,3 @@ Continue until parameters stop changing (convergence).
 
 ---
 
-# 🎉 **Final Understanding**
-
-- EM begins with random guesses
-    
-- E-step assigns **soft cluster probabilities**
-    
-- M-step recomputes **means and weights**
-    
-- Repeats until stable
-    
-- Works great for Gaussian Mixture Models
-    
-
----

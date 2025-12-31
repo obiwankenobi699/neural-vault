@@ -141,10 +141,10 @@ Lock-based protocols use locks to control concurrent access to data items. Trans
 
 ### Lock Compatibility Matrix
 
-|Request ↓ / Held →|Shared (S)|Exclusive (X)|
-|---|---|---|
-|**Shared (S)**|✓ Yes|✗ No|
-|**Exclusive (X)**|✗ No|✗ No|
+| Request ↓ / Held → | Shared (S) | Exclusive (X) |
+| ------------------ | ---------- | ------------- |
+| **Shared (S)**     | ✓ Yes      | ✗ No          |
+| **Exclusive (X)**  | ✗ No       | ✗ No          |
 
 ### Simplistic Lock Protocol
 

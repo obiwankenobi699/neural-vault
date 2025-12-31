@@ -7,16 +7,6 @@ created: 2025-11-16
 updated:
   "{ date }":
 ---
-
-> **Subject:** ML
-> **Topic Type:** Concept / Process / Architecture / Example  
-> **Related Topics:** 
-
----
-Sure! Here’s a well-structured and complete explanation of **KNN** and **Locally Weighted Regression (LWR)** — including formulas, topics, paragraphs, and clearly separated **Advantages** and **Key Features** sections.
-
----
-
 ## **K-Nearest Neighbors (KNN)**
 
 ### **Overview**
