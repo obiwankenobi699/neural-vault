@@ -19,5 +19,16 @@ Master key skills:
 
 These tools let you simulate, debug, and prototype a wide range of embedded systems without physical hardware.
 
+[
+
+# Machine Learning Based Gesture Detection Watch (ESP8266)
+
+](https://www.instructables.com/Machine-Learning-Based-Gesture-Detection-Watch-ESP/)
+
+Machine Learning Based Gesture Detection Watch (ESP8266): The world is certainly getting better everyday at technology based on gestures because it’s very intuitive, easy to use and clearly makes the interaction with gadgets and things around you futuristic and fancy! So, just to be on the trend we’ll be t…  
+
+ ... less
+
+https://www.instructables.com/DIY-Smartwatch-Using-ESP8266/
 
 

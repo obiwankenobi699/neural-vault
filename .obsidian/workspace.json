@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c7385c3ce8f2a929",
+        "id": "24e548db01a04933",
         "type": "tabs",
         "children": [
           {
-            "id": "1638827b9d710145",
+            "id": "b9342b7bdea9d583",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "07_Hardware & IoT/ESP.md",
+                "file": "04_DSA/01_Core Java/Servlet.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ESP"
+              "title": "Servlet"
             }
           }
         ]
@@ -177,13 +177,21 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "obsidian-git:Open Git source control": false,
-      "templater-obsidian:Templater": false
+      "templater-obsidian:Templater": false,
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "9f84e04eaeb9662e",
+  "active": "b9342b7bdea9d583",
   "lastOpenFiles": [
-    "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/02_KNN , LWR ,KDE.md",
+    "Excalidraw/Drawing 2026-01-04 11.21.16.excalidraw.md",
+    "04_DSA/01_Core Java/Servlet.md",
+    "07_Hardware & IoT/assets/Pasted image 20260101101720.png",
     "07_Hardware & IoT/ESP.md",
+    "Excalidraw",
+    "Neural-Vault.md",
+    "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/02_KNN , LWR ,KDE.md",
+    "07_Hardware & IoT/assets/Untitled.md",
+    "07_Hardware & IoT/assets",
     "07_Hardware & IoT",
     "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/01_ Decision Tree  ID3,C 4.5 and CART.md",
     "03_Ai_ml/01_Machinelearning/01_Supervised/01_Regression/01_Regressions.md",
@@ -193,7 +201,6 @@
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/canvas.png",
     "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/03_RBFN.md",
     "02_Devops/systemdesign.gif",
-    "Neural-Vault.md",
     "03_Ai_ml/02_Deeplearning/02_Reinforcement learning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/01_Supervised learning/02_CNN/CNN.jpg",
     "03_Ai_ml/02_Deeplearning/01_Supervised learning/02_CNN/fcb8358bbc2fd692e9ce9d85e0c2ebbf.jpg",
@@ -201,7 +208,6 @@
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/4ec6d1bb3d79e41668ca9b775828efd1.jpg",
     "03_Ai_ml/01_Machinelearning/03_Learningtheory/4ec6d1bb3d79e41668ca9b775828efd1.jpg.part",
     "03_Ai_ml/02_Deeplearning/01_Supervised learning/01_ANN/ann.jpg",
-    "03_Ai_ml/02_Deeplearning/01_Supervised learning/01_ANN/e55a2472be839ef75b18c9c8519d2145.jpg",
     "03_Ai_ml/02_Deeplearning/01_Supervised learning/01_ANN/e55a2472be839ef75b18c9c8519d2145.jpg.part",
     "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/04_SVM.md",
     "03_Ai_ml/01_Machinelearning/01_Supervised/02_Classification/d071dcef7a860e5e4cec856347ea0601.jpg.part",
@@ -224,14 +230,9 @@
     "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
     "05_OS & Systems/01_Core OS/02_Process Scheduling and management PID.md",
     "05_OS & Systems/01_Core OS/03_Virtual memory.md",
-    "07_Hardware & IoT/06_Maths/Soon...md",
-    "01_Dev/03_Database/DBMS/01_Architecture/05_Relations & Constrain and Keys.md",
-    "01_Dev/03_Database/DBMS/Relational Database Management System and SQL.md",
     "01_Dev/03_Database/DBMS/Transactions/Unconfirmed 614321.crdownload",
     "01_Dev/03_Database/DBMS/Transactions/Unconfirmed 168920.crdownload",
     "01_Dev/03_Database/DBMS/Transactions/ACID Transactions_files/vendor-react-375525fe2fdd5e54.mjs",
-    "01_Dev/03_Database/DBMS/Transactions/ACID Transactions_files/styles__ltr.css",
-    "01_Dev/03_Database/DBMS/Transactions/ACID Transactions_files/style",
     "02_Ai_ml/02_Deeplearning/Marcove.canvas",
     "02_Ai_ml/01_Machinelearning/SWG.canvas",
     "02_Ai_ml/02_Deeplearning/SWG.canvas",
