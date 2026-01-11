@@ -3,6 +3,7 @@ title:
   "{ Title }":
 tags:
   - ML
+  - DA
 created:
   "{ date }":
 updated:
