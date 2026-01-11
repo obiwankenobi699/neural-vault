@@ -1,11 +1,11 @@
 {
   "collapse-filter": false,
-  "search": "tag:#ML  ",
+  "search": "",
   "showTags": true,
   "showAttachments": false,
   "hideUnresolved": false,
-  "showOrphans": true,
-  "collapse-color-groups": false,
+  "showOrphans": false,
+  "collapse-color-groups": true,
   "colorGroups": [],
   "collapse-display": false,
   "showArrow": false,
@@ -17,6 +17,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.8429144505133853,
+  "scale": 0.3746286446726157,
   "close": true
 }

@@ -2,9 +2,8 @@
 title:
   "{ Title }":
 tags:
-  - theory
-  - "{ Subject }":
-  - semester_notes
+  - ML
+  - Applied
 created:
   "{ date }":
 updated:
