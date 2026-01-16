@@ -1,6 +1,5 @@
 ---
-title:
-  "{ Title }":
+title: ask, ifelse
 tags:
   - DevOps
   - Shell
@@ -9,8 +8,6 @@ created:
 updated:
   "{ date }":
 ---
-
-
 ## Table of Contents
 
 1. [Understanding OS Architecture](#understanding-os-architecture)
