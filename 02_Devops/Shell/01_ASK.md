@@ -10,7 +10,6 @@ updated:
   "{ date }":
 ---
 
----
 
 ## Table of Contents
 
