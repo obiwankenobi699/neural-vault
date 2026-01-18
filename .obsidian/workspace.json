@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "d57f30a9ae581419",
+        "id": "b452be3fc0ddbacf",
         "type": "tabs",
         "children": [
           {
-            "id": "c8f6b3ca5bc44fcf",
+            "id": "3b5762829ae27310",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_Devops/Shell/02_Condition , Loop , Fun().md",
+                "file": "02_Devops/03_Docker/02_Docker Architecture.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_Condition , Loop , Fun()"
+              "title": "02_Docker Architecture"
             }
           }
         ]
@@ -181,10 +181,20 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "c8f6b3ca5bc44fcf",
+  "active": "3b5762829ae27310",
   "lastOpenFiles": [
-    "02_Devops/Shell/01_ASK.md",
+    "02_Devops/03_Docker/Docker_Architecture.jpg",
+    "02_Devops/03_Docker/Unconfirmed 261301.crdownload",
+    "02_Devops/03_Docker/03_Docker CLI.md",
+    "02_Devops/03_Docker/04_DockerFile & Compose.md",
+    "02_Devops/03_Docker/05_Docker Network.md",
+    "02_Devops/03_Docker/06_Docker Volume and storage.md",
+    "02_Devops/03_Docker/07_Docker Builds.md",
+    "02_Devops/03_Docker/Docker_Component.gif",
+    "02_Devops/03_Docker/02_Docker Architecture.md",
+    "02_Devops/03_Docker/01_Multi Use Server.md",
     "02_Devops/Shell/02_Condition , Loop , Fun().md",
+    "02_Devops/Shell/01_ASK.md",
     "02_Devops/01_git/04_Git Infos.md",
     "02_Devops/01_git/03_Git Graph.md",
     "02_Devops/01_git/02_Git Internals.md",
@@ -198,27 +208,18 @@
     "05_OS & Systems/02_Lua & Vim/02_Vim.md",
     "05_OS & Systems/01_Linux/CMD/02_Commands.md",
     "05_OS & Systems/01_Linux/CMD/commands.jpg",
-    "02_Devops/03_Docker/07_Docker Builds.md",
     "02_Devops/Shell",
     "02_Devops/Untitled.md",
-    "02_Devops/03_Docker/03_Docker CLI.md",
-    "02_Devops/03_Docker/Docker_Component.gif",
-    "02_Devops/03_Docker/02_Docker Architecture.md",
-    "02_Devops/03_Docker/01_Multi Use Server.md",
     "Excalidraw/Drawing 2026-01-12 00.09.25.excalidraw.md",
     "Excalidraw/Drawing 2026-01-12 00.08.53.excalidraw.restored.md",
     "Excalidraw/Drawing 2026-01-12 00.10.15.excalidraw.md",
     "Excalidraw/Drawing 2026-01-12 00.08.53.excalidraw.md",
     "Excalidraw/Drawing 2026-01-12 00.08.44.excalidraw.md",
-    "Excalidraw/Drawing 2026-01-04 11.21.16.excalidraw.md",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/03_.md",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/mapreducer.jpg",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/Unconfirmed 792581.crdownload",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/e10780b5467c63538a85ab9e5692db4c 1.jpg",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/e10780b5467c63538a85ab9e5692db4c.jpg",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/Unconfirmed 872614.crdownload",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/02_HDFS.md",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/01_Hadoop.md",
     "01_Dev/03_Database/Types_Of_DB.gif",
     "01_Dev/03_Database/DBMS/03_Transactions/ACID.gif",
     "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
@@ -228,7 +229,6 @@
     "03_Ai_ml/01_Machinelearning/02_Unsupervised/02_Dimentionality Reduction/Unconfirmed 999308.crdownload",
     "01_Dev/03_Database/Unconfirmed 897712.crdownload",
     "05_OS & Systems/01_Linux/Dsp -1",
-    "05_OS & Systems/01_Linux/CMD",
     "03_Ai_ml/02_Deeplearning/02_Reinforcement learning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/02_Reinforcement learning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",

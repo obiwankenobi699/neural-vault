@@ -879,16 +879,16 @@ Monitoring (Prometheus / Grafana / ELK)
 ║                         DOCKER ENGINE LAYER                               ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║                                                                          ║
-║   ┌──────────────────────────┐      ┌──────────────────────────┐        ║
-║   │   Docker Daemon           │<---->│       containerd          │        ║
-║   │        (dockerd)          │ gRPC │   (Container Runtime)    │        ║
-║   │--------------------------│      │--------------------------│        ║
-║   │ - REST API                │      │ - Image management       │        ║
-║   │ - Build / Pull / Push     │      │ - Snapshotting           │        ║
-║   │ - Network mgmt            │      │ - Container lifecycle    │        ║
-║   │ - Volume mgmt             │      │ - CRI for Kubernetes     │        ║
-║   └──────────────────────────┘      └──────────────┬───────────┘        ║
-║                                                      │ OCI                ║
+║   ┌──────────────────────────┐      ┌──────────────────────────┐         ║
+║   │   Docker Daemon           │<---->│       containerd        │         ║
+║   │        (dockerd)          │ gRPC │   (Container Runtime)   │         ║
+║   │--------------------------│       │-------------------------│         ║
+║   │ - REST API                │      │ - Image management      │         ║
+║   │ - Build / Pull / Push     │      │ - Snapshotting          │         ║
+║   │ - Network mgmt            │      │ - Container lifecycle   │         ║
+║   │ - Volume mgmt             │      │ - CRI for Kubernetes    │         ║
+║   └──────────────────────────┘      └──────────────┬───────────┘         ║
+║                                                      │ OCI               ║
 ╚══════════════════════════════════════════════════════╧═══════════════════╝
                                                        │
                                                        ▼
