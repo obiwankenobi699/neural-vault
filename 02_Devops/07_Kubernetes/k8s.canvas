@@ -1,0 +1,10 @@
+{
+	"nodes":[
+		{"id":"51bed7d849f03a4d","type":"group","x":-1364,"y":-414,"width":1525,"height":1661,"label":"WorkFlow of k8s"},
+		{"id":"b1fb78d51bffc324","type":"file","file":"02_Devops/07_Kubernetes/assets/k8s.gif","x":-1349,"y":-403,"width":766,"height":899},
+		{"id":"47f6903eebd27d15","type":"file","file":"02_Devops/07_Kubernetes/assets/k8s_Workflow.gif","x":-1349,"y":520,"width":552,"height":718},
+		{"id":"214995520a6c865c","type":"text","text":"","x":-556,"y":910,"width":250,"height":60},
+		{"id":"a4b9b1e6c2bae48a","type":"file","file":"02_Devops/07_Kubernetes/assets/k8s_Architecture.jpg","x":-752,"y":538,"width":892,"height":503}
+	],
+	"edges":[]
+}
