@@ -318,7 +318,7 @@ docker run -d --network my-network my-image
 - `--rm`: Automatically remove container when it exits
 - `-it`: Interactive terminal (combines -i and -t)
 - `-e, --env`: Set environment variables
-
+   sleep 1000 forever background container
 ### Container Lifecycle Management
 
 ```mermaid

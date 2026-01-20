@@ -885,7 +885,7 @@ Monitoring (Prometheus / Grafana / ELK)
 ║   │--------------------------│       │-------------------------│         ║
 ║   │ - REST API                │      │ - Image management      │         ║
 ║   │ - Build / Pull / Push     │      │ - Snapshotting          │         ║
-║   │ - Network mgmt            │      │ - Container lifecycle   │         ║
+║   │ - Network mgmt            │      │ - Con5tainer lifecycle   │         ║
 ║   │ - Volume mgmt             │      │ - CRI for Kubernetes    │         ║
 ║   └──────────────────────────┘      └──────────────┬───────────┘         ║
 ║                                                      │ OCI               ║

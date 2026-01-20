@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_Devops/03_Docker/02_Docker Architecture.md",
+                "file": "02_Devops/03_Docker/04_DockerFile & Compose.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_Docker Architecture"
+              "title": "04_DockerFile & Compose"
             }
           }
         ]
@@ -183,15 +183,15 @@
   },
   "active": "3b5762829ae27310",
   "lastOpenFiles": [
+    "02_Devops/03_Docker/03_Docker CLI.md",
+    "02_Devops/03_Docker/02_Docker Architecture.md",
     "02_Devops/03_Docker/Docker_Architecture.jpg",
     "02_Devops/03_Docker/Unconfirmed 261301.crdownload",
-    "02_Devops/03_Docker/03_Docker CLI.md",
     "02_Devops/03_Docker/04_DockerFile & Compose.md",
     "02_Devops/03_Docker/05_Docker Network.md",
     "02_Devops/03_Docker/06_Docker Volume and storage.md",
     "02_Devops/03_Docker/07_Docker Builds.md",
     "02_Devops/03_Docker/Docker_Component.gif",
-    "02_Devops/03_Docker/02_Docker Architecture.md",
     "02_Devops/03_Docker/01_Multi Use Server.md",
     "02_Devops/Shell/02_Condition , Loop , Fun().md",
     "02_Devops/Shell/01_ASK.md",
@@ -222,7 +222,6 @@
     "03_Ai_ml/03_Datanalytics/04_Hadoop/Unconfirmed 872614.crdownload",
     "01_Dev/03_Database/Types_Of_DB.gif",
     "01_Dev/03_Database/DBMS/03_Transactions/ACID.gif",
-    "03_Ai_ml/03_Datanalytics/03_Data Modeling and Algorithm/Pasted image 20251113180000.png",
     "03_Ai_ml/03_Datanalytics/04_Hadoop",
     "06_Maths/Unconfirmed 646464.crdownload",
     "Unconfirmed 115612.crdownload",

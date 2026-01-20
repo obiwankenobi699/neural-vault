@@ -9,7 +9,6 @@ created:
 updated:
   "{ date }":
 ---
-# Docker Compose - Complete Installation & Usage Guide
 
 ```
 ╔════════════════════════════════════════════════════════════════╗
@@ -42,9 +41,355 @@ updated:
 10. [Compose Commands](https://claude.ai/chat/ccc747c5-c7ba-45c1-8ef0-6f9e4b64f666#compose-commands)
 11. [Production Patterns](https://claude.ai/chat/ccc747c5-c7ba-45c1-8ef0-6f9e4b64f666#production-patterns)
 12. [Interview Preparation](https://claude.ai/chat/ccc747c5-c7ba-45c1-8ef0-6f9e4b64f666#interview-preparation)
+---
+# Dockerfile
+
+A Dockerfile is a declarative text file containing instructions to build a Docker image.
+
+**Core Principle:**
+
+```
+Dockerfile  --[docker build]-->  Image  --[docker run]-->  Container
+```
+
+**Why Dockerfile exists:**
+
+|Problem|Dockerfile Solution|
+|---|---|
+|Manual server setup|Automated, repeatable builds|
+|Configuration drift|Version-controlled infrastructure|
+|Platform differences|Consistent environment everywhere|
+|Dependency management|All dependencies in one file|
+
+### Dockerfile vs Image vs Container
+
+```
+┌─────────────────────────────────────────────────────┐
+│                                                     │
+│  Dockerfile (blueprint)                             │
+│  ├── FROM python:3.11                               │
+│  ├── COPY app.py /app/                              │
+│  └── CMD ["python", "/app/app.py"]                  │
+│      │                                               │
+│      │ docker build -t myapp .                       │
+│      ↓                                               │
+│  Image (template)                                   │
+│  ├── Layer: python:3.11 base                        │
+│  ├── Layer: app.py copied                           │
+│  └── Layer: CMD instruction                         │
+│      │                                               │
+│      │ docker run myapp                              │
+│      ↓                                               │
+│  Container (running instance)                       │
+│  └── Process: python /app/app.py                    │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+### Basic Dockerfile Instructions
+
+**Mandatory and common instructions:**
+
+|Instruction|Purpose|When Executed|Example|
+|---|---|---|---|
+|`FROM`|Base image|Build time|`FROM node:18`|
+|`WORKDIR`|Set working directory|Build time|`WORKDIR /app`|
+|`COPY`|Copy files into image|Build time|`COPY . .`|
+|`RUN`|Execute commands|Build time|`RUN npm install`|
+|`EXPOSE`|Document port|Informational|`EXPOSE 3000`|
+|`CMD`|Default container command|Run time|`CMD ["npm", "start"]`|
+|`ENTRYPOINT`|Fixed container command|Run time|`ENTRYPOINT ["python"]`|
+
+### Build Time vs Run Time
+
+```
+Build Time (happens once)          Run Time (every container start)
+━━━━━━━━━━━━━━━━━━━━━━━━━━        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FROM python:3.11                    
+RUN apt-get update                  
+RUN pip install -r requirements.txt
+COPY app.py /app/                   
+                                    CMD ["python", "/app/app.py"]
+                                    ↓
+Result: Image layers cached         Result: Running container
+```
+
+### Image Layers and Caching
+
+**How layers work:**
+
+```
+Dockerfile Instruction              Layer Created
+─────────────────────────────────   ─────────────
+FROM python:3.11              --->  Layer 0 (base)
+WORKDIR /app                  --->  Layer 1
+COPY requirements.txt .       --->  Layer 2
+RUN pip install -r req...     --->  Layer 3 (heavy)
+COPY . .                      --->  Layer 4
+CMD ["python", "app.py"]      --->  Metadata only
+```
+
+**Cache optimization principle:**
+
+```
+BAD ORDER (rebuilds often):          GOOD ORDER (cache efficient):
+─────────────────────────           ──────────────────────────────
+FROM python:3.11                    FROM python:3.11
+COPY . .                ←─ Changes  WORKDIR /app
+RUN pip install ...     ←─ Rebuild  COPY requirements.txt .
+                                    RUN pip install ...     ←─ Cached
+                                    COPY . .                ←─ Changes
+```
+
+### Minimal Working Dockerfile
+
+```dockerfile
+FROM alpine:latest
+CMD ["echo", "Hello World"]
+```
+
+**Build and run:**
+
+```bash
+docker build -t hello .
+docker run hello
+# Output: Hello World
+```
 
 ---
 
+## Build Strategies
+
+### Single-Stage Build
+
+**Definition:** One FROM instruction, all build steps in final image.
+
+**Structure:**
+
+```
+┌──────────────────────────────┐
+│  FROM base-image             │
+│  WORKDIR /app                │
+│  COPY source files           │
+│  RUN install dependencies    │
+│  RUN compile/build           │
+│  CMD run application         │
+│                              │
+│  Result: One large image     │
+│  Contains: build tools +     │
+│            source code +     │
+│            final binary      │
+└──────────────────────────────┘
+```
+
+**Example: Python Flask Application**
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy dependency file
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY app.py .
+
+# Expose port
+EXPOSE 5000
+
+# Run application
+CMD ["python", "app.py"]
+```
+
+**Build and run:**
+
+```bash
+docker build -t flask-app .
+docker run -p 5000:5000 flask-app
+```
+
+**Advantages:**
+
+- Simple to understand
+- One Dockerfile to maintain
+- Good for interpreted languages (Python, Node.js)
+
+**Disadvantages:**
+
+- Large image size (includes build tools)
+- Build cache in production image
+- Security risk (unnecessary tools)
+
+### Multi-Stage Build
+
+**Definition:** Multiple FROM instructions, copy artifacts between stages.
+
+**Structure:**
+
+```
+┌──────────────────────────────┐     ┌──────────────────────────────┐
+│  Stage 1: Builder            │     │  Stage 2: Production         │
+│  FROM build-image            │     │  FROM runtime-image          │
+│  COPY source                 │     │  COPY --from=builder binary  │
+│  RUN compile/build           │     │  CMD run binary              │
+│  Result: build-stage (temp)  │     │  Result: Small final image   │
+│  Size: 1.2 GB                │     │  Size: 50 MB                 │
+└──────────────────────────────┘     └──────────────────────────────┘
+         Discarded                            Deployed
+```
+
+**Example: Go Application**
+
+```dockerfile
+# Stage 1: Build
+FROM golang:1.21-alpine AS builder
+
+WORKDIR /build
+
+# Copy go mod files
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build binary
+RUN CGO_ENABLED=0 GOOS=linux go build -o app .
+
+# Stage 2: Production
+FROM alpine:latest
+
+WORKDIR /app
+
+# Copy only the binary
+COPY --from=builder /build/app .
+
+# Run as non-root
+RUN adduser -D appuser
+USER appuser
+
+EXPOSE 8080
+
+CMD ["./app"]
+```
+
+**Size comparison:**
+
+```
+Single-stage (golang:1.21):     ~800 MB
+Multi-stage (alpine):           ~15 MB
+Reduction:                       ~98%
+```
+
+**Example: Node.js Application**
+
+```dockerfile
+# Stage 1: Dependencies
+FROM node:18-alpine AS dependencies
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Stage 2: Build
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# Stage 3: Production
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy production dependencies
+COPY --from=dependencies /app/node_modules ./node_modules
+
+# Copy built application
+COPY --from=builder /app/dist ./dist
+
+# Copy package.json
+COPY package*.json ./
+
+USER node
+
+EXPOSE 3000
+
+CMD ["node", "dist/server.js"]
+```
+
+**Example: Java Spring Boot**
+
+```dockerfile
+# Stage 1: Build with Maven
+FROM maven:3.9-eclipse-temurin-17 AS builder
+
+WORKDIR /app
+
+# Copy POM file
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source and build
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Production
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copy JAR from builder
+COPY --from=builder /app/target/*.jar app.jar
+
+# Run as non-root
+RUN addgroup -g 1000 appgroup && \
+    adduser -D -u 1000 -G appgroup appuser
+USER appuser
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+### Build Strategy Comparison
+
+|Aspect|Single-Stage|Multi-Stage|
+|---|---|---|
+|Image size|Large (500MB-2GB)|Small (10MB-100MB)|
+|Build time|Faster|Slower (multiple stages)|
+|Security|Lower (build tools included)|Higher (minimal runtime)|
+|Complexity|Simple|Moderate|
+|Use case|Development, scripting|Production, compiled apps|
+|Cache efficiency|Good|Excellent|
+
+### When to Use Each
+
+**Single-stage:**
+
+- Interpreted languages (Python, Node.js, Ruby)
+- Development environments
+- Quick prototypes
+- Simple applications
+
+**Multi-stage:**
+
+- Compiled languages (Go, Java, C++)
+- Production deployments
+- Security-sensitive applications
+- Large applications with many dependencies
+
+---
 ## What is Docker Compose
 
 ### Definition
@@ -58,7 +403,20 @@ Docker Compose is a declarative orchestration tool for defining and running mult
 - Manage multi-container application lifecycle
 - Enable reproducible development environments
 - Simplify complex deployment scenarios
+```
+docker-compose.yml
+        │
+        ├──▶ uses Dockerfile
+        │
+        └──▶ docker build (implicitly)
+                │
+                └──▶ Image
+                        │
+                        └──▶ Container
 
+```
+
+``
 ### The Problem Docker Compose Solves
 
 ```ascii
@@ -2479,6 +2837,25 @@ docker-compose.prod.yml
 
 # Usage
 docker compose -f docker-compose.yml -f docker-compose.prod.
+```
+
+
+---
+---
+Vite with and without server
+
+## Single-stage Dockerfile (Vite app)
+
+This **works**, and many people use it (especially for quick setups).
+
+`FROM node:20-alpine  WORKDIR /app  # install dependencies COPY package*.json ./ RUN npm install  # copy source code COPY . .  # build the app RUN npm run build  # install a static server RUN npm install -g serve  EXPOSE 3000  # serve built files CMD ["serve", "-s", "dist", "-l", "3000"]
+
+## Multi-stage (BEST PRACTICE)
+
+### 📄 `Dockerfile`
+
+```
+# ---------- Stage 1: Build ---------- FROM node:20-alpine AS builder  WORKDIR /app  # copy dependency files first (cache optimization) COPY package*.json ./ RUN npm install  # copy rest of the source COPY . .  # build vite app RUN npm run build   # ---------- Stage 2: Serve ---------- FROM nginx:alpine  # remove default nginx html RUN rm -rf /usr/share/nginx/html/*  # copy only built files COPY --from=builder /app/dist /usr/share/nginx/html  EXPOSE 80  CMD ["nginx", "-g", "daemon off;"]`
 ```
 
 
