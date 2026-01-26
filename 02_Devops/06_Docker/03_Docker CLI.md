@@ -238,7 +238,7 @@ graph TD
 
 ```bash
 # Basic image build
-docker build -t my-image .
+docker build -t my-image .{dir where Dockefile prsent}
 
 # Specify custom Dockerfile
 docker build -t my-image -f Dockerfile.dev .

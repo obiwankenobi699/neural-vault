@@ -11,7 +11,7 @@ updated: 2025-11-05
 
 > **Subject:** Auth
 > **Topic Type:** Concept / Process / Architecture / Example  
-> **Related Topics:** [[03_Functions and Safety in TS#^3da6b4]] , [[05_Middleware ,inbuild , Custom Functions#^d916d9]]
+> **Related Topics:** [[03_Types#^3da6b4]] , [[05_Middleware ,inbuild , Custom Functions#^d916d9]]
 
 ---
 

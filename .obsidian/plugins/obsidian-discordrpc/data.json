@@ -2,7 +2,7 @@
   "showVaultName": true,
   "showCurrentFileName": true,
   "showPopups": true,
-  "customVaultName": "",
+  "customVaultName": "Neural Vault",
   "showFileExtension": true,
   "useLoadedTime": true,
   "connectOnStart": true,
