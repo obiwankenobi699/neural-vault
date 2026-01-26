@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Dev/01_Frontend/01_Typescript/03_Types.md",
+                "file": "01_Dev/01_Frontend/01_Typescript/04_Objects.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_Types"
+              "title": "04_Objects"
             }
           }
         ]
@@ -183,6 +183,9 @@
   },
   "active": "e00a940618598ddd",
   "lastOpenFiles": [
+    "01_Dev/01_Frontend/01_Typescript/_Promises in TS & Api call.md",
+    "01_Dev/01_Frontend/01_Typescript/04_Objects.md",
+    "01_Dev/01_Frontend/01_Typescript/03_Types.md",
     "01_Dev/01_Frontend/01_Typescript/02_TS Config.md",
     "01_Dev/01_Frontend/01_Typescript/01_Basics of TS.md",
     "Introduction.jpg",
@@ -222,10 +225,7 @@
     "05_OS & Systems/01_Core OS/File_system.gif",
     "00_Index/Dashboard.md",
     "05_OS & Systems/02_Lua & Vim/01_Lua.md",
-    "05_OS & Systems/02_Lua & Vim/02_Vim.md",
-    "05_OS & Systems/01_Linux/CMD/02_Commands.md",
     "02_Devops/02_shell & Cron",
-    "02_Devops/Untitled.md",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/Unconfirmed 792581.crdownload",
     "03_Ai_ml/03_Datanalytics/04_Hadoop/Unconfirmed 872614.crdownload",
     "03_Ai_ml/03_Datanalytics/04_Hadoop",
