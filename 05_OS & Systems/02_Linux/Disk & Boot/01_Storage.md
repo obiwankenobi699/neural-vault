@@ -1,3 +1,15 @@
+---
+title:
+  "{ Title }":
+tags:
+  - OS
+  - Linux
+created:
+  "{ date }":
+updated:
+  "{ date }":
+---
+
 # 🚢 **THE ULTIMATE LINUX STORAGE OCEAN VOYAGE** 🚢
 *A Complete Maritime Guide to Disks, Filesystems, and Bootloaders*
 

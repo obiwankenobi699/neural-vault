@@ -1,3 +1,15 @@
+---
+title:
+  "{ Title }":
+tags:
+  - OS
+  - Linux
+created:
+  "{ date }":
+updated:
+  "{ date }":
+---
+
 # 🚢 LINUX STORAGE MASTER CHEATSHEET 🚢
 *Quick reference for disk management, filesystems, and boot configuration*
 
