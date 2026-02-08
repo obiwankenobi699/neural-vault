@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "f137b830af9fcb6a",
+        "id": "a84b3d2741ad07c9",
         "type": "tabs",
         "children": [
           {
-            "id": "8b69c1cfe1f22b33",
+            "id": "81522bdc359c3cfc",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "02_Devops/01_Open System interconnection/01_Physical Layer/01_.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "01_"
             }
           }
         ]
@@ -177,10 +181,29 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "9f84e04eaeb9662e",
+  "active": "81522bdc359c3cfc",
   "lastOpenFiles": [
-    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/03_Parser.md",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/networking_devices.canvas",
+    "router.webp",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/server.jpg",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/server 1.jpg",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/01_.md",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/Untitled.md",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/VLAN.png",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/Unconfirmed 298306.crdownload",
+    "02_Devops/01_Open System interconnection/01_Physical Layer/Unconfirmed 244578.crdownload",
+    "02_Devops/01_Open System interconnection/OSI.gif",
+    "02_Devops/01_Open System interconnection/03_Detailed layers and workings of internet.md",
+    "02_Devops/01_Open System interconnection/01_WWW.md",
+    "02_Devops/01_Open System interconnection/02_ISO Model.md",
+    "02_Devops/01_Open System interconnection/04_P2P.md",
+    "02_Devops/01_Open System interconnection/01_Physical Layer",
+    "02_Devops/06_Docker/07_Docker Builds.md",
+    "02_Devops/04_YAML & XML/01_yaml aint a markup language.md",
+    "02_Devops/04_YAML & XML/02_XML.md",
+    "01_Dev/03_Database/Types_Of_DB.gif",
     "05_OS & Systems/04_Compilor/01_Introduction to Compilor/02_Lexical Analysis.md",
+    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/03_Parser.md",
     "05_OS & Systems/Automata and formal lang/01_Introduction.md",
     "05_OS & Systems/04_Compilor/01_Introduction to Compilor/01_Introductin to Compilor.md",
     "02_Devops/06_Docker/03_Docker CLI.md",
@@ -191,8 +214,6 @@
     "Untitled.base",
     "05_OS & Systems/Automata and formal lang",
     "02_Devops/06_Docker/Docker_Architecture.jpg",
-    "02_Devops/01_Internet/02_ISO Model.md",
-    "02_Devops/01_Internet/OSI.gif",
     "05_OS & Systems/04_Compilor/01_Introduction to Compilor",
     "05_OS & Systems/02_Linux/Disk & Boot/02_storage.md",
     "05_OS & Systems/02_Linux/Disk & Boot/01_Storage.md",
@@ -204,28 +225,11 @@
     "05_OS & Systems/01_Core OS/03_Virtual memory.md",
     "05_OS & Systems/01_Core OS/02_Process Scheduling and management PID.md",
     "05_OS & Systems/01_Core OS/01_OS Structure and kernel.md",
-    "Introduction.jpg",
     "05_OS & Systems/04_Compilor",
-    "Neural-Vault.md",
-    "08_OC/introduction.md",
-    "05_OS & Systems/02_Linux/Dsp -1/02_Display Servers.md",
     "05_OS & Systems/02_Linux/Disk & Boot",
-    "05_OS & Systems/02_Linux/Dsp -1/01_Linux Destop.md",
-    "01_Dev/01_Frontend/01_Typescript/04_Objects.md",
     "08_OC",
-    "01_Dev/01_Frontend/01_Typescript/_Promises in TS & Api call.md",
-    "01_Dev/01_Frontend/01_Typescript/03_Types.md",
-    "01_Dev/01_Frontend/01_Typescript/02_TS Config.md",
-    "01_Dev/01_Frontend/01_Typescript/01_Basics of TS.md",
     "02_Devops/07_Kubernetes/k8s.canvas",
-    "02_Devops/07_Kubernetes/assets/k8s_Workflow.gif",
-    "02_Devops/07_Kubernetes/assets/k8s_Architecture.jpg",
-    "02_Devops/07_Kubernetes/assets/k8s.gif",
-    "02_Devops/05_Servers/Types_of_server.jpg",
     "02_Devops/05_Servers/Unconfirmed 592392.crdownload",
-    "02_Devops/08_Systemdesign",
-    "02_Devops/03_version control/01_git",
-    "02_Devops/05_Servers",
     "03_Ai_ml/02_Deeplearning/02_Reinforcement learning/SWG.canvas",
     "03_Ai_ml/02_Deeplearning/02_Reinforcement learning/Marcove.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",
