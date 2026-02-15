@@ -2,5 +2,6 @@
   "cssTheme": "Obsidian gruvbox",
   "accentColor": "",
   "monospaceFontFamily": "Mononoki Nerd Font",
-  "enabledCssSnippets": []
+  "enabledCssSnippets": [],
+  "theme": "obsidian"
 }

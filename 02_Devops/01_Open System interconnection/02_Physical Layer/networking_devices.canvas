@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"612971529127c775","type":"file","file":"02_Devops/01_Open System interconnection/02_Physical Layer/server.jpg","x":-338,"y":328,"width":563,"height":844},
+		{"id":"6291a45bd5165526","type":"file","file":"02_Devops/01_Open System interconnection/02_Physical Layer/VLAN.png","x":-1113,"y":-276,"width":665,"height":582},
+		{"id":"a88ea59583929827","type":"file","file":"02_Devops/01_Open System interconnection/02_Physical Layer/router.webp","x":-1127,"y":449,"width":503,"height":362}
+	],
+	"edges":[
+		{"id":"1e1a3f59caa16fa0","fromNode":"a88ea59583929827","fromSide":"bottom","toNode":"612971529127c775","toSide":"left"},
+		{"id":"66304d5d9f770aa5","fromNode":"a88ea59583929827","fromSide":"top","toNode":"6291a45bd5165526","toSide":"bottom"}
+	]
+}

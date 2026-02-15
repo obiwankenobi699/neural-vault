@@ -9,7 +9,6 @@ updated:
   "{ date }":
 ---
 
-
 ---
 
 # 🌐 **1. The First Internet (ARPANET)**
