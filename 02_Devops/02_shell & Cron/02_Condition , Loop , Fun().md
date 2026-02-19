@@ -8,7 +8,7 @@ created:
 updated:
   "{ date }":
 ---
-a
+
 ## Table of Contents
 
 1. [Conditional Statements](https://claude.ai/chat/607261bc-c435-4531-ba14-e695a595220c#conditional-statements)
@@ -207,9 +207,7 @@ done
 ```bash
 #!/bin/bash
 
-for (( i=1; i<=5; i++ )); do
-    echo "Number: $i"
-done
+Z
 
 # Output:
 # Number: 1
