@@ -60,7 +60,7 @@ $$
 ---
 
 ##  Diagram
-![[Binarysearch.excalidraw|700]]
+![[04_DSA/03_Searching/Binary/Visual/Binarysearch.excalidraw.md#^clippedframe=B4zALRWtNO_wJ_HeHtN9h|700]]
 
 ---
 
