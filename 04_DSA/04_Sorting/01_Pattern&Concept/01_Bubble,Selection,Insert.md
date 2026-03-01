@@ -2,7 +2,7 @@ Below are **Bubble Sort, Selection Sort, and Insertion Sort** — all implemente
 
 ---
 
-BUBBLE SORT
+# BUBBLE SORT
 
 Basic Idea  
 Repeatedly compare adjacent elements and swap if they are in the wrong order.  
@@ -66,7 +66,7 @@ public class Main {
 
 ---
 
-SELECTION SORT
+# SELECTION SORT
 
 Basic Idea  
 Select the smallest element from the unsorted portion and place it at correct position.
@@ -122,9 +122,13 @@ public class Main {
 }
 ```
 
+
+
+![[04_DSA/04_Sorting/visual/BSI.excelidraw.md#^frame=rpS2D6w2_nm4nHsMhZGId|700]]
+
 ---
 
-INSERTION SORT (Using Swap Version)
+# INSERTION SORT (Using Swap Version)
 
 Basic Idea  
 Take element and move it left until it reaches correct position in sorted part.
