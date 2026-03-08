@@ -140,6 +140,10 @@ graph TD
 
 Understanding NAT is critical when configuring AWS NAT Gateways, Azure NAT services, or setting up VPN connections. Docker networking also uses NAT for container-to-host communication.
 
+> [!NOTE]
+> 
+> **Common Misconception**: While all devices use the same public IP externally, they have different private IPs internally. This is normal and expected behavior.
+
 ---
 
 ## Ports & Port Forwarding
@@ -615,6 +619,11 @@ curl -X GET https://api.example.com/users
 **Data Unit:** Data
 
 **DevOps Relevance:** SSL/TLS certificates for HTTPS, data serialization formats (JSON, XML, Protocol Buffers).
+- **Encryption**: Secures data confidentiality using **symmetric algorithms** like **AES** (e.g., AES-128 or AES-256) during data transfer. 
+    
+- **Key Exchange**: Uses **asymmetric encryption** (e.g., RSA, ECC) to securely exchange the symmetric key. 
+    
+- **Hashing (e.g., SHA-256)**: Ensures **data integrity** and **authenticates certificates**, but **does not encrypt data**.
 
 ---
 
@@ -633,6 +642,7 @@ curl -X GET https://api.example.com/users
 
 - NetBIOS
 - RPC (Remote Procedure Call)
+- A real-world example of **RPC (Remote Procedure Call)** is a **mobile banking app** calling a server function to check your account balance
 - PPTP
 - L2TP
 
@@ -714,12 +724,15 @@ sequenceDiagram
 - Packet fragmentation and reassembly
 
 **Protocols:**
+**routing protocols** are primarily used to help routers exchange information about network paths so they can determine how to forward data to the correct destination network or subnet.
 
 - **IP (Internet Protocol):** IPv4, IPv6
 - **ICMP (Internet Control Message Protocol):** ping, traceroute
 - **IGMP (Internet Group Management Protocol):** Multicast
+- **IGP(Internet Gateway protocol)
 - **IPsec:** VPN encryption
 - **Routing Protocols:** OSPF, BGP, RIP, EIGRP
+
 
 **Data Unit:** Packet
 
@@ -739,11 +752,11 @@ Subnet Mask: 255.255.255.0 (or /24 in CIDR notation)
 
 **Routing Table Example:**
 
-|Destination Network|Subnet Mask|Next Hop|Interface|Metric|
-|---|---|---|---|---|
-|0.0.0.0|0.0.0.0|203.0.113.1|eth0|0|
-|192.168.1.0|255.255.255.0|0.0.0.0|eth1|0|
-|10.0.0.0|255.0.0.0|192.168.1.254|eth1|10|
+| Destination Network | Subnet Mask   | Next Hop      | Interface | Metric |
+| ------------------- | ------------- | ------------- | --------- | ------ |
+| 0.0.0.0             | 0.0.0.0       | 203.0.113.1   | eth0      | 0      |
+| 192.168.1.0         | 255.255.255.0 | 0.0.0.0       | eth1      | 0      |
+| 10.0.0.0            | 255.0.0.0     | 192.168.1.254 | eth1      | 10     |
 
 **Packet Structure:**
 
