@@ -53,6 +53,7 @@ Source Code ──→ [Pass 1] ──→ [Pass 2] ──→ ... ──→ [Pass 
 - Each pass performs specific tasks
 - Slower compilation but better optimization
 - Higher memory requirements
+- have Analysis phase and synthetic phase
 
 **Examples:** GCC, LLVM
 
@@ -464,7 +465,7 @@ User Code
 │      DECLARATIONS SECTION       │
 │  - C code in %{ }%              │
 │  - Pattern definitions          │
-│  - Regular definitions          │
+│  - Regular definitions           │
 └─────────────────────────────────┘
               │
          %%   │
@@ -584,6 +585,9 @@ NUMBER: 2
 | Examples            | TCC              | GCC, LLVM          |
 
 ---
+
+
+
 
 **End of Notes**
 
