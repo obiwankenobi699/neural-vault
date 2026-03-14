@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "04_DSA/07_Two Pointer/Problems/04_lc Q9.md",
+                "file": "04_DSA/07_Two Pointer/Problems/03_lc  Q125 Q2108.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "04_lc Q9"
+              "title": "03_lc  Q125 Q2108"
             }
           },
           {
@@ -198,11 +198,11 @@
   },
   "active": "cb730168f0c9d9f0",
   "lastOpenFiles": [
-    "04_DSA/07_Two Pointer/pattern/01_Two Pointer technique.md",
     "04_DSA/07_Two Pointer/Problems/03_lc  Q125 Q2108.md",
-    "04_DSA/07_Two Pointer/pattern/03_Palendrome checker.md",
-    "04_DSA/07_Two Pointer/pattern/02_Reverse.md",
     "04_DSA/07_Two Pointer/Problems/04_lc Q9.md",
+    "04_DSA/07_Two Pointer/pattern/03_Palendrome checker.md",
+    "04_DSA/07_Two Pointer/pattern/01_Two Pointer technique.md",
+    "04_DSA/07_Two Pointer/pattern/02_Reverse.md",
     "04_DSA/Basic logic/01_if-else & Operators/01_Basic Logic.md",
     "04_DSA/Basic logic/01_if-else & Operators/02_Basic logic.md",
     "04_DSA/07_Two Pointer/pattern/02_2p for 3sum.md",

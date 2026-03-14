@@ -8,7 +8,7 @@ Use mathematical reversal without string conversion. Extract digits using modulo
 
 **Pseudocode:**
 
-```
+```java
 if x < 0: return false
 original = x
 reversed = 0
@@ -37,7 +37,7 @@ Use two pointers from opposite ends moving toward center. Compare characters whi
 
 **Pseudocode:**
 
-```
+```java
 left = 0
 right = s.length - 1
 while left < right:
@@ -112,7 +112,7 @@ Identical to string palindrome but works with array indices instead of character
 
 **Pseudocode:**
 
-```
+```java
 left = 0
 right = arr.length - 1
 while left < right:
@@ -153,7 +153,7 @@ Find middle using fast-slow pointers, reverse second half, compare both halves.
 
 **Pseudocode:**
 
-```
+```java
 // Find middle
 slow = head, fast = head
 while fast != null and fast.next != null:
@@ -187,7 +187,7 @@ reverse(head):
 
 **Alternative (with extra space):**
 
-```
+```java
 // Push all values to stack
 stack = []
 curr = head
@@ -214,7 +214,7 @@ Check if substring is palindrome by expanding around center or using two pointer
 
 **Pseudocode (Expand Around Center):**
 
-```
+```java
 for i from 0 to n-1:
     // Odd length palindrome (single center)
     expandAroundCenter(s, i, i)
@@ -263,7 +263,7 @@ if (s.charAt(0) == 'h') { }
 
 **Mistake 2:** Using `x = x % 10` alone for integer palindrome
 
-```
+```java
 // WRONG
 while (x > 0) {
     x = x % 10;  // Loses all digits except last
@@ -279,7 +279,7 @@ while (x > 0) {
 
 **Mistake 3:** Not handling negative integers
 
-```
+```java
 // WRONG
 public boolean isPalindrome(int x) {
     // Negative numbers treated as positive
@@ -302,7 +302,7 @@ while (left < right && !Character.isLetterOrDigit(s.charAt(right))) right--;
 
 **Mistake 5:** Using string conversion when not allowed
 
-```
+```java
 // WRONG for LeetCode 9 (pure integer)
 String s = String.valueOf(x);
 
@@ -320,7 +320,7 @@ Instead of reversing entire integer, reverse only half and compare.
 
 **Pseudocode:**
 
-```
+```java
 if x < 0 or (x % 10 == 0 and x != 0): return false
 
 reversed = 0
@@ -342,7 +342,7 @@ return x == reversed or x == reversed / 10
 
 ## Decision Tree
 
-```
+```java
 Is input an integer?
 ├─ Yes → Use math reversal (Pattern 1)
 │         Avoid string conversion unless allowed
