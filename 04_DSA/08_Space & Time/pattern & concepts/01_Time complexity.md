@@ -15,6 +15,13 @@ $$
 
 The graph of execution time versus input size may have different vertical positions for different devices, but the shape and slope of the curve remain consistent. A linear algorithm produces a straight line graph, a quadratic algorithm produces a parabolic curve, and a logarithmic algorithm produces a gradually flattening curve. This property makes time complexity analysis device-independent and enables meaningful comparison of algorithms.
 
+
+
+![[time.excalidraw.svg]]
+
+
+
+
 ## Big O Notation Definition
 
 The notation f(N) = O(g(N)) is read as "f of N is Big O of g of N" and represents an upper bound on the growth rate of function f. Mathematically, this notation is defined using limits:

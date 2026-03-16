@@ -21,7 +21,7 @@
 
 **Pivot** = Index of smallest element = Number of rotations = Split point
 
-```
+```java
 Original: [1,2,3,4,5,6,7]
 Rotated:  [4,5,6,7,1,2,3]
            
@@ -32,7 +32,7 @@ Rotations = 4
 
 ## Array Structure
 
-```
+```java
 [4,5,6,7 | 1,2,3]
  Larger  | Smaller
           ↑ pivot
@@ -48,7 +48,7 @@ Rotations = 4
 
 **Compare `nums[mid]` with `nums[end]`:**
 
-```
+```java
 If nums[mid] > nums[end]:
   → mid is in left part
   → pivot is in right half
@@ -136,7 +136,7 @@ int findPivot(int[] nums) {
 
 ---
 
-# 4. Search in Rotated Array (With Duplicates) {#search}
+# 4. Search in Rotated Array (With Duplicates) {Single pass}
 
 ## Complete Solution
 
