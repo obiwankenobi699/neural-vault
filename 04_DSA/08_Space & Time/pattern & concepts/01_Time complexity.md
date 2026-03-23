@@ -171,3 +171,9 @@ Understanding time complexity enables informed algorithm selection based on prob
 Time complexity also guides optimization efforts. If an algorithm has O(N³) complexity, reducing it to O(N²) provides dramatic performance improvements for large inputs. Conversely, optimizing constant factors in an already optimal O(N) algorithm yields diminishing returns compared to choosing a better algorithmic approach.
 
 The mathematical foundation of time complexity provides a rigorous framework for comparing algorithms objectively. Rather than relying on empirical testing across various inputs and hardware configurations, asymptotic analysis gives definitive answers about scalability and efficiency. This makes Big O notation an essential tool in computer science for algorithm design, analysis, and selection.
+
+---
+
+Recurrence relation to find time complexity of recusrive algo 
+linear , divide and conquror 
+
