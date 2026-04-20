@@ -1,2 +1,0 @@
-MIT OCW's "Mathematics of Machine Learning" includes discrete math, probability, and statistical theory. 
-O'Reilly and Simplilearn offer expert playlists combining math, statistics, and ML fundamentals. 

@@ -74,3 +74,118 @@ git restore filename
 ---
 
 If you want, I can also show **a safe workflow to recover _any deleted file in Git_** (even if you forgot the commit), which is useful during development.
+
+
+You’re very close — just using the wrong command.
+
+---
+
+# ✅ **Restore to latest commit (clean state)**
+
+To reset your working directory to the latest commit (`HEAD`):
+
+```bash
+git restore .
+```
+
+---
+
+# 🔴 If files are staged too
+
+Run both:
+
+```bash
+git restore .
+git restore --staged .
+```
+
+---
+
+# 🚀 **Full Hard Reset (Recommended for your situation)**
+
+Since your repo is messy from patches, do a **complete reset**:
+
+```bash
+git reset --hard HEAD
+git clean -fd
+```
+
+### What this does:
+
+- `reset --hard` → restores all tracked files
+    
+- `clean -fd` → removes untracked files (scripts, temp fixes)
+    
+
+---
+
+# 📌 If you want to go to a specific commit
+
+Example (your stable one):
+
+```bash
+git reset --hard 01d5f33947f84aae567e4d4019e22dced1c9f1ff
+```
+
+---
+
+# 🧠 Recommendation (important)
+
+From your commits:
+
+|Commit|Meaning|
+|---|---|
+|`01d5f3`|Old architecture (stable baseline) ✅|
+|`ecfbf1`|API working|
+|later|broken experiments ❌|
+
+👉 Best move:
+
+```bash
+git reset --hard 01d5f33947f84aae567e4d4019e22dced1c9f1ff
+```
+
+---
+
+# ⚠️ Warning
+
+This will **delete all local changes**.
+
+If you want backup:
+
+```bash
+git stash
+```
+
+---
+
+# ✅ After Reset
+
+Run:
+
+```bash
+python main.py
+```
+
+You’ll be back to a **working base instead of broken patches**.
+
+---
+
+# 🚀 Next Step (clean rebuild)
+
+Don’t patch that mess again.
+
+Instead, build forward:
+
+```text
+Old working commit
+   ↓
+Add ONE feature at a time
+```
+
+---
+
+If you want, I can help you:
+
+👉 rebuild a **clean, production-grade pipeline step-by-step**  
+(no chaos this time)

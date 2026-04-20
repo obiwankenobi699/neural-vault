@@ -1,4 +1,4 @@
-## Introduction to Number Systems
+  ## Introduction to Number Systems
 
 A number system is a mathematical notation for representing numbers using a consistent set of digits or symbols. Every number system is characterized by its base or radix, which determines how many unique digits are used to represent values. The two most fundamental number systems in computer science are the decimal system (base 10) used in everyday human computation and the binary system (base 2) used internally by all digital computers. Understanding the relationship between these systems and the ability to convert between them forms the foundation for advanced algorithmic techniques involving bit manipulation.
 
