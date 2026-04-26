@@ -1,5 +1,3 @@
-4# BEGINNER DSA NOTES - JAVA
-
 ## Complete Guide: Logic, Intuition, and Problem Solving
 
 ---
