@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDA — Finding Insights</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Figtree:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0c0c10;
+  --s1: #13131a;
+  --s2: #1a1a24;
+  --s3: #22222f;
+  --border: rgba(255,255,255,0.06);
+  --text: #dddde8;
+  --muted: #6b6b80;
+  --dim: #44445a;
+  --blue: #5b8dee;
+  --teal: #3ecfaa;
+  --amber: #f5a623;
+  --coral: #f06060;
+  --purple: #a78bfa;
+  --green: #6dcc7f;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Figtree', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.hero {
+  padding: 48px 32px 36px;
+  border-bottom: 1px solid var(--border);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  color: var(--teal);
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.hero h1 em { font-style: italic; color: var(--teal); }
+
+.hero p {
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 620px;
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px 64px;
+}
+
+/* NAV TABS */
+.nav {
+  display: flex;
+  gap: 2px;
+  padding: 20px 0 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color .15s;
+}
+.nav-btn.active { color: var(--teal); border-color: var(--teal); }
+.nav-btn:hover:not(.active) { color: var(--text); }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+@media(max-width:700px){ .grid2,.grid3{ grid-template-columns:1fr; } }
+
+/* CARDS */
+.card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.tag-blue { background: rgba(91,141,238,.15); color: var(--blue); }
+.tag-teal { background: rgba(62,207,170,.15); color: var(--teal); }
+.tag-amber { background: rgba(245,166,35,.15); color: var(--amber); }
+.tag-coral { background: rgba(240,96,96,.15); color: var(--coral); }
+.tag-purple { background: rgba(167,139,250,.15); color: var(--purple); }
+.tag-green { background: rgba(109,204,127,.15); color: var(--green); }
+
+.card-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+}
+
+.card-body { padding: 14px 16px; }
+.card-body p { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+
+/* ASCII PLOT */
+.plot {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--dim);
+  overflow-x: auto;
+  white-space: pre;
+  margin: 10px 0;
+}
+.plot .hi { color: var(--text); }
+.plot .hi-teal { color: var(--teal); }
+.plot .hi-blue { color: var(--blue); }
+.plot .hi-amber { color: var(--amber); }
+.plot .hi-coral { color: var(--coral); }
+.plot .hi-purple { color: var(--purple); }
+
+.insight-list { margin: 0; padding: 0; list-style: none; }
+.insight-list li {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.insight-list li:last-child { border-bottom: none; }
+.insight-list li::before {
+  content: '→';
+  color: var(--teal);
+  font-family: var(--mono);
+  font-size: 10px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--s3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: var(--muted);
+  overflow-x: auto;
+  white-space: pre;
+  margin-top: 8px;
+}
+.code .kw { color: var(--purple); }
+.code .fn { color: var(--blue); }
+.code .str { color: var(--amber); }
+.code .cm { color: var(--dim); }
+
+.sec-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin: 28px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sec-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.big-insight {
+  background: linear-gradient(135deg, rgba(62,207,170,.06), rgba(91,141,238,.06));
+  border: 1px solid rgba(62,207,170,.15);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.big-insight strong { color: var(--teal); display: block; font-size: 13px; margin-bottom: 4px; }
+.big-insight p { font-size: 12px; color: var(--muted); margin: 0; }
+
+/* MATH TABLE */
+table { width:100%; border-collapse:collapse; font-size:12px; }
+th { font-family:var(--mono); font-size:10px; letter-spacing:.06em; color:var(--muted); text-align:left; padding:7px 10px; border-bottom:1px solid var(--border); }
+td { padding:7px 10px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+td:first-child { font-weight:500; color:#fff; }
+tr:last-child td { border-bottom:none; }
+.hl td { background:rgba(62,207,170,.03); }
+
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.flow-box {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text);
+  text-align: center;
+}
+.flow-arrow {
+  font-size: 18px;
+  color: var(--dim);
+  padding: 0 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">EXPLORATORY DATA ANALYSIS</div>
+  <h1>How to find <em>insights</em><br>from data</h1>
+  <p>Every graph and maths operation — what it tells you, when to use it, and what question it answers. Built around the Iris sepal length example.</p>
+</div>
+
+<div class="wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="show('univariate',this)">Univariate</button>
+    <button class="nav-btn" onclick="show('bivariate',this)">Bivariate</button>
+    <button class="nav-btn" onclick="show('multivariate',this)">Multivariate</button>
+    <button class="nav-btn" onclick="show('math',this)">Maths & Tests</button>
+    <button class="nav-btn" onclick="show('flow',this)">EDA Workflow</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- UNIVARIATE                                         -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="univariate" class="panel active">
+
+    <div class="big-insight">
+      <strong>What is univariate analysis?</strong>
+      <p>One variable at a time. Understand its shape, spread, and centre before comparing anything.</p>
+    </div>
+
+    <div class="sec-title">Distribution graphs</div>
+    <div class="grid2">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-blue">KDE PLOT</span>
+          <span class="card-title">Distinguish species by sepal length</span>
+        </div>
+        <div class="card-body">
+          <p>Your exact question. Plot one KDE per species. Overlap shows confusion zone, separation shows you CAN distinguish.</p>
+          <div class="plot"><span class="hi">  Sepal Length KDE — Iris species</span>
+
+<span class="hi-coral">  Setosa</span>    ─────.─────.
+                      /           \      short, tight cluster
+                     /             \
+  <span class="hi-teal">Versicolor</span>           .───.───.
+                         /           \.
+                        /              \
+  <span class="hi-purple">Virginica</span>                  .────────.
+                                /          `.
+                               /              \
+
+  ──────┬──────┬──────┬──────┬──────┬──────
+        4.0   5.0   6.0   7.0   8.0   sepal_length
+
+  Setosa is fully SEPARATED (insight: sepal length
+  alone is enough to identify Setosa).
+  Versicolor and Virginica OVERLAP (insight: you
+  need another feature to separate them).</div>
+          <ul class="insight-list">
+            <li>Overlap between two KDEs = hard to separate using this feature alone</li>
+            <li>No overlap = this feature perfectly separates those two classes</li>
+            <li>Wide KDE = high variance in that species</li>
+            <li>Tall narrow KDE = species is very consistent in this measurement</li>
+          </ul>
+          <div class="code"><span class="kw">import</span> seaborn <span class="kw">as</span> sns
+<span class="fn">sns.kdeplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+            hue=<span class="str">'species'</span>, fill=<span class="kw">True</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-teal">HISTOGRAM</span>
+          <span class="card-title">See raw frequency distribution</span>
+        </div>
+        <div class="card-body">
+          <p>Shows actual counts per bin. Use before KDE to understand the raw data shape.</p>
+          <div class="plot"><span class="hi">  Histogram — Sepal Length (all species)</span>
+
+  count
+    30 |        ██
+    25 |     ██ ██ ██
+    20 |  ██ ██ ██ ██
+    15 |  ██ ██ ██ ██ ██
+    10 |  ██ ██ ██ ██ ██ ██
+     5 |  ██ ██ ██ ██ ██ ██ ██
+     0 +──┴──┴──┴──┴──┴──┴──┴──
+       4.5  5  5.5  6  6.5  7  7.5   sepal_length
+
+  Insights: right-skewed? bimodal?
+  Bimodal hump → likely two species mixed together.</div>
+          <ul class="insight-list">
+            <li>Bimodal (two humps) = two groups hidden inside</li>
+            <li>Long right tail = outliers or rare large values</li>
+            <li>Bin width matters: too wide hides shape, too narrow looks noisy</li>
+          </ul>
+          <div class="code"><span class="fn">sns.histplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+             hue=<span class="str">'species'</span>, bins=20, kde=<span class="kw">True</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-amber">BOX PLOT</span>
+          <span class="card-title">Compare median, spread, outliers</span>
+        </div>
+        <div class="card-body">
+          <p>5-number summary for each species side by side. Best for spotting who is higher and how spread they are.</p>
+          <div class="plot"><span class="hi">  Boxplot — Sepal Length per Species</span>
+
+  sepal
+  length
+   8.0 |
+   7.5 |              ┌──┐     ┌──┐
+   7.0 |              │  │  ───┤  ├───
+   6.5 |           ───┤  ├─   └──┘
+   6.0 |        ┌──┐  └──┘
+   5.5 |    ────┤  ├───
+   5.0 |        └──┘
+   4.5 |    o
+       +──────────────────────────────
+           Setosa  Versic.  Virginica
+
+  Setosa: low median, tight box, one outlier below.
+  Virginica: highest median, wide box (more variable).</div>
+          <ul class="insight-list">
+            <li>Non-overlapping boxes = statistically different medians</li>
+            <li>Wide box = high IQR = high spread</li>
+            <li>Dots outside whiskers = outliers worth investigating</li>
+            <li>Box position vs others = which species is generally larger</li>
+          </ul>
+          <div class="code"><span class="fn">sns.boxplot</span>(data=df, x=<span class="str">'species'</span>,
+            y=<span class="str">'sepal_length'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-purple">VIOLIN PLOT</span>
+          <span class="card-title">Box plot + KDE combined</span>
+        </div>
+        <div class="card-body">
+          <p>Shows full distribution shape AND the 5-number summary. Richer than boxplot.</p>
+          <div class="plot"><span class="hi">  Violin Plot — Sepal Length per Species</span>
+
+            .─.       .──.       .───.
+           /   \     /    \     /     \
+          │     │   │      │   │       │
+   thin   │ ─── │   │  ─── │   │  ───  │  wide
+  (fewer) │     │   │      │   │       │ (more)
+           \   /     \    /     \     /
+            `─'       `──'       `───'
+
+          Setosa   Versic.   Virginica
+
+  Fat belly = many data points at that value.
+  Narrow waist = few data points there.</div>
+          <ul class="insight-list">
+            <li>Fat belly = modal region — most values concentrate here</li>
+            <li>Bimodal violin (two bulges) = two sub-groups within that species</li>
+            <li>Compare width at same height across species</li>
+          </ul>
+          <div class="code"><span class="fn">sns.violinplot</span>(data=df, x=<span class="str">'species'</span>,
+               y=<span class="str">'sepal_length'</span>, inner=<span class="str">'quartile'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-coral">STRIP / SWARM</span>
+          <span class="card-title">Show every individual data point</span>
+        </div>
+        <div class="card-body">
+          <p>Plots every row as a dot. No summarisation. Lets you see sample size and exact spread.</p>
+          <div class="plot"><span class="hi">  Swarmplot — all 50 points per species</span>
+
+  sepal_length
+   7.5 |         .  . .
+   7.0 |       . . . . . .  . . .
+   6.5 |     . . . . . .  . . . . .
+   6.0 |   . . . . . .  . . . . . . .
+   5.5 | . . . . . . .  . . . . . . .
+   5.0 | . . . . . . .  . . . .
+   4.5 | . . . .
+       +────────────────────────────
+         Setosa     Versic.  Virginica
+
+  You can see n=50 per species, density per region,
+  and any gap or cluster.</div>
+          <ul class="insight-list">
+            <li>Dense cluster = common value range for that species</li>
+            <li>Gap between dots = uncommon range</li>
+            <li>Overlapping dots across species = can't separate using this feature</li>
+          </ul>
+          <div class="code"><span class="fn">sns.swarmplot</span>(data=df, x=<span class="str">'species'</span>,
+               y=<span class="str">'sepal_length'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-green">ECDF</span>
+          <span class="card-title">Empirical cumulative distribution</span>
+        </div>
+        <div class="card-body">
+          <p>At each x value: what fraction of data is at or below x. No bin needed, no smoothing. The most honest single-variable graph.</p>
+          <div class="plot"><span class="hi">  ECDF — Sepal Length per Species</span>
+
+  fraction
+   1.0 |         <span class="hi-coral">Setosa ────────────────</span>
+   0.8 |      <span class="hi-coral">──</span>       <span class="hi-teal">Versicolor ─────────</span>
+   0.6 |   <span class="hi-coral">──</span>        <span class="hi-teal">────</span>      <span class="hi-purple">Virginica ──────</span>
+   0.4 |             <span class="hi-teal">────</span>    <span class="hi-purple">─────</span>
+   0.2 |                  <span class="hi-teal">──</span>  <span class="hi-purple">─────</span>
+   0.0 +──────────────────────────────
+       4.0   5.0   6.0   7.0   8.0
+
+  Read: 80% of Setosa has sepal_length below 5.2.
+  Read: 0% of Virginica has sepal_length below 5.0.</div>
+          <ul class="insight-list">
+            <li>If ECDF curves do not overlap = perfect separation by this feature</li>
+            <li>Read P(X ≤ x) directly off the y-axis for any x</li>
+            <li>Steeper slope = many values packed in that region</li>
+          </ul>
+          <div class="code"><span class="fn">sns.ecdfplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+              hue=<span class="str">'species'</span>)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- BIVARIATE                                          -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="bivariate" class="panel">
+
+    <div class="big-insight">
+      <strong>What is bivariate analysis?</strong>
+      <p>Two variables together. Find relationships, direction, strength. Answer: does one feature help another separate the species?</p>
+    </div>
+
+    <div class="sec-title">Two numerical variables</div>
+    <div class="grid2">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-blue">SCATTER PLOT</span>
+          <span class="card-title">Sepal length vs sepal width per species</span>
+        </div>
+        <div class="card-body">
+          <p>Each dot is one flower. Color = species. Can two features together separate what one alone cannot?</p>
+          <div class="plot"><span class="hi">  Scatter — sepal_length vs sepal_width</span>
+
+  sepal_width
+   4.5 |  <span class="hi-coral">● ●</span>
+   4.0 |  <span class="hi-coral">● ● ●</span>
+   3.5 |  <span class="hi-coral">● ● ● ●</span>  <span class="hi-teal">◆</span>
+   3.0 |   <span class="hi-coral">●</span>    <span class="hi-teal">◆ ◆ ◆</span>  <span class="hi-purple">▲</span>
+   2.5 |          <span class="hi-teal">◆ ◆ ◆</span> <span class="hi-purple">▲ ▲</span>
+   2.0 |               <span class="hi-teal">◆</span>  <span class="hi-purple">▲ ▲ ▲</span>
+       +──────────────────────────────
+         4.5  5.0  5.5  6.0  6.5  7.0  sepal_length
+
+  <span class="hi-coral">●</span> Setosa   <span class="hi-teal">◆</span> Versicolor   <span class="hi-purple">▲</span> Virginica
+
+  Setosa clearly separated top-left.
+  Versicolor and Virginica still overlap.</div>
+          <ul class="insight-list">
+            <li>Clusters that do not touch = two features together separate those classes</li>
+            <li>Cluster direction = positive/negative correlation within species</li>
+            <li>Outlier dot far from cluster = unusual flower worth investigating</li>
+          </ul>
+          <div class="code"><span class="fn">sns.scatterplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+                y=<span class="str">'sepal_width'</span>, hue=<span class="str">'species'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-teal">REG PLOT</span>
+          <span class="card-title">Scatter + regression line per group</span>
+        </div>
+        <div class="card-body">
+          <p>Does the relationship between two features differ across species? Different slopes = interaction effect.</p>
+          <div class="plot"><span class="hi">  Regplot — sepal_length vs petal_length</span>
+
+  petal_length
+   7 |                          <span class="hi-purple">▲ ▲  /</span>
+   6 |                     <span class="hi-purple">▲ ▲ / ▲</span>
+   5 |               <span class="hi-teal">◆ ◆ /◆</span> <span class="hi-purple">▲/</span>
+   4 |           <span class="hi-teal">◆  ◆/◆</span>
+   3 |         <span class="hi-teal">◆ /</span>
+   2 |   <span class="hi-coral">●●/●●</span>
+   1 |  <span class="hi-coral">/●●</span>
+     +──────────────────────────────
+       4.5  5.5  6.5  7.5   sepal_length
+
+  All species show positive slope.
+  Slope for Setosa (steep) differs from others.</div>
+          <ul class="insight-list">
+            <li>Same slope for all species = feature relationship is universal</li>
+            <li>Different slopes = species moderates the relationship (interaction)</li>
+            <li>Wide confidence band = noisy relationship, not reliable</li>
+          </ul>
+          <div class="code"><span class="fn">sns.lmplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+           y=<span class="str">'petal_length'</span>, hue=<span class="str">'species'</span>)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sec-title">Numerical vs categorical</div>
+    <div class="grid2">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-amber">BAR PLOT</span>
+          <span class="card-title">Mean sepal length per species</span>
+        </div>
+        <div class="card-body">
+          <p>Shows mean (and optional CI). Answers: which species has the highest average value?</p>
+          <div class="plot"><span class="hi">  Barplot — mean sepal_length ± 95% CI</span>
+
+  mean sepal_length
+   7.0 |                          <span class="hi-purple">████</span>
+   6.5 |              <span class="hi-teal">████ T</span>       <span class="hi-purple">████</span>
+   6.0 |              <span class="hi-teal">████</span>        <span class="hi-purple">████</span>
+   5.5 |  <span class="hi-coral">████ T</span>      <span class="hi-teal">████</span>        <span class="hi-purple">████</span>
+   5.0 |  <span class="hi-coral">████</span>         <span class="hi-teal">████</span>
+   4.5 |  <span class="hi-coral">████</span>
+       +────────────────────────────────
+            Setosa   Versic.   Virginica
+                T = error bar (95% CI)
+
+  Non-overlapping error bars = significantly different means.</div>
+          <ul class="insight-list">
+            <li>Non-overlapping CI bars = difference is statistically significant</li>
+            <li>Short error bar = species is consistent in this measure</li>
+            <li>Tall error bar = high variance, many different sized flowers</li>
+          </ul>
+          <div class="code"><span class="fn">sns.barplot</span>(data=df, x=<span class="str">'species'</span>,
+            y=<span class="str">'sepal_length'</span>, ci=95)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-coral">POINT PLOT</span>
+          <span class="card-title">Mean + CI joined by line across groups</span>
+        </div>
+        <div class="card-body">
+          <p>Same as bar plot but shows trend across ordered categories more clearly.</p>
+          <div class="plot"><span class="hi">  Pointplot — mean ± CI, connected</span>
+
+  mean sepal_length
+   6.8 |                             •  <span class="hi-purple">Virginica</span>
+   6.4 |                         •/
+   6.0 |                     •─/     <span class="hi-teal">Versicolor</span>
+   5.6 |                 •─/
+   5.2 |             •─/             <span class="hi-coral">Setosa</span>
+   4.8 |         •
+       +──────────────────────────
+          Setosa   Versic.   Virginica
+
+  Line connecting means shows monotonic increase.
+  If lines for features cross = reversal (interaction).</div>
+          <ul class="insight-list">
+            <li>Rising line = feature value increases across ordered groups</li>
+            <li>Crossing lines (two features) = one feature reverses between groups</li>
+          </ul>
+          <div class="code"><span class="fn">sns.pointplot</span>(data=df, x=<span class="str">'species'</span>,
+               y=<span class="str">'sepal_length'</span>)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sec-title">2D density</div>
+    <div class="grid2">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-purple">KDE 2D</span>
+          <span class="card-title">Joint density of two features</span>
+        </div>
+        <div class="card-body">
+          <p>Like a topographic map. Peaks = where most flowers are. Shows how two variables jointly distribute.</p>
+          <div class="plot"><span class="hi">  KDE2D — sepal_length × sepal_width</span>
+  <span class="hi">(Setosa only shown)</span>
+
+  sepal_width
+   4.5 |    · · ·
+   4.0 |  · ·(■)· ·    (■) = peak density
+   3.5 |  · ·(■)■ ·    outer rings = lower density
+   3.0 |    · · ·
+       +──────────────────────
+         4.5  5.0  5.5   sepal_length
+
+  Overlap of two species KDE2D = confusion zone.</div>
+          <ul class="insight-list">
+            <li>Non-overlapping 2D peaks = species are separable using both features together</li>
+            <li>Elongated ellipse = strong correlation between the two features</li>
+            <li>Circular ring = no correlation between the two features</li>
+          </ul>
+          <div class="code"><span class="fn">sns.kdeplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+            y=<span class="str">'sepal_width'</span>, hue=<span class="str">'species'</span>,
+            fill=<span class="kw">True</span>, alpha=0.4)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-green">JOINT PLOT</span>
+          <span class="card-title">Scatter + marginal KDE on each axis</span>
+        </div>
+        <div class="card-body">
+          <p>Central scatter + KDE on top edge + KDE on right edge. Three plots in one view.</p>
+          <div class="plot"><span class="hi">  Jointplot — sepal_length vs petal_length</span>
+
+  <span class="hi-teal">KDE─▶</span> /\        top: distribution of X alone
+           /  \
+  sepal  |scatter|    centre: relationship
+  width  | plot  |
+           \  /
+        <span class="hi-amber">KDE─▶</span>  \/         right: distribution of Y alone
+
+  Diagonal scatter = positive correlation.
+  Separate KDE humps = classes separated on that axis.</div>
+          <ul class="insight-list">
+            <li>Top KDE shows if species separate on X axis alone</li>
+            <li>Right KDE shows if species separate on Y axis alone</li>
+            <li>Centre scatter shows if both together separate the species</li>
+          </ul>
+          <div class="code"><span class="fn">sns.jointplot</span>(data=df, x=<span class="str">'sepal_length'</span>,
+              y=<span class="str">'sepal_width'</span>, hue=<span class="str">'species'</span>)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- MULTIVARIATE                                       -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="multivariate" class="panel">
+
+    <div class="big-insight">
+      <strong>What is multivariate analysis?</strong>
+      <p>Three or more variables together. Find which combination of features separates species best. Answer the question: which features matter most?</p>
+    </div>
+
+    <div class="sec-title">All-vs-all and full dataset views</div>
+    <div class="grid2">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-blue">PAIR PLOT</span>
+          <span class="card-title">Every feature vs every other feature</span>
+        </div>
+        <div class="card-body">
+          <p>Grid of scatter plots. Diagonal shows KDE for each feature. Most powerful single EDA graph for classification.</p>
+          <div class="plot"><span class="hi">  Pairplot — Iris (4 features × 4 features)</span>
+
+        <span class="hi">s_len  s_wid  p_len  p_wid</span>
+  s_len  [KDE]  [scat] [scat] [scat]
+  s_wid  [scat] [KDE]  [scat] [scat]
+  p_len  [scat] [scat] [KDE]  [scat]
+  p_wid  [scat] [scat] [scat] [KDE]
+
+  Each scatter is colored by species.
+  Look for which scatter shows cleanest cluster separation.
+
+  Result for Iris:
+  petal_length vs petal_width → best separation
+  sepal_length vs sepal_width → worst separation</div>
+          <ul class="insight-list">
+            <li>Find the scatter with least overlap = best pair of features for classification</li>
+            <li>Diagonal KDE separation = that single feature is already powerful alone</li>
+            <li>All scatters overlapping = need more features or different model</li>
+          </ul>
+          <div class="code"><span class="fn">sns.pairplot</span>(data=df, hue=<span class="str">'species'</span>,
+             diag_kind=<span class="str">'kde'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-teal">HEATMAP</span>
+          <span class="card-title">Correlation matrix — all feature pairs</span>
+        </div>
+        <div class="card-body">
+          <p>Correlation coefficient for every pair. Find which features move together (redundant) vs independently (complementary).</p>
+          <div class="plot"><span class="hi">  Correlation Heatmap — Iris</span>
+
+           s_len  s_wid  p_len  p_wid
+  s_len  [ 1.00] [-0.11] [<span class="hi-teal"> 0.87</span>] [<span class="hi-teal"> 0.82</span>]
+  s_wid  [-0.11] [ 1.00] [-0.42] [-0.37]
+  p_len  [<span class="hi-teal"> 0.87</span>] [-0.42] [ 1.00] [<span class="hi-teal"> 0.96</span>]
+  p_wid  [<span class="hi-teal"> 0.82</span>] [-0.37] [<span class="hi-teal"> 0.96</span>] [ 1.00]
+
+  High r (≥0.8): petal_length ↔ petal_width
+  → These two are highly redundant.
+  → sepal_width is nearly independent of others.</div>
+          <ul class="insight-list">
+            <li>r close to 1 or -1 = the two features carry similar information (redundant)</li>
+            <li>r close to 0 = features are independent = both useful together</li>
+            <li>High correlation pair = could drop one to reduce redundancy</li>
+          </ul>
+          <div class="code"><span class="fn">sns.heatmap</span>(df.corr(), annot=<span class="kw">True</span>,
+            cmap=<span class="str">'coolwarm'</span>, vmin=-1, vmax=1)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-amber">PARALLEL COORDS</span>
+          <span class="card-title">All features on parallel axes</span>
+        </div>
+        <div class="card-body">
+          <p>Each line is one flower. Lines that stay together = species with similar profiles.</p>
+          <div class="plot"><span class="hi">  Parallel Coordinates — Iris</span>
+
+  s_len  s_wid  p_len  p_wid
+    |       |       |       |
+    |  <span class="hi-coral">─────────────────────</span>   Setosa: high s_wid
+    |  <span class="hi-coral">─────────────────────</span>   low p_len, p_wid
+    |       |  <span class="hi-teal">──────────────</span>  Versicolor: mid values
+    |       |  <span class="hi-teal">──────────────</span>
+    |       |       |  <span class="hi-purple">───────</span>  Virginica: high p_len
+    |       |       |  <span class="hi-purple">───────</span>  high p_wid
+
+  Lines that cross between axes = negative correlation
+  between those two features for that species.</div>
+          <ul class="insight-list">
+            <li>Lines of same color staying together = that species is internally consistent</li>
+            <li>Lines crossing = one feature increases while another decreases</li>
+            <li>One axis where all species clearly separate = that feature is most useful</li>
+          </ul>
+          <div class="code"><span class="kw">from</span> pandas.plotting <span class="kw">import</span> parallel_coordinates
+<span class="fn">parallel_coordinates</span>(df, <span class="str">'species'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-coral">ANDREWS CURVES</span>
+          <span class="card-title">Multi-feature similarity as wave patterns</span>
+        </div>
+        <div class="card-body">
+          <p>Each flower becomes a sinusoidal curve using all its features. Similar flowers = similar curves.</p>
+          <div class="plot"><span class="hi">  Andrews Curves — Iris</span>
+
+   f(t)
+        | <span class="hi-coral">───── ─────</span>      Setosa: tight band
+        | <span class="hi-coral">───── ─────</span>      low amplitude waves
+        |      <span class="hi-teal">~~~~~</span>
+        |      <span class="hi-teal">~~~~~</span>        Versicolor: mid amplitude
+        |              <span class="hi-purple">≈≈≈≈≈</span>
+        |              <span class="hi-purple">≈≈≈≈≈</span> Virginica: higher amplitude
+        +──────────────────────────
+          -π               π     t
+
+  Tight cluster = species is internally similar.
+  Wide spread = species is variable.</div>
+          <ul class="insight-list">
+            <li>Species whose curves form separate bands = those species are very different overall</li>
+            <li>Overlapping bands = those species are similar across all features</li>
+          </ul>
+          <div class="code"><span class="kw">from</span> pandas.plotting <span class="kw">import</span> andrews_curves
+<span class="fn">andrews_curves</span>(df, <span class="str">'species'</span>)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- MATH & TESTS                                       -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="math" class="panel">
+
+    <div class="big-insight">
+      <strong>From graph insight to mathematical proof</strong>
+      <p>Graphs tell you what might be true. Statistical tests tell you if it is actually true (not just by chance). Always follow a graph with a test.</p>
+    </div>
+
+    <div class="sec-title">Descriptive statistics per group</div>
+
+    <table>
+      <thead><tr><th>Stat</th><th>Formula</th><th>Iris insight</th><th>Code</th></tr></thead>
+      <tbody>
+        <tr><td>Mean per group</td><td>x̄ = Σxᵢ / n</td><td>Virginica mean sepal = 6.59 vs Setosa = 5.01</td><td class="code" style="font-size:10px">df.groupby('species')['sepal_length'].mean()</td></tr>
+        <tr class="hl"><td>Std dev per group</td><td>s = √Σ(xᵢ-x̄)²/(n-1)</td><td>Setosa is most consistent (low std)</td><td class="code" style="font-size:10px">df.groupby('species')['sepal_length'].std()</td></tr>
+        <tr><td>Median per group</td><td>middle value sorted</td><td>Robust to outlier flowers</td><td class="code" style="font-size:10px">.median()</td></tr>
+        <tr class="hl"><td>IQR per group</td><td>Q3 − Q1</td><td>How wide the middle 50% is per species</td><td class="code" style="font-size:10px">q3 - q1 per group</td></tr>
+        <tr><td>Skewness</td><td>Σ((xᵢ-x̄)/s)³ / n</td><td>Is species distribution symmetric?</td><td class="code" style="font-size:10px">df.groupby('species')['sepal_length'].skew()</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-title">Inferential tests — is the difference real?</div>
+
+    <div class="grid2">
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-blue">T-TEST</span>
+          <span class="card-title">Are two group means significantly different?</span>
+        </div>
+        <div class="card-body">
+          <p>Compare mean sepal length of Setosa vs Versicolor. Is the gap real or just sampling noise?</p>
+          <div class="plot"><span class="hi">  H₀: μ_setosa = μ_versicolor (no difference)
+  H₁: μ_setosa ≠ μ_versicolor
+
+  t = (x̄₁ - x̄₂) / √(s₁²/n₁ + s₂²/n₂)
+
+  p-value < 0.05 → reject H₀ → difference is real
+  p-value ≥ 0.05 → cannot reject H₀</span></div>
+          <ul class="insight-list">
+            <li>Use when comparing exactly two groups</li>
+            <li>Assumes roughly normal distribution per group</li>
+          </ul>
+          <div class="code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> ttest_ind
+setosa = df[df.species==<span class="str">'setosa'</span>][<span class="str">'sepal_length'</span>]
+versic = df[df.species==<span class="str">'versicolor'</span>][<span class="str">'sepal_length'</span>]
+t, p = <span class="fn">ttest_ind</span>(setosa, versic)
+<span class="cm"># p < 0.05 → significantly different</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-teal">ANOVA</span>
+          <span class="card-title">Are all three group means different?</span>
+        </div>
+        <div class="card-body">
+          <p>Extension of t-test for 3+ groups. Is sepal length different across all three species?</p>
+          <div class="plot"><span class="hi">  H₀: μ_setosa = μ_versicolor = μ_virginica
+  H₁: at least one mean differs
+
+  F = variance_between_groups / variance_within_groups
+
+  Large F → groups differ more than chance allows
+  p < 0.05 → at least one group is different</span></div>
+          <ul class="insight-list">
+            <li>Use when comparing 3 or more groups at once</li>
+            <li>Does not tell you WHICH group is different — need post-hoc test after</li>
+          </ul>
+          <div class="code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> f_oneway
+<span class="fn">f_oneway</span>(setosa, versic,
+         df[df.species==<span class="str">'virginica'</span>][<span class="str">'sepal_length'</span>])</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-amber">TUKEY HSD</span>
+          <span class="card-title">Which specific pairs are different?</span>
+        </div>
+        <div class="card-body">
+          <p>Post-hoc test after ANOVA. Tells you exactly which species pairs are significantly different from each other.</p>
+          <div class="plot"><span class="hi">  Tukey HSD output example:
+
+  Pair                  p-adj   Significant?
+  Setosa vs Versicolor  0.001   YES
+  Setosa vs Virginica   0.001   YES
+  Versicolor vs Virgin. 0.001   YES
+
+  All three pairs are significantly different
+  in sepal_length → sepal_length is a useful
+  feature to separate all three species.</span></div>
+          <div class="code"><span class="kw">from</span> statsmodels.stats.multicomp <span class="kw">import</span> pairwise_tukeyhsd
+<span class="fn">pairwise_tukeyhsd</span>(df.sepal_length, df.species)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-tag tag-coral">KS TEST</span>
+          <span class="card-title">Do two distributions have the same shape?</span>
+        </div>
+        <div class="card-body">
+          <p>Kolmogorov-Smirnov: compares the full ECDF of two groups. Not just the mean — the entire distribution.</p>
+          <div class="plot"><span class="hi">  KS statistic = max gap between two ECDFs
+
+  ECDF
+   1.0 |    <span class="hi-coral">Setosa──────────────────</span>
+   0.8 |  <span class="hi-coral">──</span>   <span class="hi">↕ D (max gap)</span>
+   0.6 |        <span class="hi-teal">Versicolor──────────</span>
+   0.4 |      <span class="hi-teal">────</span>
+       +──────────────────────────
+  
+  Large D, small p → distributions are different</span></div>
+          <ul class="insight-list">
+            <li>Catches differences in shape, spread, and location all at once</li>
+            <li>More powerful than just comparing means</li>
+          </ul>
+          <div class="code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> ks_2samp
+<span class="fn">ks_2samp</span>(setosa, versic)</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sec-title">Normality and distribution tests</div>
+
+    <table>
+      <thead><tr><th>Test</th><th>Question it answers</th><th>Use before</th></tr></thead>
+      <tbody>
+        <tr><td>Shapiro-Wilk</td><td>Is this group normally distributed?</td><td>t-test and ANOVA (which assume normality)</td></tr>
+        <tr class="hl"><td>Levene's test</td><td>Do the groups have equal variance?</td><td>t-test (which assumes equal variance)</td></tr>
+        <tr><td>Chi-square</td><td>Are two categorical features independent?</td><td>When both variables are categories</td></tr>
+        <tr class="hl"><td>Mann-Whitney U</td><td>Non-parametric alternative to t-test</td><td>When data is not normally distributed</td></tr>
+        <tr><td>Kruskal-Wallis</td><td>Non-parametric alternative to ANOVA</td><td>When groups are not normally distributed</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- WORKFLOW                                           -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="flow" class="panel">
+
+    <div class="big-insight">
+      <strong>The full EDA workflow — step by step</strong>
+      <p>Every insight question has a natural sequence. Start single, then go wider.</p>
+    </div>
+
+    <div class="sec-title">Step by step</div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-body">
+        <div class="plot"><span class="hi">  STEP 1 — Understand each feature alone (Univariate)</span>
+  ────────────────────────────────────────────────────
+  Question: What does sepal_length look like by itself?
+
+  histplot → see raw shape and bins
+  kdeplot(hue=species) → does this ONE feature separate species?
+  boxplot(x=species) → compare medians and spread
+  df.describe() → mean, std, min, max, quartiles
+
+  Insight: Setosa sepal_length is clearly lower.
+           Versicolor and Virginica overlap here.
+
+  <span class="hi">  STEP 2 — Relationships between two features (Bivariate)</span>
+  ────────────────────────────────────────────────────
+  Question: Do two features together separate better than one alone?
+
+  scatterplot(x, y, hue=species) → clusters?
+  kdeplot(x, y, hue=species) → 2D density overlap?
+  jointplot → marginal + joint view
+  barplot → mean difference across groups
+  t-test / ANOVA → is the difference statistically significant?
+
+  Insight: sepal_length + petal_length → Setosa fully separates.
+           Versicolor and Virginica still overlap somewhat.
+
+  <span class="hi">  STEP 3 — All features at once (Multivariate)</span>
+  ────────────────────────────────────────────────────
+  Question: Which combination of features best separates all species?
+
+  pairplot(hue=species) → scan all pairs, find cleanest scatter
+  heatmap(corr) → which features are redundant?
+  parallel_coordinates → full profile per species
+
+  Insight: petal_length + petal_width → best separation.
+           sepal_width almost useless alone.
+           petal_length and petal_width are highly correlated (r=0.96)
+           → only need one of them for a model.
+
+  <span class="hi">  STEP 4 — Confirm with statistics</span>
+  ────────────────────────────────────────────────────
+  shapiro → check normality per species per feature
+  ANOVA → are all three species different in this feature?
+  Tukey HSD → which pairs are different?
+  KS test → do the full distributions differ?
+
+  Insight confirmed: All three species significantly differ
+  in petal_length (p < 0.001, F = 1180).</span></div>
+      </div>
+    </div>
+
+    <div class="sec-title">Feature usefulness summary — Iris example</div>
+
+    <table>
+      <thead><tr><th>Feature</th><th>Separates Setosa?</th><th>Separates Versicolor vs Virginica?</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>sepal_length</td><td>Yes (barely)</td><td>Partial overlap</td><td>Weak</td></tr>
+        <tr class="hl"><td>sepal_width</td><td>Yes (reversed!)</td><td>No — huge overlap</td><td>Very weak</td></tr>
+        <tr><td>petal_length</td><td>Yes — fully</td><td>Good separation</td><td>Strong</td></tr>
+        <tr class="hl"><td>petal_width</td><td>Yes — fully</td><td>Best separation</td><td>Strongest</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-title">All graphs — one reference</div>
+
+    <table>
+      <thead><tr><th>Graph</th><th>Type</th><th>Question it answers</th><th>sns function</th></tr></thead>
+      <tbody>
+        <tr><td>KDE plot</td><td>Univariate</td><td>Distribution shape, overlap between species</td><td>kdeplot</td></tr>
+        <tr class="hl"><td>Histogram</td><td>Univariate</td><td>Raw frequency, bimodal, skew</td><td>histplot</td></tr>
+        <tr><td>Box plot</td><td>Univariate</td><td>Median, IQR, outliers per group</td><td>boxplot</td></tr>
+        <tr class="hl"><td>Violin plot</td><td>Univariate</td><td>Shape + spread combined</td><td>violinplot</td></tr>
+        <tr><td>Swarm plot</td><td>Univariate</td><td>Every individual point</td><td>swarmplot</td></tr>
+        <tr class="hl"><td>ECDF</td><td>Univariate</td><td>Cumulative probability, P(X≤x) directly</td><td>ecdfplot</td></tr>
+        <tr><td>Scatter plot</td><td>Bivariate</td><td>Two feature relationship + cluster</td><td>scatterplot</td></tr>
+        <tr class="hl"><td>Reg plot</td><td>Bivariate</td><td>Regression slope per group</td><td>lmplot</td></tr>
+        <tr><td>Bar plot</td><td>Bivariate</td><td>Mean comparison with CI</td><td>barplot</td></tr>
+        <tr class="hl"><td>Point plot</td><td>Bivariate</td><td>Trend in mean across ordered groups</td><td>pointplot</td></tr>
+        <tr><td>KDE 2D</td><td>Bivariate</td><td>Joint density of two features</td><td>kdeplot (x+y)</td></tr>
+        <tr class="hl"><td>Joint plot</td><td>Bivariate</td><td>Scatter + marginal distribution at once</td><td>jointplot</td></tr>
+        <tr><td>Pair plot</td><td>Multivariate</td><td>All feature combinations at once</td><td>pairplot</td></tr>
+        <tr class="hl"><td>Heatmap</td><td>Multivariate</td><td>Correlation — redundancy between features</td><td>heatmap</td></tr>
+        <tr><td>Parallel coords</td><td>Multivariate</td><td>Full feature profile per species</td><td>parallel_coordinates</td></tr>
+        <tr class="hl"><td>Andrews curves</td><td>Multivariate</td><td>Overall similarity as wave patterns</td><td>andrews_curves</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
