@@ -473,7 +473,7 @@ Smeared, phase-shifted waveform
 
 ### C) Noise
 
-**Definition:** Noise refers to unwanted signals that interfere with the desired signal, degrading communication quality.
+	**Definition:** Noise refers to unwanted signals that interfere with the desired signal, degrading communication quality.
 
 #### 1. Thermal Noise (White Noise / Johnson Noise)
 

@@ -1,4 +1,4 @@
-23
+
 ## Table of Contents
 1. [Introduction to Physical Layer](#introduction)
 2. [Network Topology Design](#network-topology)
@@ -6,7 +6,8 @@
 
 ## 1. Introduction to Physical Layer {#introduction}
 
-The **Physical Layer** is the first and foundational layer of the OSI model. It deals with the actual physical connection between devices and the transmission of raw bits over a communication channel.
+
+The **Physical Layer** is the first and foundational layer of the OSI model. It deals with the actual physical connection between devices and the transmission of raw bits over a communication channel. 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
