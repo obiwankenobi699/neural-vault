@@ -4,22 +4,51 @@
     "type": "split",
     "children": [
       {
-        "id": "47f63f7a4907cace",
+        "id": "95a41b3e0647d64e",
         "type": "tabs",
         "children": [
           {
-            "id": "88a1f21a48ada011",
+            "id": "610f0de900449c26",
             "type": "leaf",
             "state": {
               "type": "excalidraw",
               "state": {
-                "file": "04_DSA/03_Searching/Binary/Visual/Binarysearch.excalidraw.md"
+                "file": "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.md"
               },
               "icon": "excalidraw-icon",
-              "title": "Binarysearch.excalidraw"
+              "title": "Policyrag.excalidraw"
+            }
+          },
+          {
+            "id": "3441372ce4e86f51",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "09_Ai_Agents/02_Rag/03_Chunking.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "03_Chunking"
+            }
+          },
+          {
+            "id": "8d93ba03f193245e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "09_Ai_Agents/01_MCP/01_Introduction.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "01_Introduction"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -179,55 +208,54 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "88a1f21a48ada011",
+  "active": "8d93ba03f193245e",
   "lastOpenFiles": [
-    "04_DSA/03_Searching/Binary/Pattern & Concept/03_Binary Search Without target and without length of array.md",
-    "04_DSA/03_Searching/Binary/Pattern & Concept/02_Order Agnostic BS.md",
-    "04_DSA/03_Searching/Binary/Pattern & Concept/01_Binary Search.md",
-    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/03_Parser.md",
-    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/02_Lexical Analysis.md",
-    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/01_Introductin to Compilor.md",
+    "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.md",
+    "09_Ai_Agents/02_Rag/03_Chunking.md",
+    "09_Ai_Agents/02_Rag/visual/MCP.gif",
+    "09_Ai_Agents/01_MCP/01_Introduction.md",
+    "09_Ai_Agents/02_Rag/02_Retrieval.md",
+    "09_Ai_Agents/02_Rag/01_Introduction.md",
+    "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.svg",
+    "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.excalidraw",
+    "08_OC/introduction.md",
+    "AND.md",
+    "09_Ai_Agents/02_Rag/visual",
+    "09_Ai_Agents/01_MCP",
+    "09_Ai_Agents/02_Rag",
+    "09_Ai_Agents",
+    "06_Maths/01_Statistics/Visual/Desruptive.excalidraw.excalidraw",
+    "06_Maths/01_Statistics/03_co-relation & varience.md",
+    "06_Maths/01_Statistics/02_Quantile.md",
+    "06_Maths/01_Statistics/01_Introduction.md",
+    "06_Maths/01_Statistics/Visual/percentil.png",
+    "06_Maths/01_Statistics/Visual/Desruptive.excalidraw.md",
+    "06_Maths/01_Statistics/Visual/corelation.png",
+    "06_Maths/01_Statistics/Visual/Boxplot.svg",
+    "06_Maths/EDA.html",
+    "06_Maths/02_Using In Ml.md",
+    "06_Maths/01_Things to cover.md",
+    "02_Devops/01_Open System interconnection/01_OSI/02_ISO Model.md",
     "02_Devops/01_Open System interconnection/02_Physical Layer/03_Network Performance & Switching.md",
     "02_Devops/01_Open System interconnection/02_Physical Layer/02_Media Acess & Waves.md",
     "02_Devops/01_Open System interconnection/02_Physical Layer/01_Networking devices & medium.md",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/networking_devices.canvas",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/router.webp",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/server.jpg",
     "02_Devops/01_Open System interconnection/02_Physical Layer/VLAN.png",
-    "02_Devops/01_Open System interconnection/01_OSI/OSI.gif",
-    "02_Devops/01_Open System interconnection/01_OSI/02_ISO Model.md",
+    "02_Devops/01_Open System interconnection/02_Physical Layer/server.jpg",
+    "02_Devops/01_Open System interconnection/02_Physical Layer/router.webp",
+    "02_Devops/01_Open System interconnection/02_Physical Layer/networking_devices.canvas",
+    "03_Ai_ml/03_Datanalytics/04_Hadoop/01_Hadoop.md",
+    "03_Ai_ml/03_Datanalytics/04_Hadoop/02_HDFS.md",
+    "03_Ai_ml/03_Datanalytics/04_Hadoop/03_.md",
+    "03_Ai_ml/03_Datanalytics/04_Hadoop/mapreducer.jpg",
+    "03_Ai_ml/03_Datanalytics/04_Hadoop/e10780b5467c63538a85ab9e5692db4c 1.jpg",
     "02_Devops/01_Open System interconnection/01_OSI/03_Detailed layers and workings of internet.md",
     "02_Devops/01_Open System interconnection/01_OSI/01_WWW.md",
-    "04_DSA/02_Arrays/Pattern & Concepts/02_Find Array is Sorted in which way.md",
-    "04_DSA/02_Arrays/Pattern & Concepts/01_Find K largest element.md",
-    "06_Maths/01_Things to cover.md",
-    "06_Maths/02_Probability/02_Normal Distribution.md",
-    "06_Maths/EDA.html",
-    "06_Maths/02_Using In Ml.md",
-    "06_Maths/02_Probability/01_Probability Distribution function.md",
-    "2026-03-22_16-59-57_grim.png",
+    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/02_Lexical Analysis.md",
+    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/03_Parser.md",
+    "04_DSA/03_Searching/Binary/Visual/Binarysearch.excalidraw.md",
     "06_Maths/EDA.html.crdownload",
-    "06_Maths/02_Probability/Visual/PD.excalidraw.md",
     "06_Maths/02_Probability/Visual/kde.excalidraw.excalidraw",
-    "06_Maths/02_Probability/Visual/kde.excalidraw.svg",
-    "06_Maths/02_Probability/Visual/PD.excalidraw.svg",
     "06_Maths/02_Probability/Visual/PD.excalidraw.excalidraw",
-    "04_DSA/Basic logic/02_pattern solving and loops/pattern.excelidraw.md",
-    "04_DSA/Basic logic/02_pattern solving and loops/01_Loops & Pattern.md",
-    "06_Maths/02_Probability/Visual/kde.excalidraw.md",
-    "06_Maths/01_Statistics/03_co-relation & varience.md",
-    "06_Maths/01_Statistics/02_Quantile.md",
-    "04_DSA/Basic logic/01_if-else & Operators/02_Basic logic.md",
-    "04_DSA/Basic logic/01_if-else & Operators/01_Basic Logic.md",
-    "07_Hardware & IoT/assets/Pasted image 20260101101720.png",
-    "06_Maths/02_Probability/Visual",
-    "06_Maths/01_Statistics/Visual/corelation.png",
-    "06_Maths/01_Statistics/Visual/Pasted image 20260420091536.png",
-    "06_Maths/01_Statistics/Visual/Desruptive.excalidraw.excalidraw",
-    "06_Maths/01_Statistics/Visual/Boxplot.svg.part",
-    "06_Maths/01_Statistics/Visual/percentile.svg.part",
-    "06_Maths/02_Probability",
-    "06_Maths/01_Statistics/Visual",
     "04_DSA/03_Searching/Binary/Visual/Untitled.canvas",
     "02_Devops/07_Kubernetes/k8s.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",
