@@ -1,0 +1,239 @@
+[2026-06-11 17:05:48] Restructure started. EXECUTE=false
+[17:05:48] would backup to: /home/mukul/Main/Notes/06_Maths_backup_20260611_170548
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would mkdir: 01_Descriptive_Statistics/Visual
+[17:05:48] would mkdir: 02_Probability_Theory
+[17:05:48] would mkdir: 02_Probability_Theory/Visual
+[17:05:48] would mkdir: 03_Probability_Distributions
+[17:05:48] would mkdir: 04_Statistical_Inference
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would mkdir: 06_Calculus_Optimisation
+[17:05:48] would mkdir: _Dashboards
+[17:05:48] would mkdir: _archive
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would move: 01_Statistics/01_Introduction.md  →  01_Descriptive_Statistics/01_Introduction_and_Roadmap.md
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would move: 01_Statistics/02_Quantile.md  →  01_Descriptive_Statistics/03_Measures_of_Dispersion.md
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would move: 01_Statistics/03_co-relation & varience.md  →  01_Descriptive_Statistics/05_Correlation_and_Covariance.md
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would move dir: 01_Statistics/Visual/  →  01_Descriptive_Statistics/Visual/
+[17:05:48] would mkdir: 02_Probability_Theory
+[17:05:48] would move: 02_Probability/01_Probability Distribution function.md  →  02_Probability_Theory/02_PDF_PMF_CDF.md
+[17:05:48] would mkdir: 03_Probability_Distributions
+[17:05:48] would move: 02_Probability/02_Normal Distribution.md  →  03_Probability_Distributions/01_Normal_Distribution.md
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would move: 02_Probability/03_skewness.md  →  01_Descriptive_Statistics/04_Skewness_and_Kurtosis.md
+[17:05:48] would mkdir: 02_Probability_Theory
+[17:05:48] would move dir: 02_Probability/Visual/  →  02_Probability_Theory/Visual/
+[17:05:48] would mkdir: _Dashboards
+[17:05:48] would move: 01_EDA.html  →  _Dashboards/01_EDA.html
+[17:05:48] would mkdir: _Dashboards
+[17:05:48] would move: 02_probability_distributions_dashboard.html  →  _Dashboards/02_Probability_Distributions.html
+[17:05:48] would mkdir: _Dashboards
+[17:05:48] would move: 03_distribution_diagnostics.html  →  _Dashboards/03_Distribution_Diagnostics.html
+[17:05:48] would mkdir: _archive
+[17:05:48] would move: 01_Things to cover.md  →  _archive/01_Things_to_cover.md
+[17:05:48] would mkdir: _archive
+[17:05:48] would move: 02_Using In Ml.md  →  _archive/02_Using_In_ML.md
+[17:05:48] would mkdir: _archive
+[17:05:48] would move: _health_report.md  →  _archive/_health_report.md
+[17:05:48] mkdir (exists): /home/mukul/Main/Notes/06_Maths
+[17:05:48] would write: 00_Roadmap.md
+[17:05:48] would mkdir: 01_Descriptive_Statistics
+[17:05:48] would write: 01_Descriptive_Statistics/02_Measures_of_Central_Tendency.md
+[17:05:48] would mkdir: 02_Probability_Theory
+[17:05:48] would write: 02_Probability_Theory/01_Probability_Fundamentals.md
+[17:05:48] would mkdir: 02_Probability_Theory
+[17:05:48] would write: 02_Probability_Theory/03_Joint_Marginal_Conditional.md
+[17:05:48] would mkdir: 02_Probability_Theory
+[17:05:48] would write: 02_Probability_Theory/04_Bayes_Theorem.md
+[17:05:48] would mkdir: 03_Probability_Distributions
+[17:05:48] would write: 03_Probability_Distributions/02_Non_Gaussian_Distributions.md
+[17:05:48] would mkdir: 03_Probability_Distributions
+[17:05:48] would write: 03_Probability_Distributions/03_Sampling_and_CLT.md
+[17:05:48] would mkdir: 03_Probability_Distributions
+[17:05:48] would write: 03_Probability_Distributions/04_Distribution_Diagnostics.md
+[17:05:48] would mkdir: 03_Probability_Distributions
+[17:05:48] would write: 03_Probability_Distributions/05_Transformations.md
+[17:05:48] would mkdir: 04_Statistical_Inference
+[17:05:48] would write: 04_Statistical_Inference/01_Confidence_Intervals.md
+[17:05:48] would mkdir: 04_Statistical_Inference
+[17:05:48] would write: 04_Statistical_Inference/02_Hypothesis_Testing_Part1.md
+[17:05:48] would mkdir: 04_Statistical_Inference
+[17:05:48] would write: 04_Statistical_Inference/03_Hypothesis_Testing_Part2.md
+[17:05:48] would mkdir: 04_Statistical_Inference
+[17:05:48] would write: 04_Statistical_Inference/04_Chi_Square_Tests.md
+[17:05:48] would mkdir: 04_Statistical_Inference
+[17:05:48] would write: 04_Statistical_Inference/05_ANOVA.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/00_Roadmap.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/01_Vectors.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/02_Matrices.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/03_Matrix_Intuition.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/04_Eigenvalues_Eigenvectors.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/05_Eigen_Decomposition_PCA.md
+[17:05:48] would mkdir: 05_Linear_Algebra
+[17:05:48] would write: 05_Linear_Algebra/06_SVD.md
+[17:05:48] would mkdir: 06_Calculus_Optimisation
+[17:05:48] would write: 06_Calculus_Optimisation/01_Optimisation_Big_Picture.md
+[17:05:48] would mkdir: 06_Calculus_Optimisation
+[17:05:48] would write: 06_Calculus_Optimisation/02_Differential_Calculus.md
+[17:05:48] 01_Descriptive_Statistics/01_Introduction_and_Roadmap.md
+[17:05:48] 01_Descriptive_Statistics/02_Measures_of_Central_Tendency.md
+[17:05:48] 01_Descriptive_Statistics/03_Measures_of_Dispersion.md
+[17:05:48] 01_Descriptive_Statistics/04_Skewness_and_Kurtosis.md
+[17:05:48] 01_Descriptive_Statistics/05_Correlation_and_Covariance.md
+[17:05:48] 02_Probability_Theory/02_PDF_PMF_CDF.md
+[17:05:48] 02_Probability_Theory/03_Joint_Marginal_Conditional.md
+[17:05:48] 02_Probability_Theory/04_Bayes_Theorem.md
+[17:05:48] 03_Probability_Distributions/01_Normal_Distribution.md
+[17:05:48] 03_Probability_Distributions/02_Non_Gaussian_Distributions.md
+[17:05:48] 03_Probability_Distributions/03_Sampling_and_CLT.md
+[17:05:48] 03_Probability_Distributions/04_Distribution_Diagnostics.md
+[17:05:48] 03_Probability_Distributions/05_Transformations.md
+[17:05:48] 04_Statistical_Inference/01_Confidence_Intervals.md
+[17:05:48] 04_Statistical_Inference/02_Hypothesis_Testing_Part1.md
+[17:05:48] 04_Statistical_Inference/03_Hypothesis_Testing_Part2.md
+[17:05:48] 04_Statistical_Inference/04_Chi_Square_Tests.md
+[17:05:48] 04_Statistical_Inference/05_ANOVA.md
+[17:05:48] 05_Linear_Algebra/00_Roadmap.md
+[17:05:48] 05_Linear_Algebra/01_Vectors.md
+[17:05:48] 05_Linear_Algebra/02_Matrices.md
+[17:05:48] 05_Linear_Algebra/03_Matrix_Intuition.md
+[17:05:48] 05_Linear_Algebra/04_Eigenvalues_Eigenvectors.md
+[17:05:48] 05_Linear_Algebra/05_Eigen_Decomposition_PCA.md
+[17:05:48] 05_Linear_Algebra/06_SVD.md
+[17:05:48] 06_Calculus_Optimisation/01_Optimisation_Big_Picture.md
+[17:05:48] 06_Calculus_Optimisation/02_Differential_Calculus.md
+[17:05:48] 00_Roadmap.md
+[17:05:48] _Dashboards/01_EDA.html
+[17:05:48] _Dashboards/02_Probability_Distributions.html
+[17:05:48] _Dashboards/03_Distribution_Diagnostics.html
+
+
+---
+context 
+mukul@mukul ~/Main/Notes (main*) $ cd Main/Notes/
+bash: cd: Main/Notes/: No such file or directory
+[exit 1] 
+[1] mukul@mukul ~/Main/Notes (main*) $ ls
+ 00_Index   02_Devops   04_DSA             06_Maths             08_OC          2026-03-22_16-59-57_grim.png   _templates
+ 01_Dev     03_Ai_ml   '05_OS & Systems'  '07_Hardware & IoT'   09_Ai_Agents   Neural-Vault.md                _utilities
+mukul@mukul ~/Main/Notes (main*) $ cd 06_Maths/
+mukul@mukul ~/Main/Notes/06_Maths (main*) $ ls -R
+.:
+ 01_EDA.html    '01_Things to cover.md'   02_probability_distributions_dashboard.html   03_distribution_diagnostics.html
+ 01_Statistics   02_Probability          '02_Using In Ml.md'
+./01_Statistics:
+ 01_Introduction.md   02_Quantile.md  '03_co-relation & varience.md'   Visual
+./01_Statistics/Visual:
+ Boxplot.svg      Desruptive.excalidraw.excalidraw   Desruptive.excalidraw.svg          percentile.svg   table.svg
+ corelation.png   Desruptive.excalidraw.md          'Pasted image 20260420091536.png'   percentil.png    Use_of_Maths.jpg
+./02_Probability:
+'01_Probability Distribution function.md'  '02_Normal Distribution.md'   03_skewness.md   Visual
+./02_Probability/Visual:
+ 2026-05-30_10-49-19_grim.png      kde.excalidraw.svg                  'Pasted Image 20260530110624_493.png'   skewness.excalidraw.excalidraw
+'2026-05-31_13-41-17_grim 1.png'   non-gaussian.excalidraw.excalidraw   PD.excalidraw.excalidraw               skewness.excalidraw.md
+ kde.excalidraw.excalidraw         non-gaussian.excalidraw.md           PD.excalidraw.md                       skewness.excalidraw.svg
+ kde.excalidraw.md                 non-gaussian.excalidraw.svg          PD.excalidraw.svg
+mukul@mukul ~/Main/Notes/06_Maths (main*) $ 
+
+
+check each file and structure and restrcuture and organise my notes and its content im learning maths for ml and ds and deep learning im following this 
+
+https://youtube.com/playlist?list=PLKnIA16_RmvbYFaaeLY28cWeqV-3vADST&si=kfBwpzMeJqY0PEjL
+
+---
+about content
+Curriculum Overview: Mathematics for Machine Learning and Deep Learning
+
+1. Programme Introduction and Purpose
+
+The "Maths for Machine Learning" curriculum, curated by CampusX, represents a sophisticated, modular approach to mastering the mathematical rigour required for contemporary artificial intelligence. As a Senior Curriculum Designer, I have structured this guide to illustrate how the programme bridges the gap between abstract theory and applied data science. The curriculum is meticulously designed to take a learner from foundational numeracy to the complex multi-dimensional calculus and linear algebra that underpin deep learning architectures. By following this end-to-end path, practitioners move beyond simply calling library functions to deeply understanding the algorithmic mechanics of the models they build and deploy.
+
+2. Core Subject Area: Statistics and Probability
+
+Statistics Roadmap for Data Science
+
+The journey commences with the Statistics Roadmap for Data Science (12:40). This foundational guide outlines a strategic three-stage progression: starting with Descriptive Statistics to understand data distribution, moving into Probability Theory to handle uncertainty, and culminating in Inferential Statistics. This roadmap serves as a navigational tool, ensuring learners understand the prerequisite relationships between mean-variance analysis and complex hypothesis testing.
+
+Statistical Sessions
+
+The following sessions deliver the core mathematical frameworks required for rigorous data analysis:
+
+* Descriptive Statistics Part 1 (1:52:26): Establishes the groundwork for data characterisation, focusing on measures of central tendency and dispersion to summarise raw information effectively.
+* Descriptive Statistics Part 2 (1:55:42): Extends the analysis into higher-order moments, including skewness and kurtosis, providing the tools to identify data asymmetry and tail-heaviness.
+* Probability Distribution Functions (2:09:55): A critical deep dive into PDF, PMF, and CDF, teaching learners how to mathematically model the likelihood of random variables within a dataset.
+* Normal Distribution (2:01:29): An exhaustive study of the Gaussian curve, the most vital distribution in machine learning due to its ubiquity in natural phenomena and model error terms.
+* Non-Gaussian Probability Distributions (2:16:04): Expands the learner's toolkit to include Binomial, Poisson, and Exponential distributions, essential for modelling diverse real-world data types.
+* Central Limit Theorem (1:51:35): Demonstrates the mathematical bridge between samples and populations, explaining why the normal distribution emerges as sample sizes increase.
+
+Statistical Inference and Testing
+
+This subsection focuses on the transition from observing data to making scientific claims through rigorous validation:
+
+* Confidence Intervals (2:10:01): Teaches the methodology for quantifying uncertainty in point estimates, a vital skill for assessing model reliability.
+* Hypothesis Testing Part 1 (1:59:16): Introduces the formal logic of null and alternative hypotheses, providing a framework for objective decision-making.
+* Hypothesis Testing Part 2 (2:11:36): A technical exploration of p-values and t-tests, enabling learners to determine if observed patterns are statistically significant or merely the result of noise.
+* Session on Chi Square Tests (2:15:21) [PREMIUM CONTENT]: Covers the application of non-parametric tests to determine relationships between categorical variables.
+* Session on ANOVA (1:58:10) [PREMIUM CONTENT]: Details the Analysis of Variance, essential for comparing means across multiple groups simultaneously without inflating the Type I error rate.
+
+Probability
+
+The probability module provides the logic of uncertainty, which is the heartbeat of Bayesian machine learning:
+
+* Master Probability in Data Science (1:34:06): An accelerated curriculum covering the axiomatic foundations and basic rules of probability.
+* Mastering Probability for ML (1:20:29): A specialised session on Joint, Marginal, and Conditional Probability. It concludes with a masterclass on Bayes' Theorem, the mathematical basis for updating beliefs in the presence of new evidence.
+
+3. Core Subject Area: Linear Algebra
+
+The Linear Algebra module transitions learners from scalar values to high-dimensional spaces. The Linear Algebra Roadmap (15:48) defines the path from vector operations to matrix transformations and spectral decomposition.
+
+Session Title and Duration	Status
+Linear Algebra Roadmap for Machine Learning and Deep Learning (15:48)	Publicly Available
+Mastering Vectors in Linear Algebra - Part 1 (1:31:58)	Publicly Available
+Linear Algebra Part 2 - Matrices (2:26:34)	[PREMIUM CONTENT]
+Linear Algebra Part 3 - Matrices Intuition (2:10:01)	[PREMIUM CONTENT]
+Session on Eigen Vectors and Eigen Values (1:40:43)	[PREMIUM CONTENT]
+Session on Eigen Decomposition + PCA Variants (2:07:27)	[PREMIUM CONTENT]
+Session on Singular Value Decomposition (2:13:01)	[PREMIUM CONTENT]
+
+Advanced Concepts in Linear Algebra
+
+To master Deep Learning, one must understand how data is transformed and compressed. This curriculum prioritises Eigen Vectors and Eigen Values, which represent the "axes" of a transformation where the direction remains unchanged; this is the mathematical engine behind Principal Component Analysis (PCA). Similarly, Singular Value Decomposition (SVD) is presented as the ultimate tool for dimensionality reduction and data compression, allowing models to process massive datasets by extracting the most influential features while discarding noise.
+
+4. Core Subject Area: Calculus and Optimisation
+
+This final module focuses on the operational mechanics of learning.
+
+* Session on Optimization - The Big Picture (2:09:10) [PREMIUM CONTENT]: Optimisation is the core of "learning" in Machine Learning. This session synthesises how algorithms adjust internal parameters to minimise a cost function, effectively navigating a landscape of error to find the most accurate model state.
+* Session on Differential Calculus (2:25:48) [PREMIUM CONTENT]: Derivatives are the compass used during optimisation. This session explains how calculus provides the gradient (slope) of a function, which tells the algorithm exactly which direction to move to reduce error. This is a non-negotiable prerequisite for understanding backpropagation in neural networks.
+
+5. Curriculum Access Summary
+
+The CampusX "Maths for Machine Learning" playlist is a robust 23-video programme. It is bifurcated to support both general literacy and expert-level specialisation:
+
+* Foundational Content (Publicly Available):
+  * Learning Roadmaps for Statistics and Linear Algebra.
+  * Core Descriptive Statistics and Probability Distributions.
+  * Essential Inferential Statistics (CLT, Basic Hypothesis Testing).
+  * Probability Theory including Bayes' Theorem.
+  * Foundational Vector Calculus and Algebra.
+* Advanced and Deep-Dive Content (Premium):
+  * Categorical and Multi-group Statistical Testing (Chi Square, ANOVA).
+  * Matrix Intuition and High-Dimensional Transformations.
+  * Spectral Theory (Eigenvalues, Eigenvectors, and Decomposition).
+  * Mathematical Foundations of Dimensionality Reduction (SVD and PCA Variants).
+  * Calculus-based Optimisation Frameworks for Model Training.
+
+6. Source and Reference Information
+
+Source: CampusX
+Last Updated: 17 January 2024
+Total View Count: 736,067

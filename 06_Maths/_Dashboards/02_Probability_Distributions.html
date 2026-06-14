@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability Distributions — Interactive Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0e14;
+    --bg2: #111520;
+    --bg3: #171c2a;
+    --bg4: #1e2436;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --text2: #8a90a8;
+    --text3: #545c78;
+    --accent: #5b8dee;
+    --accent2: #3d6fd4;
+    --green: #3ecf8e;
+    --amber: #f5a623;
+    --coral: #f06464;
+    --teal: #38bdf8;
+    --purple: #a78bfa;
+    --pink: #f472b6;
+    --glow: 0 0 20px rgba(91,141,238,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--bg2);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .header-sub {
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-badge {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    border: 1px solid;
+  }
+  .badge-gaussian { background: rgba(91,141,238,0.1); border-color: rgba(91,141,238,0.3); color: var(--accent); }
+  .badge-nongaussian { background: rgba(240,100,100,0.1); border-color: rgba(240,100,100,0.3); color: var(--coral); }
+
+  /* Layout */
+  .shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 61px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 16px 0;
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    padding: 8px 16px 4px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    font-weight: 500;
+  }
+  .dist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    color: var(--text2);
+    font-size: 12px;
+    position: relative;
+  }
+  .dist-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+  .dist-item.active {
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+  }
+  .dist-item.active::after {
+    content:'';
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    width:4px; height:4px; border-radius:50%;
+    background: var(--item-color, var(--accent));
+  }
+  .dist-item .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--item-color, var(--accent));
+    opacity: 0.7;
+  }
+  .dist-item.active .dot { opacity: 1; }
+  .dist-item .dist-name { flex: 1; }
+  .dist-item .dist-tag {
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  .sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+
+  /* Main area */
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  /* Top bar with distribution name */
+  .dist-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--bg2);
+  }
+  .dist-color-bar {
+    width: 3px;
+    height: 48px;
+    border-radius: 2px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .dist-main-name {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .dist-main-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+    line-height: 1.5;
+    max-width: 600px;
+  }
+  .dist-type-pill {
+    margin-left: auto;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  /* Grid layout for main content */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    flex: 1;
+  }
+
+  /* Chart panel */
+  .chart-panel {
+    padding: 20px 24px;
+    border-right: 1px solid var(--border);
+  }
+  .chart-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .chart-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+  .view-btns {
+    display: flex;
+    gap: 4px;
+  }
+  .view-btn {
+    padding: 4px 10px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.12s;
+  }
+  .view-btn:hover { background: var(--bg3); color: var(--text); }
+  .view-btn.active { background: var(--bg4); color: var(--text); border-color: var(--border2); }
+
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 12px;
+  }
+
+  /* Stats cards row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .stat-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .stat-value {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Fraunces', serif;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .stat-hint {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+
+  /* Parameter sliders panel */
+  .sliders-panel {
+    padding: 20px 20px;
+  }
+  .sliders-title {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .param-block {
+    margin-bottom: 18px;
+  }
+  .param-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .param-name {
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .param-sym {
+    font-style: italic;
+    color: var(--text3);
+    margin-right: 4px;
+  }
+  .param-val {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    font-family: 'Fraunces', serif;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--bg4);
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--thumb-color, var(--accent));
+    border: 2px solid var(--bg2);
+    transition: transform 0.1s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+  /* Formula box */
+  .formula-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .formula-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+  .formula-text {
+    color: var(--teal);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  /* KDE / PMF toggle */
+  .kde-row {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+  .kde-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .kde-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .kde-item { display: flex; justify-content: space-between; font-size: 11px; }
+  .kde-key { color: var(--text2); }
+  .kde-val { color: var(--text); font-weight: 500; }
+
+  /* Real-world use cases */
+  .use-cases {
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .use-cases-title {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+  .use-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .use-case-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    transition: border-color 0.15s;
+  }
+  .use-case-card:hover { border-color: var(--border2); }
+  .uc-icon { font-size: 18px; margin-bottom: 5px; }
+  .uc-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .uc-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+  /* Comparison mini-chart */
+  .mini-charts-row {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .mini-row-title { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+  }
+  .mini-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 10px 6px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .mini-card:hover { border-color: var(--border2); background: var(--bg3); }
+  .mini-card.active-mini { border-color: rgba(91,141,238,0.4); }
+  .mini-card-name { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+  .mini-chart-wrap { height: 48px; position: relative; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+  .sigma-section {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-top: 10px;
+  }
+  .sigma-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .sigma-bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 11px; }
+  .sigma-bar { height: 6px; border-radius: 3px; transition: width 0.3s; }
+  .sigma-text { color: var(--text2); width: 28px; }
+  .sigma-pct { color: var(--text); width: 36px; text-align: right; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+  .panel-anim { animation: fadeIn 0.2s ease; }
+
+  .tail-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+    border: 1px solid;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Probability Distributions</div>
+    <div class="header-sub">Interactive Explorer · PDF / PMF · KDE · Parameters</div>
+  </div>
+  <div class="header-badge">
+    <span class="badge badge-gaussian">Gaussian</span>
+    <span class="badge badge-nongaussian">Non-Gaussian</span>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">Gaussian Family</div>
+    <div class="dist-item active" style="--item-color:#5b8dee" onclick="selectDist('normal')">
+      <div class="dot"></div>
+      <span class="dist-name">Normal</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#38bdf8" onclick="selectDist('halfnormal')">
+      <div class="dot"></div>
+      <span class="dist-name">Half-Normal</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#a78bfa" onclick="selectDist('bivariate')">
+      <div class="dot"></div>
+      <span class="dist-name">Truncated Normal</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#3ecf8e" onclick="selectDist('folded')">
+      <div class="dot"></div>
+      <span class="dist-name">Folded Normal</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-section">Non-Gaussian — Continuous</div>
+    <div class="dist-item" style="--item-color:#f5a623" onclick="selectDist('lognormal')">
+      <div class="dot"></div>
+      <span class="dist-name">Log-Normal</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#f06464" onclick="selectDist('exponential')">
+      <div class="dot"></div>
+      <span class="dist-name">Exponential</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#f472b6" onclick="selectDist('gamma')">
+      <div class="dot"></div>
+      <span class="dist-name">Gamma</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#fb923c" onclick="selectDist('beta')">
+      <div class="dot"></div>
+      <span class="dist-name">Beta</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#34d399" onclick="selectDist('chi2')">
+      <div class="dot"></div>
+      <span class="dist-name">Chi-Squared</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#e879f9" onclick="selectDist('cauchy')">
+      <div class="dot"></div>
+      <span class="dist-name">Cauchy (Fat-tail)</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#94a3b8" onclick="selectDist('uniform')">
+      <div class="dot"></div>
+      <span class="dist-name">Uniform</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#fbbf24" onclick="selectDist('pareto')">
+      <div class="dot"></div>
+      <span class="dist-name">Pareto</span>
+      <span class="dist-tag">PDF</span>
+    </div>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-section">Non-Gaussian — Discrete</div>
+    <div class="dist-item" style="--item-color:#60a5fa" onclick="selectDist('binomial')">
+      <div class="dot"></div>
+      <span class="dist-name">Binomial</span>
+      <span class="dist-tag">PMF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#4ade80" onclick="selectDist('poisson')">
+      <div class="dot"></div>
+      <span class="dist-name">Poisson</span>
+      <span class="dist-tag">PMF</span>
+    </div>
+    <div class="dist-item" style="--item-color:#f87171" onclick="selectDist('geometric')">
+      <div class="dot"></div>
+      <span class="dist-name">Geometric</span>
+      <span class="dist-tag">PMF</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainArea">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  DISTRIBUTION DEFINITIONS
+// ═══════════════════════════════════════════════════════════════════════════
+const DISTS = {
+
+  normal: {
+    name: 'Normal (Gaussian)',
+    shortName: 'Normal',
+    type: 'Gaussian',
+    typeColor: '#5b8dee',
+    color: '#5b8dee',
+    desc: 'The fundamental bell curve. Arises when many independent random effects are added together. Symmetric, infinite support, defined entirely by mean and variance.',
+    formula: 'f(x) = (1 / σ√2π) · exp(−(x−μ)² / 2σ²)',
+    formulaType: 'PDF',
+    tail: 'Thin tail',
+    params: [
+      { id: 'mu', sym: 'μ', name: 'Mean', min: -5, max: 5, step: 0.5, default: 0 },
+      { id: 'sigma', sym: 'σ', name: 'Std Dev', min: 0.3, max: 4, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => {
+      const { mu, sigma } = p;
+      return Math.exp(-0.5 * ((x - mu) / sigma) ** 2) / (sigma * Math.sqrt(2 * Math.PI));
+    },
+    xRange: (p) => [p.mu - 4 * p.sigma, p.mu + 4 * p.sigma],
+    mode: (p) => p.mu,
+    mean: (p) => p.mu,
+    variance: (p) => p.sigma ** 2,
+    skewness: () => 0,
+    kurtosis: () => 0,
+    useCases: [
+      { icon: '📏', title: 'Human height', desc: 'Adult heights cluster tightly around 170 cm with small σ' },
+      { icon: '🧠', title: 'IQ scores', desc: 'Standardised to μ=100, σ=15 by design' },
+      { icon: '🌡️', title: 'Temperature errors', desc: 'Sensor measurement noise is nearly perfectly Gaussian' },
+      { icon: '💊', title: 'Dosage uniformity', desc: 'Tablet weight variation in pharma production' },
+      { icon: '📈', title: 'Asset returns', desc: 'Short-window stock returns approximate Gaussian' },
+    ],
+    discrete: false,
+  },
+
+  halfnormal: {
+    name: 'Half-Normal',
+    shortName: 'Half-Normal',
+    type: 'Gaussian',
+    typeColor: '#38bdf8',
+    color: '#38bdf8',
+    desc: 'The positive half of a Normal distribution folded at zero. Used when measurements are always non-negative but arise from a zero-mean Gaussian process.',
+    formula: 'f(x) = (√2/σ√π) · exp(−x²/2σ²)  for x ≥ 0',
+    formulaType: 'PDF',
+    tail: 'Semi-thin',
+    params: [
+      { id: 'sigma', sym: 'σ', name: 'Scale', min: 0.3, max: 4, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => {
+      if (x < 0) return 0;
+      return (Math.sqrt(2) / (p.sigma * Math.sqrt(Math.PI))) * Math.exp(-(x ** 2) / (2 * p.sigma ** 2));
+    },
+    xRange: (p) => [0, 4 * p.sigma],
+    mode: () => 0,
+    mean: (p) => p.sigma * Math.sqrt(2 / Math.PI),
+    variance: (p) => p.sigma ** 2 * (1 - 2 / Math.PI),
+    skewness: () => (Math.sqrt(2) * (4 - Math.PI)) / Math.pow(Math.PI - 2, 1.5),
+    kurtosis: () => (8 * (Math.PI - 3)) / (Math.PI - 2) ** 2,
+    useCases: [
+      { icon: '📐', title: 'Absolute error', desc: 'Distance from target in machining / navigation' },
+      { icon: '🔊', title: 'Signal amplitude', desc: 'Audio signal envelope detection' },
+      { icon: '⚡', title: 'Noise power', desc: 'Amplitude of thermal noise after rectification' },
+      { icon: '🧬', title: 'Genomic effect size', desc: 'Prior on positive effect sizes in Bayesian QTL mapping' },
+    ],
+    discrete: false,
+  },
+
+  bivariate: {
+    name: 'Truncated Normal',
+    shortName: 'Truncated N.',
+    type: 'Gaussian',
+    typeColor: '#a78bfa',
+    color: '#a78bfa',
+    desc: 'A Normal distribution restricted to [a, b]. The probabilities outside the window are redistributed inside. Common when variables have natural physical limits.',
+    formula: 'f(x) = φ((x−μ)/σ) / σ[Φ((b−μ)/σ)−Φ((a−μ)/σ)]',
+    formulaType: 'PDF',
+    tail: 'Clipped tail',
+    params: [
+      { id: 'mu', sym: 'μ', name: 'Mean', min: -3, max: 3, step: 0.5, default: 0 },
+      { id: 'sigma', sym: 'σ', name: 'Std Dev', min: 0.3, max: 3, step: 0.1, default: 1 },
+      { id: 'a', sym: 'a', name: 'Lower limit', min: -5, max: 0, step: 0.5, default: -2 },
+      { id: 'b', sym: 'b', name: 'Upper limit', min: 0, max: 5, step: 0.5, default: 2 },
+    ],
+    pdf: (x, p) => {
+      const { mu, sigma, a, b } = p;
+      if (x < a || x > b) return 0;
+      const phi = (z) => Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+      const Phi = (z) => 0.5 * (1 + erf(z / Math.sqrt(2)));
+      const num = phi((x - mu) / sigma) / sigma;
+      const den = Phi((b - mu) / sigma) - Phi((a - mu) / sigma);
+      return den > 0 ? num / den : 0;
+    },
+    xRange: (p) => [p.a - 0.5, p.b + 0.5],
+    mode: (p) => Math.min(Math.max(p.mu, p.a), p.b),
+    mean: (p) => p.mu,
+    variance: (p) => p.sigma ** 2,
+    skewness: () => '~0',
+    kurtosis: () => '<0',
+    useCases: [
+      { icon: '🏋️', title: 'Human weight', desc: 'Weight is normally distributed but bounded at 0' },
+      { icon: '⏱️', title: 'Service times', desc: 'Call centre handling time has a minimum but a cap' },
+      { icon: '📋', title: 'Survey scales', desc: 'Likert 1–5 responses bounded above and below' },
+      { icon: '🤖', title: 'Neural net init', desc: 'Glorot uniform/truncated-normal weight init' },
+    ],
+    discrete: false,
+  },
+
+  folded: {
+    name: 'Folded Normal',
+    shortName: 'Folded N.',
+    type: 'Gaussian',
+    typeColor: '#3ecf8e',
+    color: '#3ecf8e',
+    desc: 'Takes the absolute value of a Normal(μ, σ) variable. Different from Half-Normal in that μ ≠ 0, creating an asymmetric shape when |μ/σ| is large.',
+    formula: 'f(x) = φ((x−μ)/σ) + φ((x+μ)/σ)  /  σ  for x ≥ 0',
+    formulaType: 'PDF',
+    tail: 'Semi-thin',
+    params: [
+      { id: 'mu', sym: 'μ', name: 'Location', min: 0, max: 4, step: 0.5, default: 0 },
+      { id: 'sigma', sym: 'σ', name: 'Scale', min: 0.3, max: 3, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => {
+      if (x < 0) return 0;
+      const { mu, sigma } = p;
+      const phi = (z) => Math.exp(-0.5 * z * z) / (sigma * Math.sqrt(2 * Math.PI));
+      return phi((x - mu) / sigma) + phi((x + mu) / sigma);
+    },
+    xRange: (p) => [0, p.mu + 4 * p.sigma],
+    mode: (p) => Math.abs(p.mu),
+    mean: (p) => p.sigma * Math.sqrt(2 / Math.PI) * Math.exp(-(p.mu ** 2) / (2 * p.sigma ** 2)) + p.mu * (1 - 2 * 0.5),
+    variance: (p) => p.mu ** 2 + p.sigma ** 2,
+    skewness: () => '>0',
+    kurtosis: () => '>0',
+    useCases: [
+      { icon: '📡', title: 'Signal distance', desc: 'Euclidean distance from origin in 1D Gaussian noise' },
+      { icon: '🔬', title: 'Assay deviations', desc: 'Absolute deviation from reference in bioassay' },
+      { icon: '🏭', title: 'Process error', desc: '|error| in manufacturing with off-centre mean' },
+    ],
+    discrete: false,
+  },
+
+  lognormal: {
+    name: 'Log-Normal',
+    shortName: 'Log-Normal',
+    type: 'Non-Gaussian',
+    typeColor: '#f5a623',
+    color: '#f5a623',
+    desc: 'If ln(X) ~ Normal, then X is log-normal. Arises from multiplicative processes. Right-skewed, always positive. The median (not mean) is the typical value.',
+    formula: 'f(x) = exp(−(ln x − μ)²/2σ²) / xσ√2π  for x > 0',
+    formulaType: 'PDF',
+    tail: 'Heavy right tail',
+    params: [
+      { id: 'mu', sym: 'μ', name: 'Log-mean', min: -1, max: 2, step: 0.1, default: 0 },
+      { id: 'sigma', sym: 'σ', name: 'Log-std', min: 0.1, max: 2, step: 0.1, default: 0.5 },
+    ],
+    pdf: (x, p) => {
+      if (x <= 0) return 0;
+      const { mu, sigma } = p;
+      return Math.exp(-0.5 * ((Math.log(x) - mu) / sigma) ** 2) / (x * sigma * Math.sqrt(2 * Math.PI));
+    },
+    xRange: (p) => [0.001, Math.exp(p.mu + 4 * p.sigma)],
+    mode: (p) => Math.exp(p.mu - p.sigma ** 2),
+    mean: (p) => Math.exp(p.mu + p.sigma ** 2 / 2),
+    variance: (p) => (Math.exp(p.sigma ** 2) - 1) * Math.exp(2 * p.mu + p.sigma ** 2),
+    skewness: (p) => (Math.exp(p.sigma ** 2) + 2) * Math.sqrt(Math.exp(p.sigma ** 2) - 1),
+    kurtosis: (p) => Math.exp(4 * p.sigma ** 2) + 2 * Math.exp(3 * p.sigma ** 2) + 3 * Math.exp(2 * p.sigma ** 2) - 6,
+    useCases: [
+      { icon: '💵', title: 'Income / wealth', desc: 'Household income is classically log-normal in most economies' },
+      { icon: '🏙️', title: 'City populations', desc: 'Log of city size is approximately Gaussian' },
+      { icon: '💊', title: 'Pharmacokinetics', desc: 'Drug plasma concentrations multiply → log-normal' },
+      { icon: '⏳', title: 'Repair times', desc: 'Time to fix equipment failure is log-normally distributed' },
+      { icon: '📰', title: 'Article shares', desc: 'Social media shares: most get 10, few get millions' },
+    ],
+    discrete: false,
+  },
+
+  exponential: {
+    name: 'Exponential',
+    shortName: 'Exponential',
+    type: 'Non-Gaussian',
+    typeColor: '#f06464',
+    color: '#f06464',
+    desc: 'Models the time between independent events in a Poisson process. Has the unique "memoryless" property: P(T>s+t|T>s) = P(T>t). Characterised by a single rate λ.',
+    formula: 'f(x) = λ · exp(−λx)  for x ≥ 0',
+    formulaType: 'PDF',
+    tail: 'Exponential tail',
+    params: [
+      { id: 'lambda', sym: 'λ', name: 'Rate', min: 0.1, max: 5, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => x >= 0 ? p.lambda * Math.exp(-p.lambda * x) : 0,
+    xRange: (p) => [0, 6 / p.lambda],
+    mode: () => 0,
+    mean: (p) => 1 / p.lambda,
+    variance: (p) => 1 / p.lambda ** 2,
+    skewness: () => 2,
+    kurtosis: () => 6,
+    useCases: [
+      { icon: '📞', title: 'Call centre', desc: 'Inter-arrival time between customer calls' },
+      { icon: '⚙️', title: 'Machine lifetime', desc: 'Time until first failure for electronic components' },
+      { icon: '☢️', title: 'Radioactive decay', desc: 'Time until a radioactive atom decays' },
+      { icon: '🌐', title: 'Network packets', desc: 'Time between packets in a Poisson network flow' },
+    ],
+    discrete: false,
+  },
+
+  gamma: {
+    name: 'Gamma',
+    shortName: 'Gamma',
+    type: 'Non-Gaussian',
+    typeColor: '#f472b6',
+    color: '#f472b6',
+    desc: 'Generalisation of Exponential. Sum of k independent Exp(λ) variables. Shape k controls whether it\'s exponential-like (k=1) or bell-shaped (large k). Always positive.',
+    formula: 'f(x) = x^(k−1) · exp(−x/θ) / (θ^k · Γ(k))',
+    formulaType: 'PDF',
+    tail: 'Right tail',
+    params: [
+      { id: 'k', sym: 'k', name: 'Shape', min: 0.5, max: 10, step: 0.5, default: 2 },
+      { id: 'theta', sym: 'θ', name: 'Scale', min: 0.2, max: 3, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => {
+      if (x <= 0) return 0;
+      const { k, theta } = p;
+      return Math.pow(x, k - 1) * Math.exp(-x / theta) / (Math.pow(theta, k) * gammaFn(k));
+    },
+    xRange: (p) => [0, (p.k + 4 * Math.sqrt(p.k)) * p.theta],
+    mode: (p) => p.k >= 1 ? (p.k - 1) * p.theta : 0,
+    mean: (p) => p.k * p.theta,
+    variance: (p) => p.k * p.theta ** 2,
+    skewness: (p) => 2 / Math.sqrt(p.k),
+    kurtosis: (p) => 6 / p.k,
+    useCases: [
+      { icon: '☔', title: 'Rainfall', desc: 'Total daily precipitation is Gamma-distributed in hydrology' },
+      { icon: '⏱️', title: 'Queueing time', desc: 'Wait for k service stages in an Erlang queue' },
+      { icon: '🧬', title: 'Insurance claims', desc: 'Aggregate claim size in actuarial science' },
+      { icon: '💻', title: 'CPU burst time', desc: 'Process CPU usage duration in OS scheduling' },
+    ],
+    discrete: false,
+  },
+
+  beta: {
+    name: 'Beta',
+    shortName: 'Beta',
+    type: 'Non-Gaussian',
+    typeColor: '#fb923c',
+    color: '#fb923c',
+    desc: 'Defined on [0, 1]. Extremely flexible shape — uniform (α=β=1), U-shaped (α,β<1), bell (α=β>1), or skewed. The natural prior for probabilities.',
+    formula: 'f(x) = x^(α−1)(1−x)^(β−1) / B(α,β)  for 0≤x≤1',
+    formulaType: 'PDF',
+    tail: 'Bounded both sides',
+    params: [
+      { id: 'alpha', sym: 'α', name: 'Alpha', min: 0.1, max: 10, step: 0.1, default: 2 },
+      { id: 'beta_', sym: 'β', name: 'Beta', min: 0.1, max: 10, step: 0.1, default: 5 },
+    ],
+    pdf: (x, p) => {
+      if (x <= 0 || x >= 1) return 0;
+      const { alpha, beta_ } = p;
+      return Math.pow(x, alpha - 1) * Math.pow(1 - x, beta_ - 1) / betaFn(alpha, beta_);
+    },
+    xRange: () => [0, 1],
+    mode: (p) => (p.alpha > 1 && p.beta_ > 1) ? (p.alpha - 1) / (p.alpha + p.beta_ - 2) : (p.alpha <= 1 ? 0 : 1),
+    mean: (p) => p.alpha / (p.alpha + p.beta_),
+    variance: (p) => (p.alpha * p.beta_) / ((p.alpha + p.beta_) ** 2 * (p.alpha + p.beta_ + 1)),
+    skewness: (p) => 2 * (p.beta_ - p.alpha) * Math.sqrt(p.alpha + p.beta_ + 1) / ((p.alpha + p.beta_ + 2) * Math.sqrt(p.alpha * p.beta_)),
+    kurtosis: (p) => 6 * ((p.alpha - p.beta_) ** 2 * (p.alpha + p.beta_ + 1) - p.alpha * p.beta_ * (p.alpha + p.beta_ + 2)) / (p.alpha * p.beta_ * (p.alpha + p.beta_ + 2) * (p.alpha + p.beta_ + 3)),
+    useCases: [
+      { icon: '🎲', title: 'A/B test rates', desc: 'Bayesian posterior for conversion rates (conjugate prior)' },
+      { icon: '📊', title: 'Proportions', desc: 'Fraction of defectives in quality control' },
+      { icon: '🤖', title: 'ML regularisation', desc: 'Dirichlet priors for topic model mixtures' },
+      { icon: '🏏', title: 'Batting averages', desc: 'Empirical Bayes shrinkage of baseball batting rates' },
+    ],
+    discrete: false,
+  },
+
+  chi2: {
+    name: 'Chi-Squared (χ²)',
+    shortName: 'Chi-Squared',
+    type: 'Non-Gaussian',
+    typeColor: '#34d399',
+    color: '#34d399',
+    desc: 'Sum of k squared standard normal variables. Fundamental to hypothesis testing. As k→∞ it approaches Normal by CLT. Skewed right for small k.',
+    formula: 'f(x) = x^(k/2−1) · exp(−x/2) / (2^(k/2) · Γ(k/2))',
+    formulaType: 'PDF',
+    tail: 'Right tail',
+    params: [
+      { id: 'k', sym: 'k', name: 'Degrees of freedom', min: 1, max: 20, step: 1, default: 3 },
+    ],
+    pdf: (x, p) => {
+      if (x <= 0) return 0;
+      const k = p.k;
+      return Math.pow(x, k / 2 - 1) * Math.exp(-x / 2) / (Math.pow(2, k / 2) * gammaFn(k / 2));
+    },
+    xRange: (p) => [0.01, p.k + 5 * Math.sqrt(2 * p.k)],
+    mode: (p) => Math.max(0, p.k - 2),
+    mean: (p) => p.k,
+    variance: (p) => 2 * p.k,
+    skewness: (p) => Math.sqrt(8 / p.k),
+    kurtosis: (p) => 12 / p.k,
+    useCases: [
+      { icon: '🔬', title: 'Goodness-of-fit', desc: 'χ² test: are observed counts consistent with expected?' },
+      { icon: '📊', title: 'Contingency tables', desc: 'Test independence of categorical variables' },
+      { icon: '📡', title: 'Radar signal power', desc: 'Power of k-component noise is chi-squared distributed' },
+      { icon: '🧪', title: 'Variance estimation', desc: 'Sample variance s² follows a scaled chi-squared distribution' },
+    ],
+    discrete: false,
+  },
+
+  cauchy: {
+    name: 'Cauchy (Fat-tail)',
+    shortName: 'Cauchy',
+    type: 'Non-Gaussian',
+    typeColor: '#e879f9',
+    color: '#e879f9',
+    desc: 'Pathological distribution with no finite mean or variance! The ratio of two standard normals. Extremely fat tails — outliers are not rare at all.',
+    formula: 'f(x) = 1 / (πγ[1 + ((x−x₀)/γ)²])',
+    formulaType: 'PDF',
+    tail: '⚠️ Undefined mean/var',
+    params: [
+      { id: 'x0', sym: 'x₀', name: 'Location', min: -3, max: 3, step: 0.5, default: 0 },
+      { id: 'gamma', sym: 'γ', name: 'Scale (half-width)', min: 0.2, max: 3, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => 1 / (Math.PI * p.gamma * (1 + ((x - p.x0) / p.gamma) ** 2)),
+    xRange: (p) => [p.x0 - 12 * p.gamma, p.x0 + 12 * p.gamma],
+    mode: (p) => p.x0,
+    mean: () => '∞ (undefined)',
+    variance: () => '∞ (undefined)',
+    skewness: () => '∞ (undefined)',
+    kurtosis: () => '∞ (undefined)',
+    useCases: [
+      { icon: '📡', title: 'Resonance peaks', desc: 'Breit-Wigner distribution of particle physics resonances' },
+      { icon: '💡', title: 'Spectral lines', desc: 'Natural linewidth of emission spectra (Lorentzian profile)' },
+      { icon: '📐', title: 'Random angle', desc: 'Tan of a uniform angle → Cauchy distribution' },
+      { icon: '⚠️', title: 'Stress test', desc: 'Robustness test for estimators — Cauchy "breaks" mean-based stats' },
+    ],
+    discrete: false,
+  },
+
+  uniform: {
+    name: 'Uniform (Continuous)',
+    shortName: 'Uniform',
+    type: 'Non-Gaussian',
+    typeColor: '#94a3b8',
+    color: '#94a3b8',
+    desc: 'Every value in [a, b] is equally likely. Maximum entropy for bounded support. The basis of random number generators.',
+    formula: 'f(x) = 1/(b−a)  for a ≤ x ≤ b',
+    formulaType: 'PDF',
+    tail: 'No tail (bounded)',
+    params: [
+      { id: 'a', sym: 'a', name: 'Min', min: -5, max: 0, step: 0.5, default: 0 },
+      { id: 'b', sym: 'b', name: 'Max', min: 0, max: 10, step: 0.5, default: 5 },
+    ],
+    pdf: (x, p) => (x >= p.a && x <= p.b) ? 1 / (p.b - p.a) : 0,
+    xRange: (p) => [p.a - 0.5, p.b + 0.5],
+    mode: (p) => (p.a + p.b) / 2,
+    mean: (p) => (p.a + p.b) / 2,
+    variance: (p) => (p.b - p.a) ** 2 / 12,
+    skewness: () => 0,
+    kurtosis: () => -1.2,
+    useCases: [
+      { icon: '🎰', title: 'RNG seed', desc: 'Pseudo-random number generators produce Uniform(0,1)' },
+      { icon: '🎲', title: 'Fair dice/roulette', desc: 'Each outcome equally likely (discrete approximation)' },
+      { icon: '📦', title: 'Inventory model', desc: 'Demand modelled uniform when no info is available' },
+      { icon: '🔐', title: 'Cryptographic keys', desc: 'Uniform distribution over key space is the ideal' },
+    ],
+    discrete: false,
+  },
+
+  pareto: {
+    name: 'Pareto (Power Law)',
+    shortName: 'Pareto',
+    type: 'Non-Gaussian',
+    typeColor: '#fbbf24',
+    color: '#fbbf24',
+    desc: 'The 80/20 law in distribution form. Winner-takes-all. Heavy power-law tail. Mean only finite when α>1; variance only when α>2. On a log-log scale it\'s a straight line.',
+    formula: 'f(x) = αx_m^α / x^(α+1)  for x ≥ x_m',
+    formulaType: 'PDF',
+    tail: 'Power-law (heaviest)',
+    params: [
+      { id: 'alpha', sym: 'α', name: 'Shape (tail index)', min: 1.1, max: 5, step: 0.1, default: 2 },
+      { id: 'xm', sym: 'x_m', name: 'Min value', min: 0.5, max: 3, step: 0.1, default: 1 },
+    ],
+    pdf: (x, p) => x >= p.xm ? p.alpha * Math.pow(p.xm, p.alpha) / Math.pow(x, p.alpha + 1) : 0,
+    xRange: (p) => [p.xm, p.xm + 10 / Math.max(1, p.alpha - 1)],
+    mode: (p) => p.xm,
+    mean: (p) => p.alpha > 1 ? p.alpha * p.xm / (p.alpha - 1) : '∞',
+    variance: (p) => p.alpha > 2 ? p.xm ** 2 * p.alpha / ((p.alpha - 1) ** 2 * (p.alpha - 2)) : '∞',
+    skewness: (p) => p.alpha > 3 ? 2 * (1 + p.alpha) / (p.alpha - 3) * Math.sqrt((p.alpha - 2) / p.alpha) : '∞',
+    kurtosis: (p) => p.alpha > 4 ? 6 * (p.alpha ** 3 + p.alpha ** 2 - 6 * p.alpha - 2) / (p.alpha * (p.alpha - 3) * (p.alpha - 4)) : '∞',
+    useCases: [
+      { icon: '💎', title: 'Wealth', desc: 'Top 1% own ~40% of global wealth — classic Pareto(α≈1.5)' },
+      { icon: '🌋', title: 'Earthquakes', desc: 'Gutenberg-Richter law: frequency vs magnitude is power-law' },
+      { icon: '🌐', title: 'Website traffic', desc: 'Top 20% of pages get 80% of all pageviews' },
+      { icon: '📚', title: 'Word frequency', desc: 'Zipf\'s law: nth most common word has frequency ∝ 1/n' },
+    ],
+    discrete: false,
+  },
+
+  binomial: {
+    name: 'Binomial',
+    shortName: 'Binomial',
+    type: 'Non-Gaussian (Discrete)',
+    typeColor: '#60a5fa',
+    color: '#60a5fa',
+    desc: 'Count of successes in n independent Bernoulli trials each with probability p. The fundamental model for binary outcomes (pass/fail, heads/tails).',
+    formula: 'P(X=k) = C(n,k) · p^k · (1−p)^(n−k)',
+    formulaType: 'PMF',
+    tail: 'Discrete / finite',
+    params: [
+      { id: 'n', sym: 'n', name: 'Trials', min: 1, max: 40, step: 1, default: 10 },
+      { id: 'p', sym: 'p', name: 'Success prob', min: 0.01, max: 0.99, step: 0.01, default: 0.5 },
+    ],
+    pmf: (k, p) => {
+      if (k < 0 || k > p.n || !Number.isInteger(k)) return 0;
+      return comb(p.n, k) * Math.pow(p.p, k) * Math.pow(1 - p.p, p.n - k);
+    },
+    xRange: (p) => [0, p.n],
+    mode: (p) => Math.floor((p.n + 1) * p.p),
+    mean: (p) => p.n * p.p,
+    variance: (p) => p.n * p.p * (1 - p.p),
+    skewness: (p) => (1 - 2 * p.p) / Math.sqrt(p.n * p.p * (1 - p.p)),
+    kurtosis: (p) => (1 - 6 * p.p * (1 - p.p)) / (p.n * p.p * (1 - p.p)),
+    useCases: [
+      { icon: '🪙', title: 'Coin flips', desc: 'Number of heads in n fair flips' },
+      { icon: '🛒', title: 'Conversion rate', desc: 'Clicks that convert out of n visitors' },
+      { icon: '💊', title: 'Drug trials', desc: 'Patients who recover under treatment out of n enrolled' },
+      { icon: '🗳️', title: 'Election polling', desc: 'Votes for a candidate in a random sample of size n' },
+    ],
+    discrete: true,
+  },
+
+  poisson: {
+    name: 'Poisson',
+    shortName: 'Poisson',
+    type: 'Non-Gaussian (Discrete)',
+    typeColor: '#4ade80',
+    color: '#4ade80',
+    desc: 'Number of events in a fixed interval when they occur at constant rate λ independently. Discrete analogue of Exponential. Approximates Binomial for large n, small p.',
+    formula: 'P(X=k) = e^(−λ) · λ^k / k!',
+    formulaType: 'PMF',
+    tail: 'Discrete right tail',
+    params: [
+      { id: 'lambda', sym: 'λ', name: 'Rate (mean events)', min: 0.5, max: 20, step: 0.5, default: 3 },
+    ],
+    pmf: (k, p) => {
+      if (k < 0 || !Number.isInteger(k)) return 0;
+      return Math.exp(-p.lambda) * Math.pow(p.lambda, k) / factorial(k);
+    },
+    xRange: (p) => [0, Math.ceil(p.lambda + 5 * Math.sqrt(p.lambda))],
+    mode: (p) => Math.floor(p.lambda),
+    mean: (p) => p.lambda,
+    variance: (p) => p.lambda,
+    skewness: (p) => 1 / Math.sqrt(p.lambda),
+    kurtosis: (p) => 1 / p.lambda,
+    useCases: [
+      { icon: '📞', title: 'Call arrivals', desc: 'Calls per minute to a helpline with known average rate' },
+      { icon: '🦠', title: 'Mutations', desc: 'DNA mutations per genome replication at low error rate' },
+      { icon: '⚡', title: 'Power outages', desc: 'Grid failures per month in a region' },
+      { icon: '🚗', title: 'Traffic accidents', desc: 'Accidents at an intersection per month' },
+    ],
+    discrete: true,
+  },
+
+  geometric: {
+    name: 'Geometric',
+    shortName: 'Geometric',
+    type: 'Non-Gaussian (Discrete)',
+    typeColor: '#f87171',
+    color: '#f87171',
+    desc: 'Number of Bernoulli trials needed until the first success. Discrete analogue of Exponential — it has the memoryless property among discrete distributions.',
+    formula: 'P(X=k) = (1−p)^(k−1) · p  for k = 1, 2, 3, …',
+    formulaType: 'PMF',
+    tail: 'Geometric decay',
+    params: [
+      { id: 'p', sym: 'p', name: 'Success prob', min: 0.01, max: 0.99, step: 0.01, default: 0.3 },
+    ],
+    pmf: (k, p) => k >= 1 ? Math.pow(1 - p.p, k - 1) * p.p : 0,
+    xRange: (p) => [1, Math.ceil(1 / p.p + 6 / p.p)],
+    mode: () => 1,
+    mean: (p) => 1 / p.p,
+    variance: (p) => (1 - p.p) / p.p ** 2,
+    skewness: (p) => (2 - p.p) / Math.sqrt(1 - p.p),
+    kurtosis: (p) => 6 + p.p ** 2 / (1 - p.p),
+    useCases: [
+      { icon: '🎮', title: 'Level completion', desc: 'Attempts to beat a game level with fixed pass rate p' },
+      { icon: '📞', title: 'Cold calls', desc: 'Calls until first sale with conversion rate p' },
+      { icon: '🔑', title: 'Password guessing', desc: 'Tries until correct random password found' },
+      { icon: '🎰', title: 'Slot machine', desc: 'Plays until first win with fixed jackpot probability' },
+    ],
+    discrete: true,
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  MATH HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+function erf(x) {
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p_=0.3275911;
+  const sign = x >= 0 ? 1 : -1; x = Math.abs(x);
+  const t = 1 / (1 + p_ * x);
+  const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return sign * y;
+}
+
+function gammaFn(n) {
+  if (n <= 0) return Infinity;
+  if (n < 0.5) return Math.PI / (Math.sin(Math.PI * n) * gammaFn(1 - n));
+  if (n === 1) return 1;
+  if (n < 2) {
+    const g = 7, c = [0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+    let x2 = c[0]; for (let i=1; i<g+2; i++) x2 += c[i]/(n+i-1);
+    const t2 = n + g - 0.5;
+    return Math.sqrt(2*Math.PI) * Math.pow(t2, n-0.5) * Math.exp(-t2) * x2;
+  }
+  return (n-1) * gammaFn(n-1);
+}
+
+function betaFn(a, b) { return gammaFn(a) * gammaFn(b) / gammaFn(a + b); }
+
+function factorial(n) {
+  if (n <= 1) return 1;
+  let r = 1; for (let i = 2; i <= n; i++) r *= i; return r;
+}
+
+function comb(n, k) {
+  if (k < 0 || k > n) return 0;
+  if (k === 0 || k === n) return 1;
+  k = Math.min(k, n - k);
+  let r = 1; for (let i = 0; i < k; i++) r = r * (n - i) / (i + 1); return r;
+}
+
+function fmtNum(v, digits=4) {
+  if (typeof v === 'string') return v;
+  if (!isFinite(v)) return '∞';
+  if (Math.abs(v) > 1e6) return v.toExponential(2);
+  return parseFloat(v.toFixed(digits)).toString();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════════════════
+let currentDist = 'normal';
+let currentParams = {};
+let mainChart = null;
+const miniCharts = {};
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  CHART DATA GENERATORS
+// ═══════════════════════════════════════════════════════════════════════════
+function generateData(distKey, params, steps = 300) {
+  const d = DISTS[distKey];
+  const [xMin, xMax] = d.xRange(params);
+  if (d.discrete) {
+    const xs = []; const ys = [];
+    for (let k = Math.floor(xMin); k <= Math.ceil(xMax); k++) {
+      xs.push(k); ys.push(d.pmf(k, params));
+    }
+    return { xs, ys, xMin, xMax };
+  }
+  const xs = [], ys = [];
+  for (let i = 0; i <= steps; i++) {
+    const x = xMin + (xMax - xMin) * i / steps;
+    xs.push(+x.toFixed(4)); ys.push(d.pdf(x, params));
+  }
+  return { xs, ys, xMin, xMax };
+}
+
+function getCDF(distKey, params, xs) {
+  const d = DISTS[distKey];
+  const cdf = [];
+  let sum = 0;
+  const dx = xs.length > 1 ? (xs[xs.length-1] - xs[0]) / (xs.length - 1) : 1;
+  for (let i = 0; i < xs.length; i++) {
+    if (d.discrete) {
+      sum += d.pmf(xs[i], params);
+    } else {
+      sum += d.pdf(xs[i], params) * dx;
+    }
+    cdf.push(Math.min(1, +sum.toFixed(5)));
+  }
+  return cdf;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  COMPUTE KDE STATS at cursor x
+// ═══════════════════════════════════════════════════════════════════════════
+function computeStats(distKey, params) {
+  const d = DISTS[distKey];
+  const mode = d.mode(params);
+  const mean = d.mean(params);
+  const variance = d.variance(params);
+  const skewness = d.skewness(params);
+  const kurtosis = d.kurtosis(params);
+  const std = typeof variance === 'number' ? Math.sqrt(variance) : '∞';
+  const { xs, ys } = generateData(distKey, params, 1000);
+  const peak = Math.max(...ys);
+  const entropy = d.discrete
+    ? xs.reduce((s, x, i) => { const p2 = d.pmf(x, params); return p2 > 0 ? s - p2 * Math.log2(p2) : s; }, 0)
+    : (() => {
+        const dx = (xs[xs.length-1] - xs[0]) / (xs.length - 1);
+        return -xs.reduce((s, x, i) => { const p2 = ys[i]; return p2 > 0 ? s + p2 * Math.log(p2) * dx : s; }, 0);
+      })();
+  return { mode, mean, variance, std, skewness, kurtosis, peak, entropy };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════════════════════════
+function selectDist(key) {
+  currentDist = key;
+  const d = DISTS[key];
+  currentParams = {};
+  const paramList = d.params || [];
+  paramList.forEach(p => { currentParams[p.id] = p.default; });
+
+  document.querySelectorAll('.dist-item').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('onclick').includes(`'${key}'`));
+  });
+
+  renderMain();
+}
+
+function renderMain() {
+  const d = DISTS[currentDist];
+  const stats = computeStats(currentDist, currentParams);
+  const area = document.getElementById('mainArea');
+
+  area.innerHTML = `
+    <div class="dist-header panel-anim">
+      <div class="dist-color-bar" style="background:${d.color}"></div>
+      <div>
+        <div class="dist-main-name">${d.name}</div>
+        <div class="dist-main-sub">${d.desc}</div>
+      </div>
+      <div class="dist-type-pill" style="border-color:${d.typeColor}33; color:${d.typeColor}; background:${d.typeColor}11">
+        ${d.type}
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- CHART PANEL -->
+      <div class="chart-panel panel-anim">
+        <div class="chart-title-row">
+          <span class="chart-title">${d.formulaType} — ${d.name}</span>
+          <div class="view-btns">
+            <button class="view-btn active" id="btn-pdf" onclick="switchView('pdf')">
+              ${d.discrete ? 'PMF' : 'PDF'}
+            </button>
+            <button class="view-btn" id="btn-cdf" onclick="switchView('cdf')">CDF</button>
+            <button class="view-btn" id="btn-log" onclick="switchView('log')">Log scale</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="mainChart" role="img" aria-label="${d.name} probability distribution chart"></canvas>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Mean</div>
+            <div class="stat-value" style="color:${d.color}" id="sv-mean">${fmtNum(stats.mean)}</div>
+            <div class="stat-hint">μ</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Std Dev</div>
+            <div class="stat-value" id="sv-std">${fmtNum(stats.std)}</div>
+            <div class="stat-hint">σ</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Mode</div>
+            <div class="stat-value" id="sv-mode">${fmtNum(stats.mode)}</div>
+            <div class="stat-hint">peak x</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Skewness</div>
+            <div class="stat-value" id="sv-skew">${fmtNum(stats.skewness)}</div>
+            <div class="stat-hint">3rd moment</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Ex. Kurtosis</div>
+            <div class="stat-value" id="sv-kurt">${fmtNum(stats.kurtosis)}</div>
+            <div class="stat-hint">tail weight</div>
+          </div>
+        </div>
+
+        ${!d.discrete ? `
+        <div class="sigma-section">
+          <div class="sigma-label">Coverage probability (Gaussian rule reference)</div>
+          ${d.name.includes('Normal') && !d.name.includes('Log') ? `
+          <div class="sigma-bar-row">
+            <span class="sigma-text">±1σ</span>
+            <div class="sigma-bar" style="width:${68.27}%;background:${d.color}99"></div>
+            <span class="sigma-pct">68.27%</span>
+          </div>
+          <div class="sigma-bar-row">
+            <span class="sigma-text">±2σ</span>
+            <div class="sigma-bar" style="width:${95.45}%;background:${d.color}66"></div>
+            <span class="sigma-pct">95.45%</span>
+          </div>
+          <div class="sigma-bar-row">
+            <span class="sigma-text">±3σ</span>
+            <div class="sigma-bar" style="width:${99.73}%;background:${d.color}44"></div>
+            <span class="sigma-pct">99.73%</span>
+          </div>` : `
+          <div style="color:var(--text3);font-size:11px">Computed numerically for this distribution</div>
+          ${computeCoverages(currentDist, currentParams, stats)}
+          `}
+        </div>` : ''}
+      </div>
+
+      <!-- SLIDERS PANEL -->
+      <div class="sliders-panel panel-anim">
+        <div class="sliders-title">Parameters</div>
+
+        ${(d.params || []).map(p => `
+        <div class="param-block">
+          <div class="param-row">
+            <span class="param-name"><span class="param-sym">${p.sym}</span> ${p.name}</span>
+            <span class="param-val" id="pv-${p.id}">${currentParams[p.id]}</span>
+          </div>
+          <input type="range" min="${p.min}" max="${p.max}" step="${p.step}"
+            value="${currentParams[p.id]}"
+            style="--thumb-color:${d.color}"
+            oninput="updateParam('${p.id}', this.value)">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:3px">
+            <span>${p.min}</span><span>${p.max}</span>
+          </div>
+        </div>
+        `).join('')}
+
+        <div class="formula-box">
+          <div class="formula-label">${d.formulaType}</div>
+          <div class="formula-text">${d.formula}</div>
+        </div>
+
+        <div class="kde-row">
+          <div class="kde-label">Live values</div>
+          <div class="kde-grid">
+            <div class="kde-item"><span class="kde-key">Peak density</span><span class="kde-val" id="kv-peak">${fmtNum(stats.peak,5)}</span></div>
+            <div class="kde-item"><span class="kde-key">Variance</span><span class="kde-val" id="kv-var">${fmtNum(stats.variance)}</span></div>
+            <div class="kde-item"><span class="kde-key">Entropy</span><span class="kde-val" id="kv-ent">${fmtNum(stats.entropy,3)}</span></div>
+            <div class="kde-item"><span class="kde-key">Tail type</span><span class="kde-val" style="font-size:10px;color:${d.color}">${d.tail}</span></div>
+          </div>
+        </div>
+
+        <div style="font-size:10px;color:var(--text3);text-align:center;padding-top:4px;letter-spacing:0.04em">
+          drag sliders to reshape the curve ↑
+        </div>
+      </div>
+    </div>
+
+    <!-- USE CASES -->
+    <div class="use-cases panel-anim">
+      <div class="use-cases-title">Real-world applications</div>
+      <div class="use-cases-grid">
+        ${(d.useCases || []).map(uc => `
+        <div class="use-case-card">
+          <div class="uc-icon">${uc.icon}</div>
+          <div class="uc-title">${uc.title}</div>
+          <div class="uc-desc">${uc.desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- MINI CHART STRIP -->
+    <div class="mini-charts-row panel-anim">
+      <div class="mini-row-title">All distributions — click to switch</div>
+      <div class="mini-grid" id="miniGrid"></div>
+    </div>
+  `;
+
+  buildMainChart('pdf');
+  buildMiniCharts();
+}
+
+function computeCoverages(distKey, params, stats) {
+  const d = DISTS[distKey];
+  if (d.discrete) return '';
+  const { xs, ys } = generateData(distKey, params, 2000);
+  const dx = (xs[xs.length-1] - xs[0]) / xs.length;
+  const mean = typeof stats.mean === 'number' ? stats.mean : 0;
+  const std = typeof stats.std === 'number' ? stats.std : 1;
+  const cover = [1, 2, 3].map(s => {
+    let sum = 0;
+    for (let i = 0; i < xs.length; i++) {
+      if (Math.abs(xs[i] - mean) <= s * std) sum += ys[i] * dx;
+    }
+    return Math.min(99.99, sum * 100);
+  });
+  return ['±1σ', '±2σ', '±3σ'].map((label, i) => `
+    <div class="sigma-bar-row">
+      <span class="sigma-text">${label}</span>
+      <div class="sigma-bar" style="width:${cover[i]}%;background:${DISTS[distKey].color}${i===0?'99':i===1?'66':'44'}"></div>
+      <span class="sigma-pct">${cover[i].toFixed(1)}%</span>
+    </div>`).join('');
+}
+
+let currentView = 'pdf';
+
+function switchView(v) {
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + (v === 'log' ? 'log' : v)).classList.add('active');
+  buildMainChart(v);
+}
+
+function buildMainChart(view) {
+  if (mainChart) { mainChart.destroy(); mainChart = null; }
+  const d = DISTS[currentDist];
+  const { xs, ys } = generateData(currentDist, currentParams, d.discrete ? null : 300);
+  const cdfData = getCDF(currentDist, currentParams, xs);
+  const isDark = true;
+
+  const labels = xs.map(x => typeof x === 'number' ? (Math.abs(x) > 100 ? x.toFixed(0) : x.toFixed(2)) : x);
+  let data, yScale;
+
+  if (view === 'cdf') {
+    data = cdfData;
+    yScale = { min: 0, max: 1, ticks: { color: '#545c78', font: { size: 10 }, callback: v => v.toFixed(2) } };
+  } else if (view === 'log') {
+    data = ys.map(y => y > 0 ? Math.log(y) : null);
+    yScale = { ticks: { color: '#545c78', font: { size: 10 } } };
+  } else {
+    data = ys;
+    yScale = { beginAtZero: true, ticks: { color: '#545c78', font: { size: 10 }, callback: v => v < 0.001 ? v.toExponential(1) : v.toFixed(4) } };
+  }
+
+  const ctx = document.getElementById('mainChart');
+  if (!ctx) return;
+
+  const hex2rgba = (hex, a) => {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  };
+
+  const datasets = [{
+    data,
+    borderColor: d.color,
+    borderWidth: 2,
+    backgroundColor: d.discrete ? hex2rgba(d.color, 0.6) : hex2rgba(d.color, 0.15),
+    tension: d.discrete ? 0 : 0.4,
+    fill: !d.discrete && view !== 'log',
+    pointRadius: d.discrete ? 3 : 0,
+    pointHoverRadius: d.discrete ? 5 : 3,
+    pointBackgroundColor: d.color,
+    spanGaps: false,
+  }];
+
+  mainChart = new Chart(ctx, {
+    type: d.discrete ? 'bar' : 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 200 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e2436',
+          borderColor: '#2a3050',
+          borderWidth: 1,
+          titleColor: '#8a90a8',
+          bodyColor: '#e8eaf0',
+          titleFont: { family: 'DM Mono', size: 11 },
+          bodyFont: { family: 'DM Mono', size: 12 },
+          callbacks: {
+            title: (items) => `x = ${items[0].label}`,
+            label: (item) => {
+              const label = view === 'cdf' ? 'CDF' : view === 'log' ? 'log PDF' : d.formulaType;
+              return ` ${label}: ${typeof item.raw === 'number' ? item.raw.toFixed(6) : item.raw}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#545c78', font: { size: 10 }, maxTicksLimit: 12, maxRotation: 0 },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          border: { color: 'rgba(255,255,255,0.08)' },
+        },
+        y: { ...yScale, grid: { color: 'rgba(255,255,255,0.04)' }, border: { color: 'rgba(255,255,255,0.08)' } }
+      }
+    }
+  });
+}
+
+function updateParam(id, value) {
+  currentParams[id] = parseFloat(value);
+  document.getElementById('pv-' + id).textContent = value;
+
+  // recompute stats
+  const stats = computeStats(currentDist, currentParams);
+  const upd = (elId, val) => { const el = document.getElementById(elId); if (el) el.textContent = fmtNum(val); };
+  upd('sv-mean', stats.mean); upd('sv-std', stats.std);
+  upd('sv-mode', stats.mode); upd('sv-skew', stats.skewness);
+  upd('sv-kurt', stats.kurtosis); upd('kv-peak', stats.peak);
+  upd('kv-var', stats.variance); upd('kv-ent', stats.entropy);
+
+  buildMainChart(currentView);
+}
+
+function buildMiniCharts() {
+  const grid = document.getElementById('miniGrid');
+  if (!grid) return;
+
+  Object.keys(DISTS).forEach(key => {
+    const d = DISTS[key];
+    const card = document.createElement('div');
+    card.className = 'mini-card' + (key === currentDist ? ' active-mini' : '');
+    card.onclick = () => selectDist(key);
+    card.innerHTML = `
+      <div class="mini-card-name" style="color:${key === currentDist ? d.color : ''}">${d.shortName}</div>
+      <div class="mini-chart-wrap"><canvas id="mini-${key}"></canvas></div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Defer mini chart rendering slightly
+  setTimeout(() => {
+    Object.keys(DISTS).forEach(key => {
+      const d = DISTS[key];
+      const defaultParams = {};
+      (d.params || []).forEach(p => { defaultParams[p.id] = p.default; });
+      const { xs, ys } = generateData(key, defaultParams, d.discrete ? null : 80);
+      const ctx = document.getElementById('mini-' + key);
+      if (!ctx) return;
+      if (miniCharts[key]) { miniCharts[key].destroy(); }
+      miniCharts[key] = new Chart(ctx, {
+        type: d.discrete ? 'bar' : 'line',
+        data: {
+          labels: xs.map(x => x),
+          datasets: [{
+            data: ys,
+            borderColor: d.color,
+            borderWidth: 1.5,
+            backgroundColor: d.discrete ? d.color + '88' : d.color + '22',
+            tension: d.discrete ? 0 : 0.4,
+            fill: !d.discrete,
+            pointRadius: 0,
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          animation: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: { display: false },
+            y: { display: false, beginAtZero: !d.discrete }
+          }
+        }
+      });
+    });
+  }, 50);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  EXPOSE TO GLOBAL SCOPE (required for inline onclick= handlers)
+// ═══════════════════════════════════════════════════════════════════════════
+window.selectDist  = selectDist;
+window.switchView  = switchView;
+window.updateParam = updateParam;
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════════════════
+selectDist('normal');
+</script>
+</body>
+</html>

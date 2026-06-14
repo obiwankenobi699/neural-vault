@@ -4,51 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "95a41b3e0647d64e",
+        "id": "ebe16c0223c5cd11",
         "type": "tabs",
         "children": [
           {
-            "id": "610f0de900449c26",
+            "id": "20f60f25ca16699a",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "html-view",
               "state": {
-                "file": "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.md"
+                "file": "06_Maths/_Dashboards/01_EDA.html"
               },
-              "icon": "excalidraw-icon",
-              "title": "Policyrag.excalidraw"
-            }
-          },
-          {
-            "id": "3441372ce4e86f51",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "09_Ai_Agents/02_Rag/03_Chunking.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "03_Chunking"
-            }
-          },
-          {
-            "id": "8d93ba03f193245e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "09_Ai_Agents/01_MCP/01_Introduction.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "01_Introduction"
+              "icon": "code-glyph",
+              "title": "01_EDA"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -208,54 +179,55 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "8d93ba03f193245e",
+  "active": "20f60f25ca16699a",
   "lastOpenFiles": [
-    "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.md",
-    "09_Ai_Agents/02_Rag/03_Chunking.md",
-    "09_Ai_Agents/02_Rag/visual/MCP.gif",
-    "09_Ai_Agents/01_MCP/01_Introduction.md",
-    "09_Ai_Agents/02_Rag/02_Retrieval.md",
-    "09_Ai_Agents/02_Rag/01_Introduction.md",
-    "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.svg",
-    "09_Ai_Agents/02_Rag/visual/Policyrag.excalidraw.excalidraw",
-    "08_OC/introduction.md",
-    "AND.md",
-    "09_Ai_Agents/02_Rag/visual",
-    "09_Ai_Agents/01_MCP",
-    "09_Ai_Agents/02_Rag",
-    "09_Ai_Agents",
-    "06_Maths/01_Statistics/Visual/Desruptive.excalidraw.excalidraw",
-    "06_Maths/01_Statistics/03_co-relation & varience.md",
-    "06_Maths/01_Statistics/02_Quantile.md",
-    "06_Maths/01_Statistics/01_Introduction.md",
-    "06_Maths/01_Statistics/Visual/percentil.png",
-    "06_Maths/01_Statistics/Visual/Desruptive.excalidraw.md",
-    "06_Maths/01_Statistics/Visual/corelation.png",
-    "06_Maths/01_Statistics/Visual/Boxplot.svg",
-    "06_Maths/EDA.html",
-    "06_Maths/02_Using In Ml.md",
-    "06_Maths/01_Things to cover.md",
-    "02_Devops/01_Open System interconnection/01_OSI/02_ISO Model.md",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/03_Network Performance & Switching.md",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/02_Media Acess & Waves.md",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/01_Networking devices & medium.md",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/VLAN.png",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/server.jpg",
-    "02_Devops/01_Open System interconnection/02_Physical Layer/router.webp",
+    "06_Maths/_Dashboards/02_Probability_Distributions.html",
+    "06_Maths/_Dashboards/03_Distribution_Diagnostics.html",
+    "06_Maths/_Dashboards/05_CLT_CI_HypothesisTesting.html",
+    "06_Maths/_Dashboards/01_EDA.html",
+    "06_Maths/_Dashboards/04_EDA_alt.html",
+    "06_Maths_backup_20260613_104654/_archive/01_Things_to_cover.md",
+    "06_Maths_backup_20260613_104654/_Dashboards/02_Probability_Distributions.html",
+    "06_Maths_backup_20260613_104654/_Dashboards/03_Distribution_Diagnostics.html",
+    "06_Maths_backup_20260613_104654/_Dashboards/04_EDA_alt.html",
+    "06_Maths_backup_20260613_104654/_Dashboards/01_EDA.html",
+    "06_Maths_backup_20260613_104654/04_Statistical_Inference/04_Chi_Square_Tests.md",
+    "06_Maths_backup_20260613_104654/04_Statistical_Inference/03_Hypothesis_Testing_Part2.md",
+    "06_Maths_backup_20260613_104654/04_Statistical_Inference/02_Hypothesis_Testing_Part1.md",
+    "06_Maths_backup_20260613_104654/05_Linear_Algebra/06_SVD.md",
+    "06_Maths_backup_20260613_104654/05_Linear_Algebra/05_Eigen_Decomposition_PCA.md",
+    "06_Maths_backup_20260613_104654/05_Linear_Algebra/04_Eigenvalues_Eigenvectors.md",
+    "06_Maths_backup_20260613_104654/05_Linear_Algebra/03_Matrix_Intuition.md",
+    "06_Maths_backup_20260613_104654/05_Linear_Algebra/02_Matrices.md",
+    "06_Maths_backup_20260613_104654/05_Linear_Algebra/01_Vectors.md",
+    "06_Maths_backup_20260613_104654/06_Calculus_Optimisation/01_Optimisation_Big_Picture.md",
+    "06_Maths_backup_20260613_104654/06_Calculus_Optimisation/02_Differential_Calculus.md",
+    "06_Maths/02_Probability_Theory/03_Joint_Marginal_Conditional.md",
+    "06_Maths/02_Probability_Theory/02_PDF_PMF_CDF.md",
+    "06_Maths/01_Descriptive_Statistics/02_Descriptive_Statistics_Part1.md",
+    "06_Maths/01_Descriptive_Statistics/01_Statistics_Roadmap.md",
+    "06_Maths/01_Descriptive_Statistics/01_Introduction_and_Roadmap.md",
+    "06_Maths/_archive/README.md",
+    "06_Maths/05_Linear_Algebra/05_Eigendecomposition_and_PCA.md",
+    "06_Maths/05_Linear_Algebra/04_Eigenvalues_and_Eigenvectors.md",
+    "06_Maths/05_Linear_Algebra/00_Linear_Algebra_Roadmap.md",
+    "06_Maths/04_Statistical_Inference/05_Chi_Square_and_ANOVA.md",
+    "06_Maths/04_Statistical_Inference/04_Hypothesis_Testing_Part2.md",
+    "06_Maths/04_Statistical_Inference/03_Hypothesis_Testing_Part1.md",
+    "06_Maths/04_Statistical_Inference/02_Confidence_Intervals.md",
+    "06_Maths/03_Probability_Distributions/Visual",
+    "06_Maths_backup_20260613_104654/_archive",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/skewness.excalidraw.svg",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/non-gaussian.excalidraw.svg",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/kde.excalidraw.svg",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/Pasted Image 20260530110624_493.png",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/PD.excalidraw.svg",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/2026-05-31_13-41-17_grim 1.png",
+    "06_Maths_backup_20260613_104654/02_Probability_Theory/Visual/2026-05-30_10-49-19_grim.png",
+    "06_Maths_backup_20260613_104654/01_Descriptive_Statistics/Visual/table.svg",
+    "06_Maths_backup_20260613_104654/01_Descriptive_Statistics/Visual/percentile.svg",
+    "06_Maths_backup_20260613_104654/01_Descriptive_Statistics/Visual/percentil.png",
     "02_Devops/01_Open System interconnection/02_Physical Layer/networking_devices.canvas",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/01_Hadoop.md",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/02_HDFS.md",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/03_.md",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/mapreducer.jpg",
-    "03_Ai_ml/03_Datanalytics/04_Hadoop/e10780b5467c63538a85ab9e5692db4c 1.jpg",
-    "02_Devops/01_Open System interconnection/01_OSI/03_Detailed layers and workings of internet.md",
-    "02_Devops/01_Open System interconnection/01_OSI/01_WWW.md",
-    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/02_Lexical Analysis.md",
-    "05_OS & Systems/04_Compilor/01_Introduction to Compilor/03_Parser.md",
-    "04_DSA/03_Searching/Binary/Visual/Binarysearch.excalidraw.md",
-    "06_Maths/EDA.html.crdownload",
-    "06_Maths/02_Probability/Visual/kde.excalidraw.excalidraw",
-    "06_Maths/02_Probability/Visual/PD.excalidraw.excalidraw",
     "04_DSA/03_Searching/Binary/Visual/Untitled.canvas",
     "02_Devops/07_Kubernetes/k8s.canvas",
     "03_Ai_ml/01_Machinelearning/SWG.canvas",

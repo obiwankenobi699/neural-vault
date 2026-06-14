@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistical Inference — CLT · Confidence Intervals · Hypothesis Testing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0b0e14;
+  --bg2:     #111520;
+  --bg3:     #171c2a;
+  --bg4:     #1e2436;
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text:    #e8eaf0;
+  --text2:   #8a90a8;
+  --text3:   #545c78;
+  --accent:  #5b8dee;
+  --accent2: #3d6fd4;
+  --green:   #3ecf8e;
+  --amber:   #f5a623;
+  --coral:   #f06464;
+  --teal:    #38bdf8;
+  --purple:  #a78bfa;
+  --pink:    #f472b6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg2);
+  position: sticky; top:0; z-index:100;
+}
+.header-title { font-family:'Fraunces',serif; font-size:18px; font-weight:600; letter-spacing:-0.3px; }
+.header-sub { font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
+.module-tabs { margin-left:auto; display:flex; gap:4px; }
+.mtab {
+  padding:6px 14px; border-radius:4px; border:1px solid var(--border2);
+  background:transparent; color:var(--text2); font-family:'DM Mono',monospace;
+  font-size:11px; cursor:pointer; transition:all 0.15s; letter-spacing:0.03em;
+}
+.mtab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+.mtab:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
+
+/* Shell */
+.shell { display:grid; grid-template-columns:220px 1fr; min-height:calc(100vh - 57px); }
+
+/* Sidebar */
+.sidebar {
+  border-right:1px solid var(--border);
+  background:var(--bg2);
+  padding:16px 0;
+  overflow-y:auto;
+}
+.sidebar-label {
+  padding:10px 16px 4px;
+  font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text3);
+}
+.nav-item {
+  padding:9px 16px; cursor:pointer; border-left:2px solid transparent;
+  transition:all 0.12s; color:var(--text2); font-size:12px;
+}
+.nav-item:hover { color:var(--text); background:var(--bg3); }
+.nav-item.active { color:var(--accent); border-left-color:var(--accent); background:var(--bg3); }
+.nav-item .nav-tag {
+  float:right; font-size:10px; color:var(--text3);
+  background:var(--bg4); padding:2px 6px; border-radius:3px;
+}
+
+/* Content */
+.content { padding:28px; overflow-y:auto; }
+.panel { display:none; animation:fadeIn 0.2s ease; }
+.panel.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+/* Section headers */
+.section-title {
+  font-family:'Fraunces',serif; font-size:22px; font-weight:600;
+  letter-spacing:-0.3px; margin-bottom:6px;
+}
+.section-sub { color:var(--text2); font-size:12px; margin-bottom:24px; line-height:1.6; }
+
+/* Cards grid */
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:24px; }
+.card {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:20px;
+}
+.card-label { font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+.card-value { font-family:'Fraunces',serif; font-size:28px; font-weight:600; letter-spacing:-0.5px; }
+.card-value.green { color:var(--green); }
+.card-value.coral { color:var(--coral); }
+.card-value.amber { color:var(--amber); }
+.card-value.accent { color:var(--accent); }
+.card-sub { font-size:11px; color:var(--text2); margin-top:4px; }
+
+/* Canvas */
+.canvas-wrap {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+  padding:20px; margin-bottom:20px;
+}
+.canvas-title { font-size:11px; color:var(--text2); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px; }
+canvas { display:block; width:100%; }
+
+/* Controls */
+.controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px; }
+.ctrl { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.ctrl-label { font-size:10px; color:var(--text3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; }
+.ctrl-row { display:flex; align-items:center; gap:10px; }
+.ctrl-val { font-family:'Fraunces',serif; font-size:18px; color:var(--accent); min-width:48px; text-align:right; }
+input[type=range] {
+  flex:1; accent-color:var(--accent); cursor:pointer;
+  height:4px; border-radius:2px;
+}
+select, input[type=text], input[type=number] {
+  background:var(--bg4); border:1px solid var(--border2); color:var(--text);
+  font-family:'DM Mono',monospace; font-size:12px; padding:6px 10px;
+  border-radius:4px; width:100%; outline:none;
+}
+select:focus, input:focus { border-color:var(--accent); }
+
+/* Buttons */
+.btn-row { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+.btn {
+  padding:8px 16px; border-radius:4px; border:1px solid var(--border2);
+  background:transparent; color:var(--text2); font-family:'DM Mono',monospace;
+  font-size:12px; cursor:pointer; transition:all 0.12s;
+}
+.btn:hover { border-color:var(--accent); color:var(--accent); }
+.btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+.btn.primary:hover { background:var(--accent2); border-color:var(--accent2); }
+.btn.green { background:rgba(62,207,142,0.1); border-color:rgba(62,207,142,0.3); color:var(--green); }
+.btn.coral { background:rgba(240,100,100,0.1); border-color:rgba(240,100,100,0.3); color:var(--coral); }
+
+/* Info boxes */
+.info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-bottom:20px; }
+.info-box {
+  background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:14px;
+}
+.info-box .ib-label { font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.info-box .ib-val { font-size:13px; color:var(--text); line-height:1.5; }
+.info-box .ib-val.formula { font-style:italic; color:var(--teal); }
+
+/* Decision box */
+.decision {
+  border-radius:8px; padding:16px 20px; margin-bottom:20px;
+  border:1px solid; font-size:13px; line-height:1.6;
+}
+.decision.reject { background:rgba(240,100,100,0.08); border-color:rgba(240,100,100,0.3); color:var(--coral); }
+.decision.fail { background:rgba(62,207,142,0.08); border-color:rgba(62,207,142,0.3); color:var(--green); }
+.decision.neutral { background:var(--bg3); border-color:var(--border); color:var(--text2); }
+.decision .dec-title { font-family:'Fraunces',serif; font-size:16px; margin-bottom:4px; }
+
+/* Two-col layout */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+@media(max-width:800px) { .two-col { grid-template-columns:1fr; } .shell { grid-template-columns:1fr; } .sidebar { display:none; } }
+
+/* Progress bar */
+.progress-bar-wrap { background:var(--bg4); border-radius:4px; height:6px; overflow:hidden; margin-top:6px; }
+.progress-bar { height:6px; border-radius:4px; background:var(--accent); transition:width 0.3s; }
+
+/* Tag */
+.tag {
+  display:inline-block; padding:3px 8px; border-radius:3px; font-size:10px;
+  letter-spacing:0.05em; border:1px solid; margin-right:4px;
+}
+.tag-blue { background:rgba(91,141,238,0.1); border-color:rgba(91,141,238,0.3); color:var(--accent); }
+.tag-green { background:rgba(62,207,142,0.1); border-color:rgba(62,207,142,0.3); color:var(--green); }
+.tag-coral { background:rgba(240,100,100,0.1); border-color:rgba(240,100,100,0.3); color:var(--coral); }
+.tag-amber { background:rgba(245,166,35,0.1); border-color:rgba(245,166,35,0.3); color:var(--amber); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Statistical Inference</div>
+    <div class="header-sub">CLT Simulator · Confidence Intervals · Hypothesis Testing</div>
+  </div>
+  <div class="module-tabs">
+    <button class="mtab active" onclick="switchModule('clt')">CLT</button>
+    <button class="mtab" onclick="switchModule('ci')">Confidence Intervals</button>
+    <button class="mtab" onclick="switchModule('ht')">Hypothesis Testing</button>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="sidebar">
+    <!-- CLT nav -->
+    <div id="nav-clt">
+      <div class="sidebar-label">CLT Simulator</div>
+      <div class="nav-item active" onclick="switchSection('clt','sampling')">Sampling Distribution</div>
+      <div class="nav-item" onclick="switchSection('clt','se')">Standard Error</div>
+      <div class="nav-item" onclick="switchSection('clt','populations')">Population Shapes</div>
+      <div class="sidebar-label">Theory</div>
+      <div class="nav-item" onclick="switchSection('clt','theorem')">Theorem Statement</div>
+    </div>
+    <!-- CI nav -->
+    <div id="nav-ci" style="display:none">
+      <div class="sidebar-label">CI Explorer</div>
+      <div class="nav-item active" onclick="switchSection('ci','builder')">CI Builder</div>
+      <div class="nav-item" onclick="switchSection('ci','coverage')">Coverage Simulation</div>
+      <div class="nav-item" onclick="switchSection('ci','width')">Width vs n</div>
+      <div class="sidebar-label">Theory</div>
+      <div class="nav-item" onclick="switchSection('ci','interpret')">Interpretation</div>
+    </div>
+    <!-- HT nav -->
+    <div id="nav-ht" style="display:none">
+      <div class="sidebar-label">Hypothesis Tests</div>
+      <div class="nav-item active" onclick="switchSection('ht','ztest')">Z-Test</div>
+      <div class="nav-item" onclick="switchSection('ht','ttest')">T-Test</div>
+      <div class="nav-item" onclick="switchSection('ht','errors')">Type I / II Errors</div>
+      <div class="sidebar-label">Theory</div>
+      <div class="nav-item" onclick="switchSection('ht','pvalue')">p-value Explorer</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ================================================================ CLT ================================================================ -->
+    <div id="panel-clt-sampling" class="panel active">
+      <div class="section-title">Central Limit Theorem Simulator</div>
+      <div class="section-sub">Draw repeated samples from a population and watch the sampling distribution of the mean form. The key insight: regardless of the population shape, the distribution of sample means approaches Normal as n grows.</div>
+
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">Population Shape</div>
+          <select id="clt-pop" onchange="cltReset()">
+            <option value="uniform">Uniform</option>
+            <option value="exponential">Exponential (right-skewed)</option>
+            <option value="bimodal">Bimodal</option>
+            <option value="normal">Normal (baseline)</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Size (n)</div>
+          <div class="ctrl-row">
+            <input type="range" id="clt-n" min="2" max="100" value="30" oninput="cltUpdateN()">
+            <div class="ctrl-val" id="clt-n-val">30</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Samples Drawn</div>
+          <div class="ctrl-val" id="clt-count" style="font-size:22px">0</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" id="clt-progress" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="cltDraw(1)">Draw 1 Sample</button>
+        <button class="btn primary" onclick="cltDraw(10)">Draw 10</button>
+        <button class="btn primary" onclick="cltDraw(100)">Draw 100</button>
+        <button class="btn primary" onclick="cltDraw(500)">Draw 500</button>
+        <button class="btn" onclick="cltReset()">Reset</button>
+      </div>
+
+      <div class="two-col">
+        <div class="canvas-wrap">
+          <div class="canvas-title">Population Distribution</div>
+          <canvas id="clt-pop-canvas" height="180"></canvas>
+        </div>
+        <div class="canvas-wrap">
+          <div class="canvas-title">Sampling Distribution of the Mean (x-bar)</div>
+          <canvas id="clt-samp-canvas" height="180"></canvas>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Population Mean (mu)</div>
+          <div class="card-value accent" id="clt-popmean">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Sample Mean of Means (x-bar)</div>
+          <div class="card-value green" id="clt-meanmean">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Empirical SE</div>
+          <div class="card-value amber" id="clt-se-emp">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Theoretical SE = sigma/sqrt(n)</div>
+          <div class="card-value teal" id="clt-se-theory" style="color:var(--teal)">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-clt-se" class="panel">
+      <div class="section-title">Standard Error vs Sample Size</div>
+      <div class="section-sub">Standard Error = sigma / sqrt(n). To halve the SE you need 4x the sample size. This is why data collection is expensive at scale.</div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">Population Std Dev (sigma)</div>
+          <div class="ctrl-row">
+            <input type="range" id="se-sigma" min="1" max="50" value="10" oninput="drawSEChart()">
+            <div class="ctrl-val" id="se-sigma-val">10</div>
+          </div>
+        </div>
+      </div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">SE = sigma / sqrt(n) across sample sizes</div>
+        <canvas id="se-canvas" height="280"></canvas>
+      </div>
+      <div class="info-grid">
+        <div class="info-box"><div class="ib-label">Formula</div><div class="ib-val formula">SE = sigma / sqrt(n)</div></div>
+        <div class="info-box"><div class="ib-label">Key Insight</div><div class="ib-val">SE decreases with sqrt(n), not n. Quadrupling sample size halves SE.</div></div>
+        <div class="info-box"><div class="ib-label">At n=<span id="se-n1">30</span></div><div class="ib-val">SE = <span id="se-val1" style="color:var(--accent)">—</span></div></div>
+        <div class="info-box"><div class="ib-label">At n=<span id="se-n2">120</span> (4x)</div><div class="ib-val">SE = <span id="se-val2" style="color:var(--green)">—</span> (half)</div></div>
+      </div>
+    </div>
+
+    <div id="panel-clt-populations" class="panel">
+      <div class="section-title">Population Shapes and CLT</div>
+      <div class="section-sub">CLT works regardless of population shape. The skewness, modality, and spread of the original population do not matter — the sampling distribution of the mean converges to Normal.</div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">Four population shapes — all produce Normal sampling distributions</div>
+        <canvas id="pop-shapes-canvas" height="320"></canvas>
+      </div>
+    </div>
+
+    <div id="panel-clt-theorem" class="panel">
+      <div class="section-title">Theorem Statement</div>
+      <div class="info-grid">
+        <div class="info-box" style="grid-column:1/-1">
+          <div class="ib-label">Central Limit Theorem</div>
+          <div class="ib-val" style="line-height:1.9">
+            For i.i.d. random variables X1, X2, ..., Xn with mean mu and finite variance sigma-squared,
+            as n approaches infinity:<br><br>
+            <span style="color:var(--teal); font-style:italic">x-bar ~ N(mu, sigma^2 / n)</span><br><br>
+            The standardised form: sqrt(n) * (x-bar - mu) / sigma converges to N(0, 1).
+          </div>
+        </div>
+        <div class="info-box"><div class="ib-label">Required Conditions</div><div class="ib-val">1. Independent observations<br>2. Identically distributed<br>3. Finite mean and variance</div></div>
+        <div class="info-box"><div class="ib-label">Sample Size Rule</div><div class="ib-val">n >= 30 for most distributions. n >= 50 for heavily skewed. Any n for Normal populations.</div></div>
+        <div class="info-box"><div class="ib-label">Why It Matters</div><div class="ib-val">Justifies t-tests, z-tests, confidence intervals, and the ability to make probabilistic claims about sample statistics.</div></div>
+        <div class="info-box"><div class="ib-label">ML Application</div><div class="ib-val">Mini-batch gradient estimates converge to true gradient. Model accuracy on test sets is approximately normally distributed — enabling CI on metrics.</div></div>
+      </div>
+    </div>
+
+    <!-- ================================================================ CI ================================================================ -->
+    <div id="panel-ci-builder" class="panel">
+      <div class="section-title">Confidence Interval Builder</div>
+      <div class="section-sub">Compute a confidence interval from your sample. Use Z-procedure when sigma is known, T-procedure when it is not (the realistic case).</div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">Procedure</div>
+          <select id="ci-proc" onchange="computeCI()">
+            <option value="t">T-Procedure (sigma unknown)</option>
+            <option value="z">Z-Procedure (sigma known)</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Confidence Level</div>
+          <div class="ctrl-row">
+            <input type="range" id="ci-level" min="80" max="99" value="95" oninput="computeCI()">
+            <div class="ctrl-val" id="ci-level-val">95%</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Mean (x-bar)</div>
+          <input type="number" id="ci-mean" value="28.5" oninput="computeCI()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Std Dev (s or sigma)</div>
+          <input type="number" id="ci-sd" value="5" oninput="computeCI()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Size (n)</div>
+          <div class="ctrl-row">
+            <input type="range" id="ci-n" min="5" max="500" value="30" oninput="computeCI()">
+            <div class="ctrl-val" id="ci-n-val">30</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas-title">Confidence Interval Visualisation</div>
+        <canvas id="ci-canvas" height="160"></canvas>
+      </div>
+
+      <div class="cards">
+        <div class="card"><div class="card-label">Critical Value</div><div class="card-value accent" id="ci-crit">—</div><div class="card-sub" id="ci-crit-label">—</div></div>
+        <div class="card"><div class="card-label">Standard Error</div><div class="card-value teal" id="ci-se" style="color:var(--teal)">—</div></div>
+        <div class="card"><div class="card-label">Margin of Error</div><div class="card-value amber" id="ci-moe">—</div></div>
+        <div class="card"><div class="card-label">Interval</div><div class="card-value green" id="ci-interval">—</div></div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box"><div class="ib-label">Formula</div><div class="ib-val formula" id="ci-formula">x-bar ± t* × (s / sqrt(n))</div></div>
+        <div class="info-box"><div class="ib-label">Correct Interpretation</div><div class="ib-val">If this procedure were repeated 100 times, approximately <span id="ci-level-txt">95</span> of the resulting intervals would contain the true population mean.</div></div>
+      </div>
+    </div>
+
+    <div id="panel-ci-coverage" class="panel">
+      <div class="section-title">Coverage Simulation</div>
+      <div class="section-sub">Simulate drawing many samples and constructing a CI from each. See how many actually contain the true mean. The proportion should match the confidence level.</div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">True Population Mean</div>
+          <input type="number" id="cov-mu" value="50" oninput="runCoverage()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Population Sigma</div>
+          <input type="number" id="cov-sigma" value="10" oninput="runCoverage()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Size (n)</div>
+          <div class="ctrl-row">
+            <input type="range" id="cov-n" min="5" max="100" value="30" oninput="runCoverage()">
+            <div class="ctrl-val" id="cov-n-val">30</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Confidence Level</div>
+          <div class="ctrl-row">
+            <input type="range" id="cov-level" min="80" max="99" value="95" oninput="runCoverage()">
+            <div class="ctrl-val" id="cov-level-val">95%</div>
+          </div>
+        </div>
+      </div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">50 Confidence Intervals — green contains true mean, red misses it</div>
+        <canvas id="cov-canvas" height="400"></canvas>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="card-label">Intervals Containing True Mean</div><div class="card-value green" id="cov-hit">—</div></div>
+        <div class="card"><div class="card-label">Intervals Missing</div><div class="card-value coral" id="cov-miss">—</div></div>
+        <div class="card"><div class="card-label">Empirical Coverage Rate</div><div class="card-value accent" id="cov-rate">—</div></div>
+      </div>
+    </div>
+
+    <div id="panel-ci-width" class="panel">
+      <div class="section-title">CI Width vs Sample Size</div>
+      <div class="section-sub">Width = 2 × z* × sigma / sqrt(n). To halve the width you need 4x the samples.</div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">Sigma</div>
+          <div class="ctrl-row">
+            <input type="range" id="width-sigma" min="1" max="30" value="10" oninput="drawWidthChart()">
+            <div class="ctrl-val" id="width-sigma-val">10</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Confidence Level</div>
+          <select id="width-level" onchange="drawWidthChart()">
+            <option value="0.90">90%</option>
+            <option value="0.95" selected>95%</option>
+            <option value="0.99">99%</option>
+          </select>
+        </div>
+      </div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">CI Width across sample sizes</div>
+        <canvas id="width-canvas" height="280"></canvas>
+      </div>
+    </div>
+
+    <div id="panel-ci-interpret" class="panel">
+      <div class="section-title">Interpreting Confidence Intervals</div>
+      <div class="info-grid">
+        <div class="info-box" style="border-color:rgba(240,100,100,0.3)">
+          <div class="ib-label" style="color:var(--coral)">Wrong Interpretation</div>
+          <div class="ib-val">There is a 95% probability that the true parameter lies in this interval.</div>
+        </div>
+        <div class="info-box" style="border-color:rgba(62,207,142,0.3)">
+          <div class="ib-label" style="color:var(--green)">Correct Interpretation</div>
+          <div class="ib-val">If this sampling procedure were repeated many times, 95% of the resulting intervals would contain the true parameter.</div>
+        </div>
+        <div class="info-box"><div class="ib-label">Z vs T Procedure</div><div class="ib-val">Use Z when sigma is known (rare). Use T when sigma is estimated from sample (the realistic case). For large n, they are nearly identical.</div></div>
+        <div class="info-box"><div class="ib-label">Width Determinants</div><div class="ib-val">Larger n → narrower. Higher confidence level → wider. Higher sigma → wider. You can only control n.</div></div>
+        <div class="info-box"><div class="ib-label">ML Application</div><div class="ib-val">Report model accuracy as CI, not a point estimate. Accuracy = 0.92 ± 0.017 (95% CI) on n=1000 test samples is honest. A bare 92% is not.</div></div>
+        <div class="info-box"><div class="ib-label">Nitish's Analogy</div><div class="ib-val">Betting Dhoni scores exactly 25 runs — tiny probability. Betting 20-35 runs — much more probable. A range is always more honest than a single number.</div></div>
+      </div>
+    </div>
+
+    <!-- ================================================================ HT ================================================================ -->
+    <div id="panel-ht-ztest" class="panel">
+      <div class="section-title">Z-Test (Sigma Known)</div>
+      <div class="section-sub">Nitish's factory example: a plant produces 50 cars/day (mu=50, sigma=5). After training, a sample of 30 workers shows mean=53. Did training help?</div>
+
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">H0: Population Mean (mu0)</div>
+          <input type="number" id="zt-mu0" value="50" oninput="computeZTest()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Population Sigma</div>
+          <input type="number" id="zt-sigma" value="5" oninput="computeZTest()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Mean (x-bar)</div>
+          <input type="number" id="zt-xbar" value="53" oninput="computeZTest()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Size (n)</div>
+          <div class="ctrl-row">
+            <input type="range" id="zt-n" min="5" max="200" value="30" oninput="computeZTest()">
+            <div class="ctrl-val" id="zt-n-val">30</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Significance Level (alpha)</div>
+          <select id="zt-alpha" onchange="computeZTest()">
+            <option value="0.01">0.01</option>
+            <option value="0.05" selected>0.05</option>
+            <option value="0.10">0.10</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Test Type</div>
+          <select id="zt-tail" onchange="computeZTest()">
+            <option value="right">One-tailed (right): mu > mu0</option>
+            <option value="left">One-tailed (left): mu &lt; mu0</option>
+            <option value="two">Two-tailed: mu != mu0</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas-title">Standard Normal — Rejection Region and Test Statistic</div>
+        <canvas id="zt-canvas" height="220"></canvas>
+      </div>
+
+      <div class="cards">
+        <div class="card"><div class="card-label">Z Statistic</div><div class="card-value accent" id="zt-stat">—</div></div>
+        <div class="card"><div class="card-label">Critical Value</div><div class="card-value amber" id="zt-crit">—</div></div>
+        <div class="card"><div class="card-label">p-value</div><div class="card-value" id="zt-pval">—</div></div>
+      </div>
+
+      <div class="decision neutral" id="zt-decision">
+        <div class="dec-title">Set parameters to compute decision</div>
+      </div>
+    </div>
+
+    <div id="panel-ht-ttest" class="panel">
+      <div class="section-title">T-Test (Sigma Unknown)</div>
+      <div class="section-sub">The realistic case — sigma is unknown and estimated from the sample. Degrees of freedom = n - 1.</div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">H0: Population Mean (mu0)</div>
+          <input type="number" id="tt-mu0" value="50" oninput="computeTTest()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Mean (x-bar)</div>
+          <input type="number" id="tt-xbar" value="52" oninput="computeTTest()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Std Dev (s)</div>
+          <input type="number" id="tt-s" value="8" oninput="computeTTest()">
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Sample Size (n)</div>
+          <div class="ctrl-row">
+            <input type="range" id="tt-n" min="5" max="200" value="25" oninput="computeTTest()">
+            <div class="ctrl-val" id="tt-n-val">25</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Significance Level (alpha)</div>
+          <select id="tt-alpha" onchange="computeTTest()">
+            <option value="0.01">0.01</option>
+            <option value="0.05" selected>0.05</option>
+            <option value="0.10">0.10</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Test Type</div>
+          <select id="tt-tail" onchange="computeTTest()">
+            <option value="two" selected>Two-tailed</option>
+            <option value="right">One-tailed (right)</option>
+            <option value="left">One-tailed (left)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas-title">T-Distribution (df = n-1) — Rejection Region and Test Statistic</div>
+        <canvas id="tt-canvas" height="220"></canvas>
+      </div>
+
+      <div class="cards">
+        <div class="card"><div class="card-label">T Statistic</div><div class="card-value accent" id="tt-stat">—</div></div>
+        <div class="card"><div class="card-label">Degrees of Freedom</div><div class="card-value teal" id="tt-df" style="color:var(--teal)">—</div></div>
+        <div class="card"><div class="card-label">Critical Value (t*)</div><div class="card-value amber" id="tt-crit">—</div></div>
+        <div class="card"><div class="card-label">p-value (approx)</div><div class="card-value" id="tt-pval">—</div></div>
+      </div>
+
+      <div class="decision neutral" id="tt-decision">
+        <div class="dec-title">Set parameters to compute decision</div>
+      </div>
+    </div>
+
+    <div id="panel-ht-errors" class="panel">
+      <div class="section-title">Type I and Type II Errors</div>
+      <div class="section-sub">Two ways to be wrong in hypothesis testing. Reducing one increases the other. The only way to reduce both is to increase sample size.</div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">Error Regions — Power Curve</div>
+        <canvas id="errors-canvas" height="300"></canvas>
+      </div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">Alpha (Type I error rate)</div>
+          <div class="ctrl-row">
+            <input type="range" id="err-alpha" min="1" max="20" value="5" oninput="drawErrors()">
+            <div class="ctrl-val" id="err-alpha-val">0.05</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">True Difference (effect size)</div>
+          <div class="ctrl-row">
+            <input type="range" id="err-effect" min="0" max="40" value="15" oninput="drawErrors()">
+            <div class="ctrl-val" id="err-effect-val">1.5</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="info-box" style="border-color:rgba(240,100,100,0.3)">
+          <div class="ib-label" style="color:var(--coral)">Type I Error (alpha)</div>
+          <div class="ib-val">Reject H0 when it is actually true. False positive. Probability = alpha. Controlled by your choice of significance level.</div>
+        </div>
+        <div class="info-box" style="border-color:rgba(245,166,35,0.3)">
+          <div class="ib-label" style="color:var(--amber)">Type II Error (beta)</div>
+          <div class="ib-val">Fail to reject H0 when H1 is actually true. False negative. Probability = beta. Decreases as sample size or effect size increases.</div>
+        </div>
+        <div class="info-box" style="border-color:rgba(62,207,142,0.3)">
+          <div class="ib-label" style="color:var(--green)">Power = 1 - beta</div>
+          <div class="ib-val">Probability of correctly detecting a real effect. Increases with n, effect size, and alpha.</div>
+        </div>
+        <div class="info-box">
+          <div class="ib-label">The Tradeoff</div>
+          <div class="ib-val">Decreasing alpha (stricter threshold) raises beta. Increasing n is the only way to reduce both simultaneously.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-ht-pvalue" class="panel">
+      <div class="section-title">p-value Explorer</div>
+      <div class="section-sub">The p-value is the probability of observing a test statistic at least as extreme as the computed one, assuming H0 is true. It is NOT the probability that H0 is true.</div>
+      <div class="controls">
+        <div class="ctrl">
+          <div class="ctrl-label">Z Statistic</div>
+          <div class="ctrl-row">
+            <input type="range" id="pv-z" min="-40" max="40" value="20" oninput="drawPValue()">
+            <div class="ctrl-val" id="pv-z-val">2.0</div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <div class="ctrl-label">Test Type</div>
+          <select id="pv-tail" onchange="drawPValue()">
+            <option value="two">Two-tailed</option>
+            <option value="right">One-tailed (right)</option>
+            <option value="left">One-tailed (left)</option>
+          </select>
+        </div>
+      </div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">p-value = shaded area under standard normal</div>
+        <canvas id="pv-canvas" height="240"></canvas>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="card-label">Z Statistic</div><div class="card-value accent" id="pv-stat">—</div></div>
+        <div class="card"><div class="card-label">p-value</div><div class="card-value" id="pv-pval">—</div></div>
+        <div class="card"><div class="card-label">Decision at alpha=0.05</div><div class="card-value" id="pv-decision">—</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// UTILITIES
+// ============================================================
+function normalPDF(x, mu=0, sd=1) {
+  return Math.exp(-0.5*((x-mu)/sd)**2) / (sd * Math.sqrt(2*Math.PI));
+}
+function normalCDF(z) {
+  const t = 1/(1+0.2316419*Math.abs(z));
+  const poly = t*(0.319381530 + t*(-0.356563782 + t*(1.781477937 + t*(-1.821255978 + t*1.330274429))));
+  const p = 1 - normalPDF(z)*poly;
+  return z >= 0 ? p : 1-p;
+}
+function invNorm(p) {
+  // Rational approximation
+  const a = [0,-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+  const b = [0,-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
+  const c = [-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+  const d = [7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00];
+  const pLow=0.02425, pHigh=1-pLow;
+  let q,r;
+  if(p<pLow){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p<=pHigh){q=p-0.5;r=q*q;return (((((a[1]*r+a[2])*r+a[3])*r+a[4])*r+a[5])*r+a[6])*q/(((((b[1]*r+b[2])*r+b[3])*r+b[4])*r+b[5])*r+1);}
+  q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+}
+// Approximate t-CDF using normal for large df, beta regularisation otherwise
+function tCDF(t, df) {
+  if(df > 100) return normalCDF(t);
+  // Simple approximation via Wilson-Hilferty
+  const x = df/(df + t*t);
+  const a = df/2, b = 0.5;
+  // Use incomplete beta approximation
+  const p = incompleteBeta(x, a, b);
+  return t > 0 ? 1 - p/2 : p/2;
+}
+function incompleteBeta(x, a, b) {
+  // Continued fraction approximation
+  if(x < 0 || x > 1) return 0;
+  if(x === 0) return 0;
+  if(x === 1) return 1;
+  const lbeta = lgamma(a+b) - lgamma(a) - lgamma(b);
+  const front = Math.exp(Math.log(x)*a + Math.log(1-x)*b - lbeta) / a;
+  return front * betaCF(x, a, b);
+}
+function betaCF(x, a, b) {
+  const MAXIT=200; const EPS=3e-7;
+  let qab=a+b, qap=a+1, qam=a-1;
+  let c=1, d=1-qab*x/qap; if(Math.abs(d)<1e-30)d=1e-30; d=1/d;
+  let h=d;
+  for(let m=1;m<=MAXIT;m++){
+    let m2=2*m;
+    let aa=m*(b-m)*x/((qam+m2)*(a+m2));
+    d=1+aa*d; if(Math.abs(d)<1e-30)d=1e-30;
+    c=1+aa/c; if(Math.abs(c)<1e-30)c=1e-30;
+    d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));
+    d=1+aa*d; if(Math.abs(d)<1e-30)d=1e-30;
+    c=1+aa/c; if(Math.abs(c)<1e-30)c=1e-30;
+    d=1/d; let del=d*c; h*=del;
+    if(Math.abs(del-1)<EPS) break;
+  }
+  return h;
+}
+function lgamma(x) {
+  const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];
+  let y=x,tmp=x+5.5; tmp-=(x+0.5)*Math.log(tmp);
+  let ser=1.000000000190015;
+  for(let j=0;j<6;j++){ser+=c[j]/++y;}
+  return -tmp+Math.log(2.5066282746310005*ser/x);
+}
+function invT(p, df) {
+  // Approximate using normal for simplicity
+  if(df > 100) return invNorm(p);
+  // Binary search
+  let lo=-10, hi=10;
+  for(let i=0;i<60;i++){
+    const mid=(lo+hi)/2;
+    if(tCDF(mid,df) < p) lo=mid; else hi=mid;
+  }
+  return (lo+hi)/2;
+}
+
+function getColor(name) {
+  const m = {'accent':'#5b8dee','green':'#3ecf8e','amber':'#f5a623','coral':'#f06464','teal':'#38bdf8','purple':'#a78bfa','text2':'#8a90a8','text3':'#545c78','bg3':'#171c2a','bg4':'#1e2436','border':'rgba(255,255,255,0.07)'};
+  return m[name]||name;
+}
+
+function setupCanvas(id) {
+  const c = document.getElementById(id);
+  if(!c) return null;
+  const dpr = window.devicePixelRatio||1;
+  const w = c.parentElement.clientWidth - 40;
+  const h = parseInt(c.getAttribute('height'));
+  c.width = w * dpr; c.height = h * dpr;
+  c.style.width = w+'px'; c.style.height = h+'px';
+  const ctx = c.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.W = w; ctx.H = h;
+  return ctx;
+}
+
+// ============================================================
+// MODULE / SECTION SWITCHING
+// ============================================================
+let currentModule = 'clt';
+const moduleSections = {
+  clt: ['sampling','se','populations','theorem'],
+  ci:  ['builder','coverage','width','interpret'],
+  ht:  ['ztest','ttest','errors','pvalue']
+};
+
+function switchModule(mod) {
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  ['clt','ci','ht'].forEach(m=>{
+    const n=document.getElementById('nav-'+m);
+    if(n) n.style.display = m===mod?'block':'none';
+  });
+  currentModule = mod;
+  // activate first section of module
+  const first = moduleSections[mod][0];
+  moduleSections[mod].forEach(s=>{
+    const p=document.getElementById(`panel-${mod}-${s}`);
+    if(p) p.classList.remove('active');
+  });
+  const firstPanel = document.getElementById(`panel-${mod}-${first}`);
+  if(firstPanel) firstPanel.classList.add('active');
+  document.querySelectorAll('#nav-'+mod+' .nav-item').forEach((el,i)=>el.classList.toggle('active',i===0));
+  // trigger draw
+  setTimeout(()=>{ initDrawForSection(mod, first); }, 50);
+}
+
+function switchSection(mod, sec) {
+  moduleSections[mod].forEach(s=>{
+    const p=document.getElementById(`panel-${mod}-${s}`);
+    if(p) p.classList.remove('active');
+  });
+  const panel = document.getElementById(`panel-${mod}-${sec}`);
+  if(panel) panel.classList.add('active');
+  document.querySelectorAll('#nav-'+mod+' .nav-item').forEach(el=>el.classList.remove('active'));
+  event.target.classList.add('active');
+  setTimeout(()=>{ initDrawForSection(mod, sec); }, 50);
+}
+
+function initDrawForSection(mod, sec) {
+  const key = `${mod}-${sec}`;
+  if(key==='clt-sampling') { cltReset(); }
+  else if(key==='clt-se') drawSEChart();
+  else if(key==='clt-populations') drawPopShapes();
+  else if(key==='ci-builder') computeCI();
+  else if(key==='ci-coverage') runCoverage();
+  else if(key==='ci-width') drawWidthChart();
+  else if(key==='ht-ztest') computeZTest();
+  else if(key==='ht-ttest') computeTTest();
+  else if(key==='ht-errors') drawErrors();
+  else if(key==='ht-pvalue') drawPValue();
+}
+
+// ============================================================
+// CLT SIMULATOR
+// ============================================================
+let cltSampleMeans = [];
+let cltPopData = [];
+
+function genPop(type, N=5000) {
+  const arr = [];
+  for(let i=0;i<N;i++){
+    if(type==='uniform') arr.push(Math.random()*10);
+    else if(type==='exponential') arr.push(-Math.log(1-Math.random())*3);
+    else if(type==='bimodal') arr.push(Math.random()<0.5 ? randn()*1.2+2 : randn()*1.2+8);
+    else arr.push(randn()*2+5);
+  }
+  return arr;
+}
+function randn() {
+  let u=0,v=0;
+  while(u===0)u=Math.random();
+  while(v===0)v=Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
+function cltReset() {
+  cltSampleMeans = [];
+  const type = document.getElementById('clt-pop').value;
+  cltPopData = genPop(type);
+  document.getElementById('clt-count').textContent = '0';
+  document.getElementById('clt-progress').style.width = '0%';
+  document.getElementById('clt-meanmean').textContent = '—';
+  document.getElementById('clt-se-emp').textContent = '—';
+  document.getElementById('clt-se-theory').textContent = '—';
+  const mu = cltPopData.reduce((a,b)=>a+b,0)/cltPopData.length;
+  document.getElementById('clt-popmean').textContent = mu.toFixed(3);
+  drawCLTPopulation();
+  drawCLTSampling();
+}
+
+function cltUpdateN() {
+  document.getElementById('clt-n-val').textContent = document.getElementById('clt-n').value;
+}
+
+function cltDraw(k) {
+  const n = parseInt(document.getElementById('clt-n').value);
+  for(let i=0;i<k;i++){
+    let s=0;
+    for(let j=0;j<n;j++) s += cltPopData[Math.floor(Math.random()*cltPopData.length)];
+    cltSampleMeans.push(s/n);
+  }
+  const total = cltSampleMeans.length;
+  document.getElementById('clt-count').textContent = total;
+  document.getElementById('clt-progress').style.width = Math.min(100, total/5)+'%';
+
+  const mu = cltPopData.reduce((a,b)=>a+b,0)/cltPopData.length;
+  const sigma = Math.sqrt(cltPopData.reduce((a,b)=>a+(b-mu)**2,0)/cltPopData.length);
+  const meanMean = cltSampleMeans.reduce((a,b)=>a+b,0)/total;
+  const seEmp = total>1 ? Math.sqrt(cltSampleMeans.reduce((a,b)=>a+(b-meanMean)**2,0)/(total-1)) : 0;
+  const seTheory = sigma/Math.sqrt(n);
+
+  document.getElementById('clt-meanmean').textContent = meanMean.toFixed(4);
+  document.getElementById('clt-se-emp').textContent = seEmp.toFixed(4);
+  document.getElementById('clt-se-theory').textContent = seTheory.toFixed(4);
+
+  drawCLTSampling();
+}
+
+function histogram(data, bins=30) {
+  const min=Math.min(...data), max=Math.max(...data);
+  const w=(max-min)/bins;
+  const counts=new Array(bins).fill(0);
+  data.forEach(v=>{ let i=Math.min(bins-1,Math.floor((v-min)/w)); counts[i]++; });
+  return {counts,min,max,w};
+}
+
+function drawHist(ctx, data, color, bins=30) {
+  if(!data.length) return;
+  const W=ctx.W, H=ctx.H;
+  const {counts,min,max,w} = histogram(data,bins);
+  const maxC = Math.max(...counts);
+  const pad={l:30,r:10,t:10,b:30};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#171c2a';
+  ctx.fillRect(0,0,W,H);
+  // axes
+  ctx.strokeStyle='rgba(255,255,255,0.07)';
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  // bars
+  ctx.fillStyle = color+'88';
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 0.5;
+  counts.forEach((c,i)=>{
+    const x=pad.l+i*(iW/bins);
+    const bW=iW/bins-1;
+    const bH=c/maxC*iH;
+    const y=H-pad.b-bH;
+    ctx.fillRect(x,y,bW,bH);
+    ctx.strokeRect(x,y,bW,bH);
+  });
+  // x labels
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='center';
+  [0,0.25,0.5,0.75,1].forEach(t=>{
+    const v=(min+t*(max-min)).toFixed(1);
+    ctx.fillText(v, pad.l+t*iW, H-pad.b+14);
+  });
+}
+
+function drawCLTPopulation() {
+  const ctx = setupCanvas('clt-pop-canvas');
+  if(!ctx || !cltPopData.length) return;
+  drawHist(ctx, cltPopData, getColor('accent'), 40);
+}
+
+function drawCLTSampling() {
+  const ctx = setupCanvas('clt-samp-canvas');
+  if(!ctx) return;
+  if(!cltSampleMeans.length){ ctx.clearRect(0,0,ctx.W,ctx.H); return; }
+  drawHist(ctx, cltSampleMeans, getColor('green'), 30);
+  // overlay normal curve if enough samples
+  if(cltSampleMeans.length < 10) return;
+  const mu = cltSampleMeans.reduce((a,b)=>a+b,0)/cltSampleMeans.length;
+  const sigma = Math.sqrt(cltSampleMeans.reduce((a,b)=>a+(b-mu)**2,0)/cltSampleMeans.length);
+  const min=Math.min(...cltSampleMeans), max=Math.max(...cltSampleMeans);
+  const {counts} = histogram(cltSampleMeans, 30);
+  const maxC = Math.max(...counts);
+  const pad={l:30,r:10,t:10,b:30};
+  const W=ctx.W,H=ctx.H;
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  const n=cltSampleMeans.length, binW=(max-min)/30;
+  ctx.strokeStyle=getColor('coral'); ctx.lineWidth=2;
+  ctx.beginPath();
+  for(let i=0;i<=200;i++){
+    const x=min+i*(max-min)/200;
+    const y=normalPDF(x,mu,sigma)*n*binW;
+    const px=pad.l+(x-min)/(max-min)*iW;
+    const py=H-pad.b-y/maxC*iH;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+}
+
+// ============================================================
+// SE CHART
+// ============================================================
+function drawSEChart() {
+  const sigma = parseInt(document.getElementById('se-sigma').value);
+  document.getElementById('se-sigma-val').textContent = sigma;
+  const ctx = setupCanvas('se-canvas');
+  if(!ctx) return;
+  const W=ctx.W, H=ctx.H;
+  const pad={l:50,r:20,t:20,b:40};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  const ns=[]; for(let i=2;i<=200;i+=2) ns.push(i);
+  const ses = ns.map(n=>sigma/Math.sqrt(n));
+  const maxSE = ses[0];
+
+  ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1;
+  [0,.25,.5,.75,1].forEach(t=>{
+    const y=pad.t+t*iH;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='right';
+    ctx.fillText((maxSE*(1-t)).toFixed(2), pad.l-6, y+4);
+  });
+
+  ctx.strokeStyle=getColor('accent'); ctx.lineWidth=2.5;
+  ctx.beginPath();
+  ns.forEach((n,i)=>{
+    const px=pad.l+i/ns.length*iW;
+    const py=pad.t+(1-ses[i]/maxSE)*iH;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.stroke();
+
+  // Mark n=30 and n=120
+  [[30,'accent'],[120,'green']].forEach(([n,col])=>{
+    const i=ns.indexOf(n); if(i<0) return;
+    const px=pad.l+i/ns.length*iW;
+    const py=pad.t+(1-ses[i]/maxSE)*iH;
+    ctx.fillStyle=getColor(col);
+    ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle=getColor(col); ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(px,pad.t+iH); ctx.lineTo(px,py); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=getColor(col); ctx.font='10px DM Mono'; ctx.textAlign='center';
+    ctx.fillText('n='+n, px, py-10);
+  });
+
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='center';
+  [0,.25,.5,.75,1].forEach(t=>{
+    const n=Math.round(2+t*198);
+    ctx.fillText(n, pad.l+t*iW, H-pad.b+16);
+  });
+  ctx.fillText('Sample Size (n)', pad.l+iW/2, H-6);
+
+  const n1=30, n2=120;
+  document.getElementById('se-n1').textContent=n1;
+  document.getElementById('se-n2').textContent=n2;
+  document.getElementById('se-val1').textContent=(sigma/Math.sqrt(n1)).toFixed(3);
+  document.getElementById('se-val2').textContent=(sigma/Math.sqrt(n2)).toFixed(3);
+}
+
+// ============================================================
+// POPULATION SHAPES
+// ============================================================
+function drawPopShapes() {
+  const ctx = setupCanvas('pop-shapes-canvas');
+  if(!ctx) return;
+  const W=ctx.W, H=ctx.H;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  const shapes=[
+    {name:'Uniform',color:getColor('accent'),fn:x=>x>=0&&x<=10?0.1:0},
+    {name:'Exponential',color:getColor('coral'),fn:x=>x>=0?0.33*Math.exp(-0.33*x):0},
+    {name:'Bimodal',color:getColor('green'),fn:x=>0.5*normalPDF(x,2,1)+0.5*normalPDF(x,8,1)},
+    {name:'Normal',color:getColor('amber'),fn:x=>normalPDF(x,5,2)}
+  ];
+
+  const cols=2, rows=2;
+  const cW=W/cols, cH=H/rows;
+  shapes.forEach(({name,color,fn},i)=>{
+    const col=i%cols, row=Math.floor(i/cols);
+    const ox=col*cW, oy=row*cH;
+    const pad={l:20,r:10,t:24,b:20};
+    const xs=[]; for(let j=0;j<=200;j++) xs.push(-1+j*12/200);
+    const ys=xs.map(x=>fn(x));
+    const maxY=Math.max(...ys);
+    ctx.fillStyle=color+'18';
+    ctx.strokeStyle=color; ctx.lineWidth=2;
+    ctx.beginPath();
+    xs.forEach((x,j)=>{
+      const px=ox+pad.l+j/200*(cW-pad.l-pad.r);
+      const py=oy+cH-pad.b-(ys[j]/maxY)*(cH-pad.t-pad.b);
+      j===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    });
+    ctx.lineTo(ox+cW-pad.r, oy+cH-pad.b);
+    ctx.lineTo(ox+pad.l, oy+cH-pad.b);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    xs.forEach((x,j)=>{
+      const px=ox+pad.l+j/200*(cW-pad.l-pad.r);
+      const py=oy+cH-pad.b-(ys[j]/maxY)*(cH-pad.t-pad.b);
+      j===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    });
+    ctx.stroke();
+    ctx.fillStyle=color; ctx.font='bold 11px DM Mono'; ctx.textAlign='left';
+    ctx.fillText(name, ox+pad.l, oy+16);
+    // border
+    ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+    ctx.strokeRect(ox,oy,cW,cH);
+  });
+}
+
+// ============================================================
+// CONFIDENCE INTERVALS
+// ============================================================
+function computeCI() {
+  const proc = document.getElementById('ci-proc').value;
+  const level = parseInt(document.getElementById('ci-level').value)/100;
+  const mean = parseFloat(document.getElementById('ci-mean').value)||28.5;
+  const sd = parseFloat(document.getElementById('ci-sd').value)||5;
+  const n = parseInt(document.getElementById('ci-n').value)||30;
+  document.getElementById('ci-level-val').textContent = Math.round(level*100)+'%';
+  document.getElementById('ci-n-val').textContent = n;
+  document.getElementById('ci-level-txt').textContent = Math.round(level*100);
+
+  const alpha = 1-level;
+  const se = sd/Math.sqrt(n);
+  let crit, critLabel, formula;
+  if(proc==='z'){
+    crit = invNorm(1-alpha/2);
+    critLabel = 'z* (normal)';
+    formula = 'x-bar ± z* × (sigma / sqrt(n))';
+  } else {
+    crit = invT(1-alpha/2, n-1);
+    critLabel = `t* (df=${n-1})`;
+    formula = 'x-bar ± t* × (s / sqrt(n))';
+  }
+  const moe = crit * se;
+  const lo = mean - moe, hi = mean + moe;
+
+  document.getElementById('ci-formula').textContent = formula;
+  document.getElementById('ci-crit').textContent = crit.toFixed(3);
+  document.getElementById('ci-crit-label').textContent = critLabel;
+  document.getElementById('ci-se').textContent = se.toFixed(4);
+  document.getElementById('ci-moe').textContent = moe.toFixed(4);
+  document.getElementById('ci-interval').textContent = `(${lo.toFixed(3)}, ${hi.toFixed(3)})`;
+
+  drawCIViz(mean, lo, hi, se);
+}
+
+function drawCIViz(mean, lo, hi, se) {
+  const ctx = setupCanvas('ci-canvas');
+  if(!ctx) return;
+  const W=ctx.W, H=ctx.H;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  const span = (hi-lo)*2.5;
+  const cx = W/2, cy=H/2;
+  const scale = (W*0.7)/span;
+
+  const xlo = cx + (lo-mean)*scale;
+  const xhi = cx + (hi-mean)*scale;
+  const xmean = cx;
+
+  // axis
+  ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(W*0.1,cy); ctx.lineTo(W*0.9,cy); ctx.stroke();
+
+  // CI line
+  ctx.strokeStyle=getColor('accent'); ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(xlo,cy); ctx.lineTo(xhi,cy); ctx.stroke();
+
+  // CI brackets
+  [xlo,xhi].forEach(x=>{
+    ctx.strokeStyle=getColor('accent'); ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(x,cy-16); ctx.lineTo(x,cy+16); ctx.stroke();
+  });
+
+  // mean dot
+  ctx.fillStyle=getColor('green');
+  ctx.beginPath(); ctx.arc(xmean,cy,7,0,Math.PI*2); ctx.fill();
+
+  // labels
+  ctx.fillStyle=getColor('accent'); ctx.font='11px DM Mono'; ctx.textAlign='center';
+  ctx.fillText(lo.toFixed(2), xlo, cy+32);
+  ctx.fillText(hi.toFixed(2), xhi, cy+32);
+  ctx.fillStyle=getColor('green'); ctx.font='11px DM Mono';
+  ctx.fillText('x-bar = '+mean.toFixed(2), xmean, cy-24);
+  ctx.fillStyle='#8a90a8'; ctx.font='10px DM Mono';
+  ctx.fillText('Point Estimate', xmean, cy-12);
+}
+
+// ============================================================
+// COVERAGE SIMULATION
+// ============================================================
+function runCoverage() {
+  const mu = parseFloat(document.getElementById('cov-mu').value)||50;
+  const sigma = parseFloat(document.getElementById('cov-sigma').value)||10;
+  const n = parseInt(document.getElementById('cov-n').value)||30;
+  const level = parseInt(document.getElementById('cov-level').value)/100;
+  document.getElementById('cov-n-val').textContent = n;
+  document.getElementById('cov-level-val').textContent = Math.round(level*100)+'%';
+
+  const alpha=1-level;
+  const crit = invT(1-alpha/2, n-1);
+  const intervals=[];
+  for(let i=0;i<50;i++){
+    const s=[]; for(let j=0;j<n;j++) s.push(mu+randn()*sigma);
+    const xbar=s.reduce((a,b)=>a+b,0)/n;
+    const sd=Math.sqrt(s.reduce((a,b)=>a+(b-xbar)**2,0)/(n-1));
+    const moe=crit*sd/Math.sqrt(n);
+    intervals.push({lo:xbar-moe,hi:xbar+moe,hit:mu>=xbar-moe&&mu<=xbar+moe});
+  }
+  const hits=intervals.filter(i=>i.hit).length;
+  document.getElementById('cov-hit').textContent=hits;
+  document.getElementById('cov-miss').textContent=50-hits;
+  document.getElementById('cov-rate').textContent=(hits/50*100).toFixed(1)+'%';
+  drawCoverage(intervals, mu);
+}
+
+function drawCoverage(intervals, mu) {
+  const ctx = setupCanvas('cov-canvas');
+  if(!ctx) return;
+  const W=ctx.W, H=ctx.H;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  const allLo=Math.min(...intervals.map(i=>i.lo));
+  const allHi=Math.max(...intervals.map(i=>i.hi));
+  const pad={l:50,r:20,t:10,b:20};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  const rowH=iH/50;
+  const toX=v=>pad.l+(v-allLo)/(allHi-allLo)*iW;
+
+  // mu line
+  const muX=toX(mu);
+  ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(muX,pad.t); ctx.lineTo(muX,H-pad.b); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#8a90a8'; ctx.font='10px DM Mono'; ctx.textAlign='center';
+  ctx.fillText('mu='+mu, muX, pad.t+8);
+
+  intervals.forEach((iv,i)=>{
+    const y=pad.t+i*rowH+rowH/2;
+    const x1=toX(iv.lo), x2=toX(iv.hi);
+    const col=iv.hit?getColor('green'):getColor('coral');
+    ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke();
+    [x1,x2].forEach(x=>{
+      ctx.beginPath(); ctx.moveTo(x,y-3); ctx.lineTo(x,y+3); ctx.stroke();
+    });
+  });
+}
+
+// ============================================================
+// WIDTH CHART
+// ============================================================
+function drawWidthChart() {
+  const sigma = parseInt(document.getElementById('width-sigma').value);
+  const level = parseFloat(document.getElementById('width-level').value);
+  document.getElementById('width-sigma-val').textContent = sigma;
+  const z = invNorm(1-(1-level)/2);
+  const ctx = setupCanvas('width-canvas');
+  if(!ctx) return;
+  const W=ctx.W, H=ctx.H;
+  const pad={l:60,r:20,t:20,b:40};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  const ns=[]; for(let i=5;i<=300;i+=5) ns.push(i);
+  const widths=ns.map(n=>2*z*sigma/Math.sqrt(n));
+  const maxW=widths[0];
+
+  ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1;
+  [0,.25,.5,.75,1].forEach(t=>{
+    const y=pad.t+t*iH;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='right';
+    ctx.fillText((maxW*(1-t)).toFixed(2), pad.l-6, y+4);
+  });
+
+  ctx.strokeStyle=getColor('purple'); ctx.lineWidth=2.5;
+  ctx.beginPath();
+  ns.forEach((n,i)=>{
+    const px=pad.l+i/ns.length*iW;
+    const py=pad.t+(1-widths[i]/maxW)*iH;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.stroke();
+
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='center';
+  [5,75,150,225,300].forEach(n=>{
+    const i=ns.indexOf(n); if(i<0)return;
+    ctx.fillText(n, pad.l+i/ns.length*iW, H-pad.b+16);
+  });
+  ctx.fillText('Sample Size (n)', pad.l+iW/2, H-6);
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.save();
+  ctx.translate(14, pad.t+iH/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center'; ctx.fillText('CI Width', 0, 0); ctx.restore();
+}
+
+// ============================================================
+// HYPOTHESIS TESTING — Z-TEST
+// ============================================================
+function computeZTest() {
+  const mu0=parseFloat(document.getElementById('zt-mu0').value)||50;
+  const sigma=parseFloat(document.getElementById('zt-sigma').value)||5;
+  const xbar=parseFloat(document.getElementById('zt-xbar').value)||53;
+  const n=parseInt(document.getElementById('zt-n').value)||30;
+  const alpha=parseFloat(document.getElementById('zt-alpha').value)||0.05;
+  const tail=document.getElementById('zt-tail').value;
+  document.getElementById('zt-n-val').textContent=n;
+
+  const se=sigma/Math.sqrt(n);
+  const z=(xbar-mu0)/se;
+  let pval, crit;
+  if(tail==='two'){ pval=2*(1-normalCDF(Math.abs(z))); crit=invNorm(1-alpha/2); }
+  else if(tail==='right'){ pval=1-normalCDF(z); crit=invNorm(1-alpha); }
+  else { pval=normalCDF(z); crit=invNorm(alpha); }
+
+  document.getElementById('zt-stat').textContent=z.toFixed(4);
+  document.getElementById('zt-crit').textContent=(tail==='two'?'±':'')+Math.abs(crit).toFixed(3);
+  const pEl=document.getElementById('zt-pval');
+  pEl.textContent=pval.toFixed(4);
+  pEl.style.color=pval<alpha?getColor('coral'):getColor('green');
+
+  const reject = tail==='two'?Math.abs(z)>Math.abs(crit):(tail==='right'?z>crit:z<crit);
+  const dec=document.getElementById('zt-decision');
+  dec.className='decision '+(reject?'reject':'fail');
+  dec.innerHTML=`<div class="dec-title">${reject?'Reject H0':'Fail to Reject H0'}</div>
+    Z = ${z.toFixed(4)} ${reject?(tail==='two'?'outside':'>'):(tail==='two'?'inside':'<')} critical value ${Math.abs(crit).toFixed(3)}.
+    p-value = ${pval.toFixed(4)} ${pval<alpha?'<':'≥'} alpha ${alpha}.
+    ${reject?'Sufficient evidence to reject H0.':'Insufficient evidence to reject H0.'}`;
+
+  drawZTest(z, crit, tail, alpha);
+}
+
+function drawZTest(z, crit, tail, alpha) {
+  const ctx=setupCanvas('zt-canvas');
+  if(!ctx)return;
+  drawNormalWithRegion(ctx, z, crit, tail, alpha);
+}
+
+function drawNormalWithRegion(ctx, z, crit, tail, alpha) {
+  const W=ctx.W, H=ctx.H;
+  const pad={l:30,r:30,t:20,b:30};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  const xMin=-4, xMax=4;
+  const toX=v=>pad.l+(v-xMin)/(xMax-xMin)*iW;
+  const toY=v=>pad.t+iH-v/normalPDF(0)*iH*0.85;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  // rejection region fill
+  const fillRegion=(x1,x2,color)=>{
+    ctx.fillStyle=color+'40';
+    ctx.beginPath();
+    const xs=[]; for(let i=0;i<=100;i++) xs.push(x1+i*(x2-x1)/100);
+    ctx.moveTo(toX(x1),toY(0));
+    xs.forEach(x=>ctx.lineTo(toX(x),toY(normalPDF(x))));
+    ctx.lineTo(toX(x2),toY(0));
+    ctx.closePath(); ctx.fill();
+  };
+
+  if(tail==='two'){ fillRegion(xMin,-Math.abs(crit),getColor('coral')); fillRegion(Math.abs(crit),xMax,getColor('coral')); }
+  else if(tail==='right'){ fillRegion(Math.abs(crit),xMax,getColor('coral')); }
+  else { fillRegion(xMin,-Math.abs(crit),getColor('coral')); }
+
+  // normal curve
+  ctx.strokeStyle=getColor('accent'); ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(let i=0;i<=300;i++){
+    const x=xMin+i*(xMax-xMin)/300;
+    i===0?ctx.moveTo(toX(x),toY(normalPDF(x))):ctx.lineTo(toX(x),toY(normalPDF(x)));
+  }
+  ctx.stroke();
+
+  // axis
+  ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+
+  // critical value lines
+  const critVals=tail==='two'?[-Math.abs(crit),Math.abs(crit)]:tail==='right'?[Math.abs(crit)]:[-Math.abs(crit)];
+  critVals.forEach(cv=>{
+    ctx.strokeStyle=getColor('amber'); ctx.lineWidth=1.5; ctx.setLineDash([5,3]);
+    ctx.beginPath(); ctx.moveTo(toX(cv),pad.t); ctx.lineTo(toX(cv),H-pad.b); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=getColor('amber'); ctx.font='10px DM Mono'; ctx.textAlign='center';
+    ctx.fillText(cv.toFixed(2), toX(cv), pad.t+12);
+  });
+
+  // z statistic line
+  const zClamped=Math.max(xMin+0.1,Math.min(xMax-0.1,z));
+  ctx.strokeStyle=getColor('green'); ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(toX(zClamped),pad.t); ctx.lineTo(toX(zClamped),H-pad.b); ctx.stroke();
+  ctx.fillStyle=getColor('green'); ctx.font='bold 11px DM Mono'; ctx.textAlign='center';
+  ctx.fillText('Z='+z.toFixed(2), toX(zClamped), pad.t+22);
+
+  // x labels
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='center';
+  [-4,-3,-2,-1,0,1,2,3,4].forEach(v=>ctx.fillText(v, toX(v), H-pad.b+14));
+}
+
+// ============================================================
+// T-TEST
+// ============================================================
+function computeTTest() {
+  const mu0=parseFloat(document.getElementById('tt-mu0').value)||50;
+  const xbar=parseFloat(document.getElementById('tt-xbar').value)||52;
+  const s=parseFloat(document.getElementById('tt-s').value)||8;
+  const n=parseInt(document.getElementById('tt-n').value)||25;
+  const alpha=parseFloat(document.getElementById('tt-alpha').value)||0.05;
+  const tail=document.getElementById('tt-tail').value;
+  document.getElementById('tt-n-val').textContent=n;
+
+  const df=n-1;
+  const se=s/Math.sqrt(n);
+  const t=(xbar-mu0)/se;
+  let pval, crit;
+  if(tail==='two'){ pval=2*(1-tCDF(Math.abs(t),df)); crit=invT(1-alpha/2,df); }
+  else if(tail==='right'){ pval=1-tCDF(t,df); crit=invT(1-alpha,df); }
+  else { pval=tCDF(t,df); crit=invT(alpha,df); }
+
+  document.getElementById('tt-stat').textContent=t.toFixed(4);
+  document.getElementById('tt-df').textContent=df;
+  document.getElementById('tt-crit').textContent=(tail==='two'?'±':'')+Math.abs(crit).toFixed(3);
+  const pEl=document.getElementById('tt-pval');
+  pEl.textContent=pval.toFixed(4);
+  pEl.style.color=pval<alpha?getColor('coral'):getColor('green');
+
+  const reject=tail==='two'?Math.abs(t)>Math.abs(crit):(tail==='right'?t>crit:t<crit);
+  const dec=document.getElementById('tt-decision');
+  dec.className='decision '+(reject?'reject':'fail');
+  dec.innerHTML=`<div class="dec-title">${reject?'Reject H0':'Fail to Reject H0'}</div>
+    t = ${t.toFixed(4)}, df = ${df}. p-value = ${pval.toFixed(4)} ${pval<alpha?'<':'≥'} alpha ${alpha}.
+    ${reject?'Sufficient evidence to reject H0.':'Insufficient evidence to reject H0.'}`;
+
+  const ctx=setupCanvas('tt-canvas');
+  if(ctx) drawNormalWithRegion(ctx, t, crit, tail, alpha);
+}
+
+// ============================================================
+// TYPE I / II ERRORS
+// ============================================================
+function drawErrors() {
+  const alphaInt=parseInt(document.getElementById('err-alpha').value);
+  const alpha=alphaInt/100;
+  const effectInt=parseInt(document.getElementById('err-effect').value);
+  const effect=effectInt/10;
+  document.getElementById('err-alpha-val').textContent=alpha.toFixed(2);
+  document.getElementById('err-effect-val').textContent=effect.toFixed(1);
+
+  const ctx=setupCanvas('errors-canvas');
+  if(!ctx)return;
+  const W=ctx.W, H=ctx.H;
+  const pad={l:30,r:30,t:30,b:30};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+
+  const xMin=-4, xMax=effect+4;
+  const toX=v=>pad.l+(v-xMin)/(xMax-xMin)*iW;
+  const toY=v=>pad.t+iH-v/normalPDF(0)*iH*0.75;
+  const crit=invNorm(1-alpha);
+
+  // H0 distribution (mu=0)
+  const drawDist=(mu,color)=>{
+    ctx.strokeStyle=color; ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let i=0;i<=300;i++){
+      const x=xMin+i*(xMax-xMin)/300;
+      i===0?ctx.moveTo(toX(x),toY(normalPDF(x,mu))):ctx.lineTo(toX(x),toY(normalPDF(x,mu)));
+    }
+    ctx.stroke();
+  };
+
+  // Type I fill (alpha region under H0)
+  ctx.fillStyle=getColor('coral')+'35';
+  ctx.beginPath();
+  ctx.moveTo(toX(crit),toY(0));
+  for(let i=0;i<=100;i++){const x=crit+i*(4)/100; ctx.lineTo(toX(x),toY(normalPDF(x,0)));}
+  ctx.lineTo(toX(crit+4),toY(0)); ctx.closePath(); ctx.fill();
+
+  // Type II fill (beta region under H1 left of crit)
+  ctx.fillStyle=getColor('amber')+'35';
+  ctx.beginPath();
+  ctx.moveTo(toX(xMin),toY(0));
+  for(let i=0;i<=200;i++){const x=xMin+i*(crit-xMin)/200; ctx.lineTo(toX(x),toY(normalPDF(x,effect)));}
+  ctx.lineTo(toX(crit),toY(0)); ctx.closePath(); ctx.fill();
+
+  // Power fill (green, right of crit under H1)
+  ctx.fillStyle=getColor('green')+'35';
+  ctx.beginPath();
+  ctx.moveTo(toX(crit),toY(0));
+  for(let i=0;i<=200;i++){const x=crit+i*(xMax-crit)/200; ctx.lineTo(toX(x),toY(normalPDF(x,effect)));}
+  ctx.lineTo(toX(xMax),toY(0)); ctx.closePath(); ctx.fill();
+
+  drawDist(0, getColor('accent'));
+  drawDist(effect, getColor('green'));
+
+  // crit line
+  ctx.strokeStyle=getColor('coral'); ctx.lineWidth=1.5; ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(toX(crit),pad.t); ctx.lineTo(toX(crit),H-pad.b); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // labels
+  ctx.fillStyle=getColor('accent'); ctx.font='10px DM Mono'; ctx.textAlign='center';
+  ctx.fillText('H0: mu=0', toX(0), pad.t+12);
+  ctx.fillStyle=getColor('green');
+  ctx.fillText('H1: mu='+effect.toFixed(1), toX(effect), pad.t+12);
+  ctx.fillStyle=getColor('coral');
+  ctx.fillText('alpha='+alpha.toFixed(2), toX(crit+0.5), pad.t+26);
+  ctx.fillStyle=getColor('amber');
+  ctx.fillText('beta', toX(crit-0.8), H-pad.b-8);
+  ctx.fillStyle=getColor('green');
+  ctx.fillText('power', toX(effect+0.8), H-pad.b-8);
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono';
+  ctx.fillText('critical value = '+crit.toFixed(2), toX(crit), H-pad.b+16);
+}
+
+// ============================================================
+// P-VALUE EXPLORER
+// ============================================================
+function drawPValue() {
+  const zInt=parseInt(document.getElementById('pv-z').value);
+  const z=zInt/10;
+  const tail=document.getElementById('pv-tail').value;
+  document.getElementById('pv-z-val').textContent=z.toFixed(1);
+
+  let pval;
+  if(tail==='two') pval=2*(1-normalCDF(Math.abs(z)));
+  else if(tail==='right') pval=1-normalCDF(z);
+  else pval=normalCDF(z);
+
+  document.getElementById('pv-stat').textContent=z.toFixed(2);
+  const pEl=document.getElementById('pv-pval');
+  pEl.textContent=pval.toFixed(4);
+  pEl.style.color=pval<0.05?getColor('coral'):getColor('green');
+  const dec=document.getElementById('pv-decision');
+  if(pval<0.05){ dec.textContent='Reject H0'; dec.style.color=getColor('coral'); }
+  else { dec.textContent='Fail to Reject H0'; dec.style.color=getColor('green'); }
+
+  const ctx=setupCanvas('pv-canvas');
+  if(!ctx)return;
+  const W=ctx.W, H=ctx.H;
+  const pad={l:30,r:30,t:20,b:30};
+  const iW=W-pad.l-pad.r, iH=H-pad.t-pad.b;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#171c2a'; ctx.fillRect(0,0,W,H);
+  const xMin=-4, xMax=4;
+  const toX=v=>pad.l+(v-xMin)/(xMax-xMin)*iW;
+  const toY=v=>pad.t+iH-v/normalPDF(0)*iH*0.85;
+
+  const fillTail=(x1,x2)=>{
+    ctx.fillStyle=getColor('coral')+'40';
+    ctx.beginPath(); ctx.moveTo(toX(x1),toY(0));
+    for(let i=0;i<=100;i++){const x=x1+i*(x2-x1)/100; ctx.lineTo(toX(x),toY(normalPDF(x)));}
+    ctx.lineTo(toX(x2),toY(0)); ctx.closePath(); ctx.fill();
+  };
+
+  const zc=Math.max(xMin+0.01,Math.min(xMax-0.01,z));
+  if(tail==='two'){ fillTail(xMin,-Math.abs(zc)); fillTail(Math.abs(zc),xMax); }
+  else if(tail==='right'){ fillTail(zc,xMax); }
+  else { fillTail(xMin,zc); }
+
+  ctx.strokeStyle=getColor('accent'); ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(let i=0;i<=300;i++){
+    const x=xMin+i*8/300;
+    i===0?ctx.moveTo(toX(x),toY(normalPDF(x))):ctx.lineTo(toX(x),toY(normalPDF(x)));
+  }
+  ctx.stroke();
+
+  ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+
+  ctx.strokeStyle=getColor('green'); ctx.lineWidth=2.5;
+  ctx.beginPath(); ctx.moveTo(toX(zc),pad.t); ctx.lineTo(toX(zc),H-pad.b); ctx.stroke();
+  ctx.fillStyle=getColor('green'); ctx.font='bold 11px DM Mono'; ctx.textAlign='center';
+  ctx.fillText('z='+z.toFixed(1), toX(zc), pad.t+14);
+
+  ctx.fillStyle='#545c78'; ctx.font='10px DM Mono'; ctx.textAlign='center';
+  [-4,-3,-2,-1,0,1,2,3,4].forEach(v=>ctx.fillText(v, toX(v), H-pad.b+14));
+
+  ctx.fillStyle=getColor('coral'); ctx.font='11px DM Mono'; ctx.textAlign='center';
+  ctx.fillText('p = '+pval.toFixed(4), W/2, pad.t+10);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', ()=>{
+  cltReset();
+  computeCI();
+  computeZTest();
+});
+window.addEventListener('resize', ()=>{
+  const active=document.querySelector('.panel.active');
+  if(!active)return;
+  const id=active.id.replace('panel-','');
+  const parts=id.split('-');
+  initDrawForSection(parts[0], parts.slice(1).join('-'));
+});
+</script>
+</body>
+</html>

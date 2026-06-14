@@ -3,5 +3,6 @@
   "accentColor": "",
   "monospaceFontFamily": "Mononoki Nerd Font",
   "enabledCssSnippets": [],
-  "theme": "obsidian"
+  "theme": "obsidian",
+  "textFontFamily": "Inter,Mononoki Nerd Font"
 }

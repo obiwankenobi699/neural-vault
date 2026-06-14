@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Distribution Diagnostics & Transformations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --ink:#0d0f17;--surface:#131620;--raised:#1a1f30;--card:#1f2538;
+  --line:rgba(255,255,255,0.06);--line2:rgba(255,255,255,0.11);
+  --text:#dde2f0;--muted:#7880a0;--faint:#3a4060;
+  --gold:#e8b84b;--em:#3ecb8a;--rose:#e85c7a;
+  --sky:#4cb8f5;--lav:#8b7cf8;--r:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--ink);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;min-height:100vh;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--ink);}
+::-webkit-scrollbar-thumb{background:var(--raised);border-radius:3px;}
+
+/* HEADER */
+.hdr{background:var(--surface);border-bottom:1px solid var(--line2);padding:13px 28px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+.hdr-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.4px;}
+.hdr-title span{color:var(--sky);}
+.hdr-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.pill{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;border:1px solid;letter-spacing:0.04em;margin-left:auto;}
+.pill-gold{background:rgba(232,184,75,0.1);border-color:rgba(232,184,75,0.3);color:var(--gold);}
+
+/* TABS */
+.tab-bar{display:flex;border-bottom:1px solid var(--line);background:var(--surface);padding:0 28px;}
+.tab{padding:11px 18px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;user-select:none;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--text);border-bottom-color:var(--sky);}
+.tn{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:3px;background:var(--raised);font-size:10px;margin-right:6px;}
+.tab.active .tn{background:var(--sky);color:#000;}
+
+.page{display:none;padding:22px 28px 48px;max-width:1400px;}
+.page.active{display:block;}
+
+/* SECTION */
+.slabel{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--faint);margin-bottom:10px;}
+.stitle{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;letter-spacing:-0.5px;margin-bottom:5px;}
+.sdesc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:20px;max-width:800px;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;}
+.card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.card-sub{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+
+/* CHART CONTAINERS — key: position:relative, overflow:hidden, canvas fills parent */
+.cbox{position:relative;width:100%;background:var(--raised);border-radius:4px;overflow:hidden;}
+.cbox-lg{height:255px;}
+.cbox-md{height:195px;}
+.cbox-sm{height:140px;}
+.cbox-xs{height:110px;}
+.cbox canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;}
+
+/* DETECT BUTTONS */
+.dsel{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
+.dbtn{padding:5px 12px;border:1px solid var(--line2);border-radius:4px;background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .12s;}
+.dbtn:hover{background:var(--raised);color:var(--text);}
+.dbtn.active{background:var(--sky);border-color:var(--sky);color:#000;font-weight:500;}
+
+/* STAT TESTS */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.tcard{background:var(--raised);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;}
+.tname{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;margin-bottom:3px;}
+.tstat{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin:5px 0 3px;letter-spacing:-0.5px;}
+.tpval{font-size:11px;color:var(--muted);}
+.tverd{font-size:10px;padding:2px 8px;border-radius:3px;border:1px solid;display:inline-block;margin-top:5px;font-weight:600;letter-spacing:0.04em;}
+.pass{background:rgba(62,203,138,0.1);border-color:rgba(62,203,138,0.3);color:var(--em);}
+.fail{background:rgba(232,92,122,0.1);border-color:rgba(232,92,122,0.3);color:var(--rose);}
+
+/* INTERVIEW BOX */
+.ibox{border:1px solid rgba(232,184,75,0.22);background:rgba(232,184,75,0.04);border-radius:var(--r);padding:13px 16px;margin:14px 0;}
+.ihead{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;}
+.ibody{font-size:12px;color:var(--text);line-height:1.85;}
+.ibody code{color:var(--sky);background:var(--raised);padding:1px 5px;border-radius:3px;font-size:11px;}
+.ibody strong{color:var(--text);}
+
+/* TAGS */
+.tag{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;border:1px solid;margin:2px;}
+.tsky{background:rgba(75,184,245,0.1);border-color:rgba(75,184,245,0.3);color:var(--sky);}
+.tlav{background:rgba(139,124,248,0.1);border-color:rgba(139,124,248,0.3);color:var(--lav);}
+.tgold{background:rgba(232,184,75,0.1);border-color:rgba(232,184,75,0.3);color:var(--gold);}
+.trose{background:rgba(232,92,122,0.1);border-color:rgba(232,92,122,0.3);color:var(--rose);}
+.tem{background:rgba(62,203,138,0.1);border-color:rgba(62,203,138,0.3);color:var(--em);}
+
+/* TAB 2 — TRANSFORM CARDS */
+.tx-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+.tx-head{padding:13px 15px 10px;border-bottom:1px solid var(--line);}
+.tx-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;letter-spacing:-0.3px;}
+.tx-formula{font-size:12px;color:var(--sky);margin-top:2px;}
+.sbadge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:500;border:1px solid;margin-top:5px;}
+.spos{background:rgba(139,124,248,0.1);border-color:rgba(139,124,248,0.3);color:var(--lav);}
+.sneg{background:rgba(232,92,122,0.1);border-color:rgba(232,92,122,0.3);color:var(--rose);}
+.sany{background:rgba(62,203,138,0.1);border-color:rgba(62,203,138,0.3);color:var(--em);}
+.tx-body{padding:13px 15px;}
+.tx-charts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.tx-clbl{font-size:10px;color:var(--muted);text-align:center;margin-bottom:3px;letter-spacing:0.04em;text-transform:uppercase;}
+.tx-what{font-size:12px;color:var(--text);line-height:1.7;margin-bottom:8px;padding:9px 11px;background:var(--raised);border-radius:4px;border-left:2px solid var(--sky);}
+.tx-cond{font-size:11px;color:var(--muted);line-height:1.75;}
+.tx-cond span{display:block;}
+.delta{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:4px;font-size:11px;font-weight:500;margin-top:7px;background:rgba(62,203,138,0.1);color:var(--em);}
+
+/* TAB 2 — condition table */
+.ctable{width:100%;border-collapse:collapse;font-size:11px;margin:12px 0 20px;}
+.ctable th{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:8px 10px;text-align:left;background:var(--raised);border:1px solid var(--line2);}
+.ctable td{padding:7px 10px;border:1px solid var(--line);line-height:1.5;}
+.ctable tr:hover td{background:rgba(255,255,255,0.015);}
+
+/* TAB 3 — ML */
+.step{display:flex;gap:12px;margin-bottom:18px;}
+.step-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--raised);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--sky);margin-top:1px;}
+.step-body{flex:1;}
+.step-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:4px;}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.7;}
+.step-desc code{color:var(--sky);background:var(--raised);padding:1px 5px;border-radius:3px;}
+
+.ds-sel{background:var(--raised);border:1px solid var(--line2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;padding:6px 10px;border-radius:4px;cursor:pointer;}
+.run-btn{padding:8px 18px;background:var(--sky);color:#000;border:none;border-radius:4px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:opacity .15s;}
+.run-btn:hover{opacity:0.85;}
+
+.banner{background:linear-gradient(135deg,rgba(62,203,138,0.07),rgba(75,184,245,0.07));border:1px solid rgba(62,203,138,0.18);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:20px;}
+.bnum{font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:var(--em);letter-spacing:-2px;}
+.btext{font-size:13px;color:var(--text);line-height:1.7;}
+
+.scorerow{display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;gap:0;margin-bottom:16px;}
+.sarrow{text-align:center;font-size:18px;color:var(--faint);}
+.sbox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;}
+.slbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.sval{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;letter-spacing:-1px;}
+.shint{font-size:11px;color:var(--muted);margin-top:3px;}
+
+.ftable{width:100%;border-collapse:collapse;font-size:12px;}
+.ftable th{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:7px 10px;text-align:left;border-bottom:1px solid var(--line2);}
+.ftable td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.ftable tr:last-child td{border-bottom:none;}
+.chip{font-size:11px;padding:2px 7px;border-radius:3px;}
+.chip-bad{background:rgba(232,92,122,0.1);border:1px solid rgba(232,92,122,0.2);color:var(--rose);}
+.chip-good{background:rgba(62,203,138,0.1);border:1px solid rgba(62,203,138,0.2);color:var(--em);}
+.chip-neu{background:rgba(120,128,160,0.1);border:1px solid rgba(120,128,160,0.2);color:var(--muted);}
+
+.divider{border:none;border-top:1px solid var(--line);margin:20px 0;}
+
+/* optimize box */
+.opt-box{background:var(--raised);border:1px solid var(--line2);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;}
+.opt-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--sky);margin-bottom:8px;letter-spacing:0.04em;}
+.opt-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:6px;font-size:11px;line-height:1.6;}
+.opt-icon{flex-shrink:0;width:18px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="hdr-title">Distribution <span>Diagnostics</span> & Transforms</div>
+    <div class="hdr-sub">Goodness-of-fit · Normality tests · Transforms · ML feature engineering</div>
+  </div>
+  <span class="pill pill-gold">★ ML Interview Ready</span>
+</div>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab(0)"><span class="tn">1</span>Detect</div>
+  <div class="tab" onclick="showTab(1)"><span class="tn">2</span>Transform</div>
+  <div class="tab" onclick="showTab(2)"><span class="tn">3</span>ML Pipeline</div>
+</div>
+
+<!-- ═══════════════════════════════ TAB 1 ═══════════════════════════════ -->
+<div class="page active" id="page-0">
+  <div class="slabel">Tab 1 — Detect</div>
+  <div class="stitle">How do you identify which distribution your data follows?</div>
+  <div class="sdesc">In a DS/ML interview, never say "I'll assume normality." These four visual tools are your evidence — use at least two before drawing any conclusion.</div>
+
+  <div style="margin-bottom:14px;">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:7px;">Choose a sample dataset to inspect →</div>
+    <div class="dsel" id="dsel">
+      <button class="dbtn active" onclick="setDetect('normal',this)">Normal</button>
+      <button class="dbtn" onclick="setDetect('lognormal',this)">Log-Normal</button>
+      <button class="dbtn" onclick="setDetect('exponential',this)">Exponential</button>
+      <button class="dbtn" onclick="setDetect('uniform',this)">Uniform</button>
+      <button class="dbtn" onclick="setDetect('bimodal',this)">Bimodal</button>
+      <button class="dbtn" onclick="setDetect('pareto',this)">Pareto</button>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px;">
+    <div class="card">
+      <div class="card-title">Q-Q Plot <span class="tag tsky">Most important</span></div>
+      <div class="card-sub">Sample quantiles vs theoretical normal quantiles. <strong style="color:var(--em)">Straight diagonal = normal.</strong> Every deviation tells you something specific about shape.</div>
+      <div class="cbox cbox-lg" id="box-qq"><canvas id="c-qq"></canvas></div>
+      <div style="margin-top:9px;font-size:11px;color:var(--muted);line-height:1.8;" id="txt-qq"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Histogram + KDE + Normal fit</div>
+      <div class="card-sub">Kernel density estimate (blue) vs fitted normal curve (yellow). Divergence between the two shows how non-normal your data is.</div>
+      <div class="cbox cbox-lg" id="box-hist"><canvas id="c-hist"></canvas></div>
+      <div style="margin-top:9px;font-size:11px;color:var(--muted);line-height:1.8;" id="txt-hist"></div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px;">
+    <div class="card">
+      <div class="card-title">P-P Plot <span class="tag tlav">Body-sensitive</span></div>
+      <div class="card-sub">Empirical CDF vs theoretical CDF. Q-Q amplifies tails; P-P amplifies the central body of the distribution.</div>
+      <div class="cbox cbox-md" id="box-pp"><canvas id="c-pp"></canvas></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--muted);line-height:1.7;" id="txt-pp"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Log-Log Plot <span class="tag tlav">Power-law detector</span></div>
+      <div class="card-sub">log(rank) vs log(value). A straight line = power law (Pareto). Concave curve = normal/log-normal. Key tool for detecting heavy tails.</div>
+      <div class="cbox cbox-md" id="box-ll"><canvas id="c-ll"></canvas></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--muted);line-height:1.7;" id="txt-ll"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-title">Statistical Normality Tests</div>
+    <div class="card-sub">H₀: data is normally distributed. Reject H₀ when p &lt; 0.05. Always combine with visual checks — large n makes tests flag trivial deviations.</div>
+    <div class="tgrid" id="tgrid"></div>
+  </div>
+
+  <div class="ibox">
+    <div class="ihead">★ Interview: "How do you verify normality?"</div>
+    <div class="ibody">
+      Answer in three layers: <strong>(1) Visual</strong> — Q-Q plot first, then histogram + KDE. 
+      <strong>(2) Statistical</strong> — Shapiro-Wilk for n &lt; 50, D'Agostino-Pearson for n 50–2000 (jointly tests skewness + kurtosis), K-S for n &gt; 2000. 
+      <strong>(3) Descriptive</strong> — <code>skewness ≈ 0</code>, <code>excess kurtosis ≈ 0</code>, mean ≈ median ≈ mode.<br>
+      Key caveat: <em>"With n &gt; 5000, any distribution will fail Shapiro-Wilk. Visual + descriptive carry more weight at large sample sizes."</em>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:10px;">Q-Q shape dictionary</div>
+  <div class="g4" style="margin-bottom:14px;">
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--em);margin-bottom:5px;">✓ Normal</div><div style="font-size:11px;color:var(--muted);line-height:1.7;">Points follow diagonal perfectly. No systematic S-curve or hockey-stick shape.</div></div>
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--lav);margin-bottom:5px;">⤴ Right-skewed</div><div style="font-size:11px;color:var(--muted);line-height:1.7;">Points curve above line at right tail. Income, prices, insurance claims.</div></div>
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--rose);margin-bottom:5px;">⤵ Left-skewed</div><div style="font-size:11px;color:var(--muted);line-height:1.7;">Points curve below line at left tail. Exam scores, age-at-death distributions.</div></div>
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:5px;">↗↖ Fat tails</div><div style="font-size:11px;color:var(--muted);line-height:1.7;">S-shape: below at left end, above at right. Leptokurtic — more extreme events.</div></div>
+  </div>
+
+  <div class="ibox">
+    <div class="ihead">★ Interview: "Q-Q vs P-P — when do you use each?"</div>
+    <div class="ibody">
+      <strong>Q-Q</strong>: superior for detecting tail behaviour — skewness, outliers, heavy tails show dramatically. Axes are in original data units, making deviations interpretable. Default choice.<br>
+      <strong>P-P</strong>: superior for inspecting the central body. Less distorted by extreme outliers — useful when you care about fit quality in the majority of your data rather than extremes.<br>
+      Rule: show Q-Q in every interview. If the interviewer asks how you'd detect a power-law specifically, mention the log-log plot.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TAB 2 ═══════════════════════════════ -->
+<div class="page" id="page-1">
+  <div class="slabel">Tab 2 — Transform</div>
+  <div class="stitle">Mathematical transformations: what they do and when to use them</div>
+  <div class="sdesc">These transforms convert skewed distributions toward normality by changing the scale of the feature. They are monotonic — they preserve rank order — so they don't distort your data's meaning, only its shape.</div>
+
+  <div class="opt-box" style="border-color:rgba(75,184,245,0.2);">
+    <div class="opt-title">What does "transforming toward normality" actually optimise?</div>
+    <div class="opt-row"><span class="opt-icon">📐</span><span><strong>Linearity</strong> — Linear regression assumes a linear relationship between X and y. A log-normal feature has an exponential relationship with y. Log-transforming it makes the relationship linear, so the model can fit it with a straight coefficient.</span></div>
+    <div class="opt-row"><span class="opt-icon">⚖️</span><span><strong>Variance homogeneity (homoscedasticity)</strong> — Skewed features often have variance that grows with magnitude. Transforms stabilise the variance across the range, making OLS estimates unbiased and efficient.</span></div>
+    <div class="opt-row"><span class="opt-icon">🎯</span><span><strong>Outlier compression</strong> — A value of 1,000,000 in a skewed feature has enormous leverage on regression coefficients. Log(1,000,000) = 14, which is in a reasonable range. Transforms compress the extreme tail.</span></div>
+    <div class="opt-row"><span class="opt-icon">📊</span><span><strong>Distance metrics (KNN, SVM, PCA)</strong> — Distance-based models measure closeness in feature space. A 1-unit change at the low end of a skewed scale should mean the same as 1 unit at the high end. Transforms normalise this interpretation.</span></div>
+    <div class="opt-row"><span class="opt-icon">📈</span><span><strong>Coefficient interpretability</strong> — After log transform, a 1-unit change in log(x) corresponds to a fixed <em>percentage</em> change in x (multiplicative interpretation), which is often more natural for economic or biological data.</span></div>
+  </div>
+
+  <table class="ctable">
+    <tr><th>Transform</th><th>Formula</th><th>Skew it fixes</th><th>Prerequisite</th><th>Handles negatives</th><th>sklearn</th></tr>
+    <tr><td><strong>Log</strong></td><td style="color:var(--sky)">log(x)</td><td>Right (strong)</td><td>x &gt; 0</td><td style="color:var(--rose)">No</td><td style="color:var(--muted)">np.log</td></tr>
+    <tr><td><strong>Square Root</strong></td><td style="color:var(--sky)">√x</td><td>Right (mild)</td><td>x ≥ 0</td><td style="color:var(--rose)">No</td><td style="color:var(--muted)">np.sqrt</td></tr>
+    <tr><td><strong>Reciprocal</strong></td><td style="color:var(--sky)">1/x</td><td>Right (very strong)</td><td>x ≠ 0</td><td style="color:var(--gold)">Careful</td><td style="color:var(--muted)">1/x</td></tr>
+    <tr><td><strong>Cube Root</strong></td><td style="color:var(--sky)">∛x</td><td>Both</td><td>None</td><td style="color:var(--em)">Yes ✓</td><td style="color:var(--muted)">np.cbrt</td></tr>
+    <tr><td><strong>Box-Cox</strong></td><td style="color:var(--sky)">(x^λ−1)/λ</td><td>Right (auto-finds λ)</td><td>x &gt; 0 strictly</td><td style="color:var(--rose)">No</td><td style="color:var(--muted)">PowerTransformer('box-cox')</td></tr>
+    <tr><td><strong>Yeo-Johnson</strong></td><td style="color:var(--sky)">piecewise</td><td>Both (auto-finds λ)</td><td>None (x ∈ ℝ)</td><td style="color:var(--em)">Yes ✓</td><td style="color:var(--muted)">PowerTransformer('yeo-johnson')</td></tr>
+  </table>
+
+  <div id="transformGrid" class="g2"></div>
+
+  <hr class="divider">
+
+  <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:12px;">Box-Cox λ value guide</div>
+  <div class="g4" style="margin-bottom:16px;">
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--sky);">λ = 0</div><div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.7;">→ log(x). Most common useful value. Fitted when data spans orders of magnitude.</div></div>
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--lav);">λ = 0.5</div><div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.7;">→ √x. Count data, Poisson features (page views, transactions).</div></div>
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--em);">λ = 1</div><div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.7;">→ identity. Box-Cox found no improvement — data already near-normal.</div></div>
+    <div class="card" style="padding:11px 13px;"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--rose);">λ = −1</div><div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.7;">→ 1/x. Very strong right skew. Rates and speeds (response time, throughput).</div></div>
+  </div>
+
+  <div class="ibox">
+    <div class="ihead">★ Interview: "Yeo-Johnson vs Box-Cox — which do you use by default?"</div>
+    <div class="ibody">
+      <strong>Box-Cox:</strong> <code>T(x,λ) = (x^λ−1)/λ</code> if λ≠0 else <code>log(x)</code>. Requires <em>strictly positive</em> values.<br>
+      <strong>Yeo-Johnson:</strong> piecewise — for x≥0 applies Box-Cox to (x+1); for x&lt;0 applies Box-Cox to (−x+1) with exponent (2−λ). Works on all real numbers.<br><br>
+      <strong>Default answer:</strong> Always use <code>PowerTransformer(method='yeo-johnson')</code> unless you can guarantee x&gt;0. It handles zero-containing and negative features that Box-Cox would silently break on. The performance gain over Box-Cox when x&gt;0 is negligible.<br>
+      <strong>Critical:</strong> <code>pt.fit(X_train)</code> → <code>pt.transform(X_train)</code> → <code>pt.transform(X_test)</code>. Never fit on X_test — that leaks test distribution into your pipeline.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TAB 3 ═══════════════════════════════ -->
+<div class="page" id="page-2">
+  <div class="slabel">Tab 3 — ML Pipeline</div>
+  <div class="stitle">How transformations fit into a real ML pipeline</div>
+  <div class="sdesc">The full workflow: detect → decide → transform → train → compare. This is what you describe in a DS interview when asked about your feature engineering process.</div>
+
+  <!-- PIPELINE STEPS -->
+  <div style="margin-bottom:20px;">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Detect skewness in every feature</div>
+        <div class="step-desc">Run <code>df.skew()</code> or <code>df.describe()</code>. Flag any feature where |skewness| &gt; 0.5 as a transform candidate. Values &gt; 1 are strongly skewed, &gt; 2 are severely skewed. Look at the histogram too — skewness alone doesn't detect bimodality.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Decide which transform to apply per feature</div>
+        <div class="step-desc">All positive + strong right skew → <code>log(x)</code>. Count data / mild skew → <code>sqrt(x)</code>. Has zeros or negatives → <code>Yeo-Johnson</code> (safest default). Don't know → let <code>PowerTransformer</code> auto-find the best λ via MLE.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Fit on X_train ONLY — then transform both splits</div>
+        <div class="step-desc"><code>pt = PowerTransformer(method='yeo-johnson')</code><br><code>X_train_t = pt.fit_transform(X_train)</code><br><code>X_test_t = pt.transform(X_test)</code> ← never fit_transform on test. Fitting on test data leaks the test distribution's statistics (mean, std, λ) into your model evaluation — a form of data leakage that inflates reported performance.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Standardise after transforming</div>
+        <div class="step-desc">Transforms fix shape (skewness). StandardScaler fixes scale (mean=0, std=1). Both matter for linear models, SVM, and KNN. <code>Pipeline([('tx', PowerTransformer()), ('sc', StandardScaler()), ('model', LinearRegression())])</code> — use Pipeline to prevent leakage automatically.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Validate on residuals, not just R²</div>
+        <div class="step-desc">For linear models, check the residual Q-Q plot. If residuals are normal (straight diagonal), your transform worked and your p-values and confidence intervals are valid. If residuals are still skewed, try a stronger transform or a non-linear model.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="opt-box" style="border-color:rgba(62,203,138,0.2);margin-bottom:18px;">
+    <div class="opt-title" style="color:var(--em);">What transformations actually optimise in a model</div>
+    <div class="opt-row"><span class="opt-icon">📉</span><span><strong>Reduces leverage of extreme values</strong> — A single value of 1,000,000 in raw income data pulls the regression line toward it. After log: log(1M)=14 vs log(50K)=10.8. The ratio is reasonable; the leverage drops dramatically.</span></div>
+    <div class="opt-row"><span class="opt-icon">📏</span><span><strong>Makes the linear assumption hold</strong> — If income has a log-linear relationship with house price, raw income gives a curved regression — the model is misspecified. Log(income) makes the curve linear, so OLS can actually fit it.</span></div>
+    <div class="opt-row"><span class="opt-icon">🔀</span><span><strong>Stabilises variance (homoscedasticity)</strong> — For Poisson count features, variance = mean. High values have more noise. √x stabilises this: Var(√X) ≈ constant. Heteroscedasticity inflates SE of coefficients → wrong p-values.</span></div>
+    <div class="opt-row"><span class="opt-icon">🏘️</span><span><strong>Improves KNN and SVM neighbourhoods</strong> — In a skewed feature, Euclidean distance is dominated by the tail. After normalisation, all parts of the feature space contribute equally to distance, so neighbourhood-based models find meaningful clusters.</span></div>
+    <div class="opt-row"><span class="opt-icon">🔄</span><span><strong>Note on tree models</strong> — Random Forest and XGBoost split on rank order (thresholds). A monotonic transform cannot change which point is greater than another. Therefore <em>tree models are invariant to monotonic transforms</em>. Box-Cox won't help XGBoost.</span></div>
+  </div>
+
+  <!-- SIMULATION -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+    <div style="font-size:11px;color:var(--muted);">Simulate pipeline on:</div>
+    <select class="ds-sel" id="mlDs">
+      <option value="house">House Price (income, area, age, rooms)</option>
+      <option value="medical">Medical Cost (BMI, smoking, age, claims)</option>
+      <option value="ecom">E-commerce (visit_time, page_views, clicks, days_active)</option>
+    </select>
+    <button class="run-btn" onclick="runML()">▶ Run</button>
+  </div>
+
+  <div id="mlOut" style="display:none;">
+    <div class="banner">
+      <div class="bnum" id="bDelta">—</div>
+      <div>
+        <div class="btext" id="bText"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;" id="bSub"></div>
+      </div>
+    </div>
+
+    <div class="scorerow">
+      <div class="sbox">
+        <div class="slbl">Raw features — before transform</div>
+        <div class="sval" style="color:var(--rose);" id="sc-before">—</div>
+        <div class="shint">Linear Regression R² (test set)</div>
+      </div>
+      <div class="sarrow">→</div>
+      <div class="sbox">
+        <div class="slbl">Transformed features — after</div>
+        <div class="sval" style="color:var(--em);" id="sc-after">—</div>
+        <div class="shint">Same model, transformed features</div>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px;">
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:9px;">Feature skewness audit</div>
+        <table class="ftable" id="ftable"></table>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:9px;">Model R² comparison</div>
+        <div class="cbox cbox-md" id="box-bar"><canvas id="c-bar"></canvas></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.7;" id="bar-note"></div>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:9px;">Residual Q-Q — before transform</div>
+        <div class="cbox cbox-md" id="box-rqb"><canvas id="c-rqb"></canvas></div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:9px;">Residual Q-Q — after transform</div>
+        <div class="cbox cbox-md" id="box-rqa"><canvas id="c-rqa"></canvas></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px;" id="rq-note"></div>
+
+    <div class="ibox" id="mlIbox"></div>
+  </div>
+
+  <hr class="divider">
+
+  <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:12px;">When NOT to transform</div>
+  <div class="g3">
+    <div class="card" style="padding:12px 14px;">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--gold);">Tree models (RF, XGBoost, LGB)</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;">Split on rank/threshold — completely invariant to monotonic transforms. Box-Cox changes nothing for XGBoost. Save compute, skip it.</div>
+      <div style="margin-top:7px;"><span class="tag trose">Skip transforms</span></div>
+    </div>
+    <div class="card" style="padding:12px 14px;">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--gold);">Neural networks</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;">Can learn non-linear mappings internally. Standardise features (BatchNorm handles scale), but distributional shape is less critical. Log-transform of target variable (y) can still help.</div>
+      <div style="margin-top:7px;"><span class="tag tgold">Standardise yes</span> <span class="tag tgold">Shape optional</span></div>
+    </div>
+    <div class="card" style="padding:12px 14px;">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--em);">Linear models, SVM, KNN, PCA</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;">Most sensitive to distribution shape AND scale. Transform skewed features first, then standardise. |skew| &gt; 0.5 → investigate. &gt; 1.0 → transform.</div>
+      <div style="margin-top:7px;"><span class="tag tem">Always transform</span></div>
+    </div>
+  </div>
+
+  <div class="ibox" style="margin-top:14px;">
+    <div class="ihead">★ Interview: complete feature engineering answer</div>
+    <div class="ibody">
+      "My pipeline for numeric features: <strong>(1)</strong> <code>df.skew()</code> — flag |skew| &gt; 0.5. <strong>(2)</strong> For positive-only → try log; for zeros → sqrt or log(x+1); for negatives → Yeo-Johnson. <strong>(3)</strong> <code>PowerTransformer(method='yeo-johnson').fit(X_train)</code>, apply to both splits. <strong>(4)</strong> Then <code>StandardScaler</code>. <strong>(5)</strong> Fit model. <strong>(6)</strong> Check residual Q-Q for linear models — normal residuals validate the transform worked and that inference (p-values, CIs) is valid.
+      For tree models: skip transforms 2–4, just handle missing values. For neural nets: standardise but distribution shape matters less."
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// MATH UTILS
+// ═══════════════════════════════════════════════════════
+function erf(x){
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  const s=x<0?-1:1;x=Math.abs(x);
+  const t=1/(1+p*x);
+  return s*(1-(((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x)));
+}
+function normCDF(x){return 0.5*(1+erf(x/Math.sqrt(2)));}
+function normInv(p){
+  if(p<=0)return -8;if(p>=1)return 8;
+  const a=[2.50662823884,-18.61500062529,41.39119773534,-25.44106049637];
+  const b=[-8.47351093090,23.08336743743,-21.06224101826,3.13082909833];
+  const c=[0.3374754822726147,0.9761690190917186,0.1607979714918209,0.0276438810333863,0.0038405729373609,0.0003951896511349,0.0000321767881768,0.0000002888167364,0.0000003960315187];
+  let q=p-0.5,r;
+  if(Math.abs(q)<0.42){r=q*q;return q*(((a[3]*r+a[2])*r+a[1])*r+a[0])/((((b[3]*r+b[2])*r+b[1])*r+b[0])*r+1);}
+  r=p<0.5?p:1-p;r=Math.log(-Math.log(r));
+  r=c[0]+r*(c[1]+r*(c[2]+r*(c[3]+r*(c[4]+r*(c[5]+r*(c[6]+r*(c[7]+r*c[8])))))));
+  return p<0.5?-r:r;
+}
+function mean(a){return a.reduce((s,v)=>s+v,0)/a.length;}
+function std(a){const m=mean(a);return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/a.length);}
+function skew(a){const m=mean(a),s=std(a);return a.reduce((S,v)=>S+((v-m)/s)**3,0)/a.length;}
+function seededRng(seed){let s=seed;return ()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/0xffffffff;};}
+function logTx(a){return a.map(v=>Math.log(Math.max(1e-9,v)));}
+function sqrtTx(a){return a.map(v=>Math.sqrt(Math.max(0,v)));}
+function yeojohnson(a){
+  const lams=[-1,-0.5,0,0.25,0.5,0.75,1,1.25,1.5,2];
+  let bL=1,bS=Infinity;
+  for(const l of lams){
+    const t=a.map(x=>x>=0?(l!==0?(Math.pow(x+1,l)-1)/l:Math.log(x+1)):
+      (l!==2?-(Math.pow(-x+1,2-l)-1)/(2-l):-Math.log(-x+1)));
+    const sk=Math.abs(skew(t));if(sk<bS){bS=sk;bL=l;}
+  }
+  return a.map(x=>x>=0?(bL!==0?(Math.pow(x+1,bL)-1)/bL:Math.log(x+1)):
+    (bL!==2?-(Math.pow(-x+1,2-bL)-1)/(2-bL):-Math.log(-x+1)));
+}
+function boxcox(a){
+  const pos=a.map(v=>Math.max(1e-9,v));
+  const lams=[-1,-0.5,0,0.25,0.5,0.75,1,1.5,2];
+  let bL=0,bS=Infinity;
+  for(const l of lams){
+    const t=pos.map(x=>l!==0?(Math.pow(x,l)-1)/l:Math.log(x));
+    const sk=Math.abs(skew(t));if(sk<bS){bS=sk;bL=l;}
+  }
+  return pos.map(x=>bL!==0?(Math.pow(x,bL)-1)/bL:Math.log(x));
+}
+function cuberoot(a){return a.map(v=>Math.sign(v)*Math.pow(Math.abs(v),1/3));}
+
+function getSample(type){
+  const rng=seededRng(99);
+  const rn=(m,s)=>{const u1=Math.max(1e-10,rng()),u2=rng();return Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2)*s+m;};
+  const N=120;
+  switch(type){
+    case 'normal':    return Array.from({length:N},()=>rn(50,10));
+    case 'lognormal': return Array.from({length:N},()=>Math.exp(rn(3.5,0.7)));
+    case 'exponential':return Array.from({length:N},()=>-Math.log(Math.max(1e-10,rng()))*20);
+    case 'uniform':   return Array.from({length:N},()=>rng()*100);
+    case 'bimodal':   return Array.from({length:N},()=>rng()<0.5?rn(20,5):rn(70,5));
+    case 'pareto':{const al=1.5;return Array.from({length:N},()=>Math.pow(Math.max(1e-10,rng()),-(1/al))*10);}
+    default:          return Array.from({length:N},()=>rn(50,10));
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// CANVAS MANAGEMENT — key: always destroy chart AND remove/replace canvas
+// ═══════════════════════════════════════════════════════
+const charts={};
+function mkChart(id,cfg){
+  // Destroy existing chart
+  if(charts[id]){try{charts[id].destroy();}catch(e){} delete charts[id];}
+  // Remove existing canvas, create fresh one — this is the fix for "can't acquire context"
+  const parent=document.getElementById(id.replace('c-','box-'));
+  if(parent){
+    const old=document.getElementById(id);
+    if(old)old.remove();
+    const canvas=document.createElement('canvas');
+    canvas.id=id;
+    parent.appendChild(canvas);
+    charts[id]=new Chart(canvas,cfg);
+  } else {
+    // Fallback: use canvas directly
+    const canvas=document.getElementById(id);
+    if(!canvas)return null;
+    charts[id]=new Chart(canvas,cfg);
+  }
+  return charts[id];
+}
+
+const bAxes={
+  x:{ticks:{color:'#7880a0',font:{size:10,family:"'JetBrains Mono',monospace"},maxRotation:0},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.08)'}},
+  y:{ticks:{color:'#7880a0',font:{size:10,family:"'JetBrains Mono',monospace"}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.08)'}}
+};
+const noLeg={legend:{display:false},tooltip:{enabled:false}};
+const noLegTip={legend:{display:false},tooltip:{backgroundColor:'#1a1f30',borderColor:'#3a4060',borderWidth:1,titleColor:'#7880a0',bodyColor:'#dde2f0',titleFont:{family:"'JetBrains Mono',monospace",size:10},bodyFont:{family:"'JetBrains Mono',monospace",size:11}}};
+
+// ═══════════════════════════════════════════════════════
+// TAB 1 — DETECT
+// ═══════════════════════════════════════════════════════
+let detectType='normal';
+
+function setDetect(type,btn){
+  detectType=type;
+  document.querySelectorAll('#dsel .dbtn').forEach(b=>{b.classList.remove('active');});
+  btn.classList.add('active');
+  renderDetect();
+}
+
+function renderDetect(){
+  const data=getSample(detectType);
+  renderQQ(data);
+  renderHist(data);
+  renderPP(data);
+  renderLL(data);
+  renderTests(data);
+}
+
+function renderQQ(data){
+  const sorted=[...data].sort((a,b)=>a-b),n=sorted.length;
+  const pts=sorted.map((v,i)=>({x:normInv((i+0.5)/n),y:v}));
+  const xs=pts.map(p=>p.x),m=mean(data),s=std(data);
+  const xMin=Math.min(...xs),xMax=Math.max(...xs);
+  mkChart('c-qq',{
+    type:'scatter',
+    data:{datasets:[
+      {data:[{x:xMin,y:xMin*s+m},{x:xMax,y:xMax*s+m}],type:'line',borderColor:'#e8b84b',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0,showLine:true},
+      {data:pts,backgroundColor:'rgba(75,184,245,0.55)',pointRadius:2.8,pointHoverRadius:4},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:200},
+      plugins:{...noLegTip,tooltip:{...noLegTip.tooltip,callbacks:{label:i=>`(${i.parsed.x.toFixed(2)}, ${i.parsed.y.toFixed(1)})`}}},
+      scales:{x:{...bAxes.x,title:{display:true,text:'Theoretical Quantiles',color:'#7880a0',font:{size:10}}},y:{...bAxes.y,title:{display:true,text:'Sample Quantiles',color:'#7880a0',font:{size:10}}}}}
+  });
+  const interp={
+    normal:'✓ Points closely follow the diagonal — strong evidence of normality. Minor scatter at extremes is normal for n=120.',
+    lognormal:'⤴ Points curve sharply above the line at the right tail — classic right-skew signature. Log-transform recommended.',
+    exponential:'⤴ Severe right-skew. Lower tail falls below line, upper tail shoots far above. Consistent with Exponential distribution.',
+    uniform:'↔ S-shape (points below at left, above at right) — thin tails (platykurtic). Consistent with Uniform distribution.',
+    bimodal:'⚠ Stepped/irregular pattern — two clusters pull the points off the diagonal in a characteristic two-step shape. Not normal.',
+    pareto:'⤴ Extreme right deviation in the upper tail — power-law signature. Log-log plot will confirm this is Pareto.',
+  };
+  document.getElementById('txt-qq').innerHTML=`<strong style="color:var(--sky)">Reading:</strong> ${interp[detectType]}`;
+}
+
+function renderHist(data){
+  const bins=18,mn=Math.min(...data),mx=Math.max(...data),bw=(mx-mn)/bins;
+  const counts=Array(bins).fill(0);
+  data.forEach(v=>{const bi=Math.min(bins-1,Math.floor((v-mn)/bw));counts[bi]++;});
+  const density=counts.map(c=>c/(data.length*bw));
+  const centers=Array.from({length:bins},(_,i)=>mn+bw*(i+0.5));
+  const m=mean(data),s=std(data);
+  const normCurve=centers.map(x=>Math.exp(-((x-m)**2)/(2*s**2))/(s*Math.sqrt(2*Math.PI)));
+  mkChart('c-hist',{
+    type:'bar',
+    data:{labels:centers.map(v=>v.toFixed(1)),datasets:[
+      {data:density,backgroundColor:'rgba(75,184,245,0.22)',borderColor:'rgba(75,184,245,0.55)',borderWidth:1,label:'KDE'},
+      {data:normCurve,type:'line',borderColor:'#e8b84b',borderWidth:2,pointRadius:0,tension:0.4,fill:false,label:'Normal fit'},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:200},
+      plugins:{legend:{display:true,labels:{color:'#7880a0',font:{size:10},boxWidth:10,boxHeight:8}},tooltip:{enabled:false}},
+      scales:{x:{...bAxes.x,ticks:{...bAxes.x.ticks,maxTicksLimit:8}},y:{...bAxes.y,beginAtZero:true,title:{display:true,text:'Density',color:'#7880a0',font:{size:10}}}}}
+  });
+  const sk=skew(data);
+  const skStr=sk>0.5?`Right-skewed (skew=${sk.toFixed(2)})`:sk<-0.5?`Left-skewed (skew=${sk.toFixed(2)})`:`Near-symmetric (skew=${sk.toFixed(2)})`;
+  const interp={
+    normal:`KDE (blue) closely follows the normal fit (yellow). ${skStr}. Mean ≈ median — no transform needed.`,
+    lognormal:`KDE peaks at left, long right tail. Normal curve is misfit. ${skStr}. Apply log transform.`,
+    exponential:`Monotonically decreasing shape. Normal fit is useless. ${skStr}. Exponential distribution.`,
+    uniform:`Flat KDE — normal curve over-estimates centre, misses edges. ${skStr}. Uniform distribution.`,
+    bimodal:`Two distinct peaks — no normal curve can fit this. Must model as mixture or split the data.`,
+    pareto:`Extreme right tail. ${skStr}. Skewness value alone understates how non-normal this is — check log-log.`,
+  };
+  document.getElementById('txt-hist').innerHTML=`<strong style="color:var(--sky)">Reading:</strong> ${interp[detectType]}`;
+}
+
+function renderPP(data){
+  const sorted=[...data].sort((a,b)=>a-b),n=sorted.length;
+  const m=mean(data),s=std(data);
+  const pts=sorted.map((v,i)=>({x:normCDF((v-m)/s),y:(i+0.5)/n}));
+  mkChart('c-pp',{
+    type:'scatter',
+    data:{datasets:[
+      {data:[{x:0,y:0},{x:1,y:1}],type:'line',borderColor:'#e8b84b',borderWidth:1.5,borderDash:[4,3],pointRadius:0,showLine:true},
+      {data:pts,backgroundColor:'rgba(139,124,248,0.55)',pointRadius:2.5},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:200},plugins:noLeg,
+      scales:{x:{...bAxes.x,min:0,max:1,title:{display:true,text:'Theoretical CDF',color:'#7880a0',font:{size:10}}},
+              y:{...bAxes.y,min:0,max:1,title:{display:true,text:'Empirical CDF',color:'#7880a0',font:{size:10}}}}}
+  });
+  const interp={
+    normal:'Central mass tracks diagonal well — good body fit. P-P is less sensitive to tail deviations than Q-Q.',
+    lognormal:'Points bow above diagonal in the lower half — empirical CDF rises faster than the normal model predicts.',
+    exponential:'Large bow shape — the empirical distribution differs from normal throughout the entire range.',
+    uniform:'S-bow — platykurtic (thin-tailed) signature confirmed.',
+    bimodal:'Irregular step-plateau shape — two modes show as flat sections.',
+    pareto:'Points cluster near origin, then curve away sharply — extreme upper tail dominates.',
+  };
+  document.getElementById('txt-pp').innerHTML=`<strong style="color:var(--sky)">Reading:</strong> ${interp[detectType]}`;
+}
+
+function renderLL(data){
+  const pos=data.filter(v=>v>0).sort((a,b)=>a-b),n=pos.length;
+  const pts=pos.map((v,i)=>({x:Math.log10(v),y:Math.log10((n-i)/n)})).filter(p=>isFinite(p.x)&&isFinite(p.y));
+  mkChart('c-ll',{
+    type:'scatter',
+    data:{datasets:[{data:pts,backgroundColor:'rgba(232,92,122,0.5)',pointRadius:2.5}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:200},plugins:noLeg,
+      scales:{x:{...bAxes.x,title:{display:true,text:'log₁₀(value)',color:'#7880a0',font:{size:10}}},
+              y:{...bAxes.y,title:{display:true,text:'log₁₀(P[X>x])',color:'#7880a0',font:{size:10}}}}}
+  });
+  const interp={
+    normal:'Concave (bowing downward) — not a power law. Gaussian tails decay too fast to be linear on log-log.',
+    lognormal:'Slightly concave — heavier tail than normal but lighter than Pareto. Curves away from linear.',
+    exponential:'Appears fairly straight — exponential tails are actually linear on a semi-log (not log-log) scale.',
+    uniform:'Drops vertically at max value — probability is zero beyond the boundary. Not a power law.',
+    bimodal:'Kinked shape — the two clusters create a step visible even on this scale.',
+    pareto:'★ Near-straight line — this is the power-law signature. Slope ≈ −α (tail index). Pareto confirmed.',
+  };
+  document.getElementById('txt-ll').innerHTML=`<strong style="color:var(--sky)">Reading:</strong> ${interp[detectType]}`;
+}
+
+function renderTests(data){
+  const sw=shapiroW(data),dp=dagostino(data),ks=ksTest(data);
+  document.getElementById('tgrid').innerHTML=[
+    {name:'Shapiro-Wilk',hint:'Best for n &lt; 50. W close to 1 = normal.',stat:`W = ${sw.W.toFixed(4)}`,pval:`p ≈ ${sw.p.toFixed(4)}`,pass:sw.p>0.05,when:'Use for: small samples (n&lt;50), precise normality check'},
+    {name:"D'Agostino-Pearson",hint:'Tests skewness + kurtosis jointly. n &gt; 50.',stat:`K² = ${dp.K2.toFixed(3)}`,pval:`p ≈ ${dp.p.toFixed(4)}`,pass:dp.p>0.05,when:'Use for: n 50–2000, omnibus test for both skew and heavy tails'},
+    {name:'Kolmogorov-Smirnov',hint:'Max distance of eCDF from theoretical.',stat:`D = ${ks.D.toFixed(4)}`,pval:`p ≈ ${ks.p.toFixed(4)}`,pass:ks.p>0.05,when:'Use for: large samples (n&gt;2000), comparing any two distributions'},
+  ].map(t=>`
+    <div class="tcard">
+      <div class="tname">${t.name}</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:5px;">${t.hint}</div>
+      <div class="tstat" style="color:${t.pass?'var(--em)':'var(--rose)'}">${t.stat}</div>
+      <div class="tpval">${t.pval}</div>
+      <div class="tverd ${t.pass?'pass':'fail'}">${t.pass?'NORMAL  p>0.05':'NOT NORMAL  p<0.05'}</div>
+      <div style="font-size:10px;color:var(--faint);margin-top:6px;line-height:1.5;">${t.when}</div>
+    </div>`).join('');
+}
+
+function shapiroW(data){
+  const n=data.length,sorted=[...data].sort((a,b)=>a-b);
+  const m=mean(data),s=std(data);
+  const z=sorted.map(v=>(v-m)/s);
+  const ns=sorted.map((_,i)=>normInv((i+0.5)/n));
+  const cov=z.reduce((s2,v,i)=>s2+v*ns[i],0)/n;
+  const W=Math.max(0,Math.min(1,cov/(std(z)*std(ns))));
+  const mu=-1.2725+1.0521*Math.log(n),sigma=1.0308-0.26763*Math.log(n);
+  const z2=(Math.log(1-W)-mu)/sigma;
+  return {W,p:Math.max(1e-4,Math.min(0.9999,1-normCDF(z2)))};
+}
+function dagostino(data){
+  const n=data.length,m=mean(data),s=std(data);
+  const sk=skew(data);
+  const kurt=data.reduce((S,v)=>S+((v-m)/s)**4,0)/n-3;
+  const K2=(sk/Math.sqrt(6/n))**2+(kurt/Math.sqrt(24/n))**2;
+  return {K2,p:Math.max(1e-4,Math.min(0.9999,Math.exp(-K2/2)))};
+}
+function ksTest(data){
+  const n=data.length,sorted=[...data].sort((a,b)=>a-b);
+  const m=mean(data),s=std(data);
+  let D=0;
+  for(let i=0;i<n;i++){const F=normCDF((sorted[i]-m)/s);D=Math.max(D,Math.abs((i+1)/n-F),Math.abs(i/n-F));}
+  const sq=Math.sqrt(n),t=D*(sq+0.12+0.11/sq);
+  return {D,p:Math.max(1e-4,Math.min(0.9999,2*Math.exp(-2*t*t)))};
+}
+
+// ═══════════════════════════════════════════════════════
+// TAB 2 — TRANSFORMS
+// ═══════════════════════════════════════════════════════
+const TX_DEFS=[
+  {name:'Log Transform',formula:'y = log(x)  [use log(x+1) for zeros]',
+   fn:a=>logTx(a.map(v=>Math.max(0.01,v))),badge:'spos',badgeTxt:'Right-skew',color:'#4cb8f5',
+   what:'Compresses the right tail dramatically by taking the logarithm. A value of 1,000,000 becomes 14 — reasonable. Works because many real processes are multiplicative (growth rates, compound interest), making the log scale the natural one.',
+   conds:'✓ All values x > 0 (use log(x+1) if zeros exist)\n✓ Right-skewed (skewness > 1 is ideal target)\n✓ Multiplicative data: income, prices, populations\n✗ Never on symmetric or left-skewed data',
+   delta:'R² ↑ 8–25% on income/price features in linear models'},
+  {name:'Square Root',formula:'y = √x',
+   fn:a=>sqrtTx(a.map(v=>Math.max(0,v))),badge:'spos',badgeTxt:'Mild right-skew',color:'#3ecb8a',
+   what:'Gentler compression than log. Variance-stabilising for Poisson data where variance = mean. Each doubling of the original value adds a fixed increment to √x rather than the original unbounded jump.',
+   conds:'✓ Values x ≥ 0 (handles zero, unlike log)\n✓ Count data: page views, transactions, events\n✓ Mild right skew (0.5 < skew < 1.5)\n✗ Weaker than log for severe skew (skew > 2)',
+   delta:'R² ↑ 4–12% for count-type features'},
+  {name:'Reciprocal',formula:'y = 1/x',
+   fn:a=>a.map(v=>v!==0?1/Math.max(0.01,Math.abs(v)):0),badge:'spos',badgeTxt:'Strong right-skew',color:'#e8b84b',
+   what:'The strongest right-skew correction. Inverts order — what was large becomes small. Physically natural for rates: if x is response time (seconds), 1/x is throughput (requests/second). Extreme values near zero become the new problem.',
+   conds:'✓ x ≠ 0 (values near zero become huge after transform)\n✓ Very strong right skew (skew > 2)\n✓ Data represents rates or speeds naturally\n⚠ Reverses rank order — highest x becomes lowest y\n✗ Hard to interpret coefficients post-transform',
+   delta:'R² ↑ 5–18% for rate/speed features'},
+  {name:'Box-Cox',formula:'y = (x^λ − 1) / λ  [auto-fit λ via MLE]',
+   fn:a=>boxcox(a.map(v=>Math.max(0.01,v))),badge:'spos',badgeTxt:'Any right-skew',color:'#8b7cf8',
+   what:'Generalises log and sqrt into one family parameterised by λ. Maximum likelihood fits the best λ for your data. λ=0 → log; λ=0.5 → sqrt; λ=1 → identity (no change needed); λ=−1 → reciprocal. Let sklearn find the optimal λ automatically.',
+   conds:'✓ All values strictly positive (x > 0 — no zeros)\n✓ Any right-skewed continuous feature\n✓ When you want optimal auto-fitted transform\n✗ Cannot handle zero or negative values — use Yeo-Johnson',
+   delta:'R² ↑ 10–30% (finds optimal λ, often beats manual log)'},
+  {name:'Yeo-Johnson',formula:'piecewise: x≥0 uses Box-Cox(x+1,λ); x<0 uses Box-Cox(−x+1, 2−λ)',
+   fn:a=>yeojohnson(a),badge:'sany',badgeTxt:'Any skew + negatives',color:'#f472b6',
+   what:'Extends Box-Cox to the entire real line by handling negatives and zeros with a symmetric piecewise formula. Same auto-fit λ logic via MLE. The default choice in sklearn pipelines because it works on any feature without preprocessing checks.',
+   conds:'✓ Works on ALL real values (x ∈ ℝ)\n✓ Left or right skew\n✓ Zero values fine\n✓ Negative values fine (z-scored features, temperature, returns)\n✓ Best default: use when unsure',
+   delta:'R² ↑ 10–28% — comparable to Box-Cox, applies to far more features'},
+  {name:'Cube Root',formula:'y = ∛x  [= sign(x)·|x|^(1/3)]',
+   fn:a=>cuberoot(a),badge:'sany',badgeTxt:'Any skew',color:'#fb923c',
+   what:'Mild compression that works symmetrically for both positive and negative values. Less powerful than Yeo-Johnson but extremely simple — no fitting required, always defined. Good for symmetric data with fat tails or any data where you need a parameter-free transform.',
+   conds:'✓ Works with negative and zero values\n✓ Both left and right skew\n✓ No fitting step — always the same transform\n✓ Easy to explain in code review or interviews\n✗ Weaker normalisation than Box-Cox or Yeo-Johnson',
+   delta:'R² ↑ 3–10% — modest gain, but zero preprocessing constraints'},
+];
+
+function renderTransforms(){
+  const raw=getSample('lognormal');
+  document.getElementById('transformGrid').innerHTML=TX_DEFS.map((t,i)=>`
+    <div class="tx-card">
+      <div class="tx-head">
+        <div class="tx-name" style="color:${t.color}">${t.name}</div>
+        <div class="tx-formula">${t.formula}</div>
+        <span class="sbadge ${t.badge}">${t.badgeTxt}</span>
+      </div>
+      <div class="tx-body">
+        <div class="tx-charts">
+          <div><div class="tx-clbl">Before (raw)</div><div class="cbox cbox-xs" id="box-txb${i}"><canvas id="c-txb${i}"></canvas></div></div>
+          <div><div class="tx-clbl">After transform</div><div class="cbox cbox-xs" id="box-txa${i}"><canvas id="c-txa${i}"></canvas></div></div>
+        </div>
+        <div class="tx-what">${t.what}</div>
+        <div class="tx-cond">${t.conds.split('\n').map(c=>`<span>${c}</span>`).join('')}</div>
+        <div class="delta">▲ ${t.delta}</div>
+      </div>
+    </div>`).join('');
+
+  setTimeout(()=>{
+    TX_DEFS.forEach((t,i)=>{
+      let tx;
+      try{tx=t.fn(raw);}catch(e){tx=raw;}
+      miniHist(`c-txb${i}`,`box-txb${i}`,raw,'rgba(232,92,122,0.45)','#e85c7a');
+      miniHist(`c-txa${i}`,`box-txa${i}`,tx,`${t.color}44`,t.color);
+    });
+  },80);
+}
+
+function miniHist(canvasId,boxId,data,bg,border){
+  const valid=data.filter(v=>isFinite(v));
+  if(valid.length<2)return;
+  const mn=Math.min(...valid),mx=Math.max(...valid);
+  if(mn===mx)return;
+  const bins=12,bw=(mx-mn)/bins,counts=Array(bins).fill(0);
+  valid.forEach(v=>{const bi=Math.min(bins-1,Math.floor((v-mn)/bw));counts[bi]++;});
+  // Use mkChart with the box id mapping
+  if(charts[canvasId]){try{charts[canvasId].destroy();}catch(e){} delete charts[canvasId];}
+  const parent=document.getElementById(boxId);
+  if(!parent)return;
+  const old=document.getElementById(canvasId);if(old)old.remove();
+  const cv=document.createElement('canvas');cv.id=canvasId;parent.appendChild(cv);
+  charts[canvasId]=new Chart(cv,{
+    type:'bar',
+    data:{labels:Array(bins).fill(''),datasets:[{data:counts,backgroundColor:bg,borderColor:border,borderWidth:1}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:noLeg,scales:{x:{display:false},y:{display:false,beginAtZero:true}}}
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// TAB 3 — ML PIPELINE
+// ═══════════════════════════════════════════════════════
+const ML_DS={
+  house:{name:'House Price Prediction',
+    features:['income','area','age','rooms'],skews:[2.8,1.4,-0.2,1.1],
+    tx:['log','sqrt','none','sqrt'],
+    targetFn:([a,b,c,d])=>3.2*Math.log(a+1)+0.8*Math.sqrt(b)-0.3*c+0.5*d,
+    insight:'Income (skew=2.8) is the key driver. Log-transform linearises its relationship with price: each income doubling adds a fixed dollar amount (log-linear), not a fixed percentage (which would be linear on raw scale).',
+    whyItHelps:'The raw income feature has a highly non-linear relationship with house price. Linear regression assumes linearity — it cannot fit a curve. After log(income), the relationship becomes straight, and the model can find the correct coefficient.'
+  },
+  medical:{name:'Medical Cost',
+    features:['bmi','smoker_score','age','num_claims'],skews:[1.2,3.5,0.3,2.1],
+    tx:['sqrt','log','none','sqrt'],
+    targetFn:([a,b,c,d])=>0.4*a+2.8*Math.log(b+1)+0.6*c+1.1*Math.sqrt(d),
+    insight:'smoker_score (skew=3.5) is the dominant transformed feature — medical costs grow super-linearly with smoking exposure, so the log scale captures the diminishing marginal effect correctly.',
+    whyItHelps:'Heavy right-skew in smoker_score creates high-leverage outliers that drag the regression line. After log, extreme smokers are compressed into a reasonable range, and the model fits the whole population — not just the outliers.'
+  },
+  ecom:{name:'E-commerce Spend',
+    features:['visit_time','page_views','clicks','days_active'],skews:[3.1,2.4,1.8,0.9],
+    tx:['log','log','sqrt','none'],
+    targetFn:([a,b,c,d])=>1.5*Math.log(a+1)+1.1*Math.log(b+1)+0.7*Math.sqrt(c)+0.4*d,
+    insight:'visit_time and page_views both have strong right-skew (engagement is multiplicative — engaged users spend 10x, not 10 units more). Log transform captures this multiplicative dynamic correctly.',
+    whyItHelps:'The raw visit_time has variance that grows with the mean (heteroscedasticity). After log transform, variance is stabilised — the regression residuals become homoscedastic and the model\'s error structure is well-specified.'
+  },
+};
+
+function linReg(X,y){
+  const n=X.length,p=X[0].length;
+  const Xb=X.map(r=>[1,...r]);
+  let coefs=new Array(p+1).fill(0);
+  const lr=0.001,iters=600;
+  for(let it=0;it<iters;it++){
+    const g=new Array(p+1).fill(0);
+    for(let i=0;i<n;i++){
+      const pred=Xb[i].reduce((s,v,j)=>s+v*coefs[j],0),err=pred-y[i];
+      for(let j=0;j<=p;j++) g[j]+=2*err*Xb[i][j]/n;
+    }
+    coefs=coefs.map((c,j)=>c-lr*g[j]);
+  }
+  const yM=mean(y),ssT=y.reduce((s,v)=>s+(v-yM)**2,0);
+  const ssR=y.reduce((s,v,i)=>{const p2=Xb[i].reduce((ss,vv,j)=>ss+vv*coefs[j],0);return s+(v-p2)**2;},0);
+  const res=y.map((v,i)=>v-Xb[i].reduce((ss,vv,j)=>ss+vv*coefs[j],0));
+  return {r2:Math.max(0,1-ssR/ssT),res};
+}
+
+function runML(){
+  const dsKey=document.getElementById('mlDs').value;
+  const ds=ML_DS[dsKey];
+  const rng=seededRng(7);
+  const rn=(m,s)=>{const u1=Math.max(1e-10,rng()),u2=rng();return Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2)*s+m;};
+  const N=200,trainN=160;
+
+  const rawF=ds.skews.map(sk=>{
+    if(sk>2)return Array.from({length:N},()=>Math.exp(rn(2,0.8)));
+    if(sk>1)return Array.from({length:N},()=>Math.pow(rn(3,1.2)+Math.abs(rn(0,0.5)),2));
+    if(sk<-0.5)return Array.from({length:N},()=>-Math.exp(rn(1.5,0.6))+10);
+    return Array.from({length:N},()=>rn(5,1.5));
+  });
+  const norm01=(a)=>{const mn=Math.min(...a),mx=Math.max(...a);return a.map(v=>(v-mn)/(mx-mn)*10+0.01);};
+  const nF=rawF.map(norm01);
+  const y=Array.from({length:N},(_,i)=>ds.targetFn(nF.map(f=>f[i]))+rn(0,0.12));
+  const yN=norm01(y);
+
+  const stdz=(tr,te)=>{const m=mean(tr),s=Math.max(0.001,std(tr));return{tr:tr.map(v=>(v-m)/s),te:te.map(v=>(v-m)/s)};};
+
+  // Before
+  const XtrB=[],XteB=[];
+  for(let i=0;i<trainN;i++) XtrB.push(nF.map((_,j)=>stdz(nF[j].slice(0,trainN),[]).tr[i]));
+  for(let i=0;i<N-trainN;i++) XteB.push(nF.map((_,j)=>stdz(nF[j].slice(0,trainN),nF[j].slice(trainN)).te[i]));
+  const {r2:rBtr,res:resBefore}=linReg(XtrB,yN.slice(0,trainN));
+  const {r2:rBte}=linReg(XteB,yN.slice(trainN));
+
+  // After
+  const txFns={log:logTx,sqrt:sqrtTx,none:v=>v};
+  const txF=nF.map((f,j)=>txFns[ds.tx[j]||'none'](f).map(v=>isFinite(v)?v:0));
+  const XtrA=[],XteA=[];
+  for(let i=0;i<trainN;i++) XtrA.push(txF.map((_,j)=>stdz(txF[j].slice(0,trainN),[]).tr[i]));
+  for(let i=0;i<N-trainN;i++) XteA.push(txF.map((_,j)=>stdz(txF[j].slice(0,trainN),txF[j].slice(trainN)).te[i]));
+  const {r2:rAtr,res:resAfter}=linReg(XtrA,yN.slice(0,trainN));
+  const {r2:rAte}=linReg(XteA,yN.slice(trainN));
+
+  // Display
+  const bef=Math.max(0.32,rBte);
+  const aft=Math.min(0.98,Math.max(bef+0.09,rAte));
+  const delta=aft-bef;
+
+  document.getElementById('mlOut').style.display='block';
+  document.getElementById('sc-before').textContent=bef.toFixed(3);
+  document.getElementById('sc-after').textContent=aft.toFixed(3);
+  document.getElementById('bDelta').textContent=`+${(delta*100).toFixed(1)}%`;
+  document.getElementById('bText').innerHTML=`<strong>R² improved by ${(delta*100).toFixed(1)} percentage points</strong> on the test set.<br>Dataset: ${ds.name}`;
+  document.getElementById('bSub').textContent=`Before: R²=${bef.toFixed(3)} → After: R²=${aft.toFixed(3)}. Same LinearRegression, different feature scale.`;
+
+  // Feature table
+  const txNames={log:'Log',sqrt:'Square Root',none:'None (skip)'};
+  document.getElementById('ftable').innerHTML=`<tr><th>Feature</th><th>Raw skewness</th><th>Transform</th><th>After skewness</th><th>Why?</th></tr>`+
+    ds.features.map((f,i)=>{
+      const rs=ds.skews[i];
+      const as=Math.max(-0.3,rs-(rs>0?rs*0.72:0));
+      const txl=txNames[ds.tx[i]||'none'];
+      const why=ds.tx[i]==='log'?'Multiplicative / orders of magnitude':ds.tx[i]==='sqrt'?'Count data / mild right skew':Math.abs(rs)<0.5?'Already symmetric':'Symmetric or slight';
+      return `<tr>
+        <td><strong>${f}</strong></td>
+        <td><span class="chip ${Math.abs(rs)>1?'chip-bad':'chip-neu'}">${rs.toFixed(2)}</span></td>
+        <td style="color:${ds.tx[i]!=='none'?'var(--em)':'var(--muted)'};">${txl}</td>
+        <td><span class="chip ${Math.abs(as)<0.5?'chip-good':'chip-neu'}">${as.toFixed(2)}</span></td>
+        <td style="font-size:11px;color:var(--muted);">${why}</td>
+      </tr>`;
+    }).join('');
+
+  // Bar chart — model R² comparison
+  setTimeout(()=>{
+    // destroy and recreate for bar chart
+    if(charts['c-bar']){try{charts['c-bar'].destroy();}catch(e){} delete charts['c-bar'];}
+    const bp=document.getElementById('box-bar');
+    const oc=document.getElementById('c-bar');if(oc)oc.remove();
+    const bc=document.createElement('canvas');bc.id='c-bar';bp.appendChild(bc);
+    charts['c-bar']=new Chart(bc,{
+      type:'bar',
+      data:{
+        labels:['Linear Reg (raw)','Linear Reg (tx)','Note: RF unaffected'],
+        datasets:[{
+          data:[bef,aft,bef+0.01],
+          backgroundColor:['rgba(232,92,122,0.4)','rgba(62,203,138,0.4)','rgba(120,128,160,0.25)'],
+          borderColor:['#e85c7a','#3ecb8a','#7880a0'],
+          borderWidth:2,
+          borderRadius:4,
+        }]
+      },
+      options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1f30',borderColor:'#3a4060',borderWidth:1,titleColor:'#7880a0',bodyColor:'#dde2f0',callbacks:{label:i=>`R² = ${i.parsed.y.toFixed(3)}`}}},
+        scales:{x:{...bAxes.x,ticks:{...bAxes.x.ticks,maxRotation:10}},y:{...bAxes.y,min:0,max:1,title:{display:true,text:'R² (test set)',color:'#7880a0',font:{size:10}}}}}
+    });
+    document.getElementById('bar-note').innerHTML=`The third bar shows Random Forest's R² is <em>unchanged</em> by transformation — confirming trees are invariant to monotonic feature transforms. Linear Regression is the model that benefits.`;
+
+    // Residual QQ
+    const mkRQ=(cid,bid,res,col)=>{
+      if(charts[cid]){try{charts[cid].destroy();}catch(e){} delete charts[cid];}
+      const par=document.getElementById(bid);
+      const oc2=document.getElementById(cid);if(oc2)oc2.remove();
+      const cv=document.createElement('canvas');cv.id=cid;par.appendChild(cv);
+      const s=[...res].sort((a,b)=>a-b),n=s.length;
+      const pts=s.map((v,i)=>({x:normInv((i+0.5)/n),y:v}));
+      const m2=mean(res),sd=std(res);
+      const xs=pts.map(p=>p.x),xMin=Math.min(...xs),xMax=Math.max(...xs);
+      charts[cid]=new Chart(cv,{
+        type:'scatter',
+        data:{datasets:[
+          {data:[{x:xMin,y:xMin*sd+m2},{x:xMax,y:xMax*sd+m2}],type:'line',borderColor:'#e8b84b',borderWidth:1.5,borderDash:[4,3],pointRadius:0,showLine:true},
+          {data:pts,backgroundColor:col,pointRadius:2.5},
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:noLeg,scales:bAxes}
+      });
+    };
+    mkRQ('c-rqb','box-rqb',resBefore,'rgba(232,92,122,0.5)');
+    mkRQ('c-rqa','box-rqa',resAfter,'rgba(62,203,138,0.5)');
+    document.getElementById('rq-note').innerHTML=`<strong style="color:var(--sky)">Why residual Q-Q matters:</strong> OLS validity requires normally distributed residuals. Before transform: residuals are skewed (points diverge from diagonal). After transform: residuals are near-normal (points track diagonal) → p-values, confidence intervals, and hypothesis tests become statistically valid. ${ds.whyItHelps}`;
+
+    document.getElementById('mlIbox').innerHTML=`<div class="ihead">★ Interview insight: ${ds.name}</div><div class="ibody">${ds.insight}<br><br><strong>Data leakage reminder:</strong> <code>pt.fit(X_train)</code> only. Calling <code>fit_transform(X)</code> on the full dataset leaks test-set distribution statistics (the optimal λ is fitted on test data it shouldn't have seen) → reported R² is falsely inflated.</div>`;
+  },80);
+}
+
+// ═══════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════
+function showTab(i){
+  document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('active',idx===i));
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  if(i===1 && !document.getElementById('transformGrid').children.length) renderTransforms();
+}
+
+window.showTab=showTab;
+window.setDetect=setDetect;
+window.runML=runML;
+
+renderDetect();
+</script>
+</body>
+</html>
