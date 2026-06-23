@@ -62,7 +62,7 @@ public class Main {
 
 
 
-![[04_DSA/04_Sorting/visual/BSI.excelidraw.md#^frame=Qzr9AYh0xhNMRhNriSTEd|700]]
+![[04_DSA/04_Sorting/visual/BSI.excalidraw.md#^frame=Qzr9AYh0xhNMRhNriSTEd|700]]
 
 ---
 
@@ -124,7 +124,7 @@ public class Main {
 
 
 
-![[04_DSA/04_Sorting/visual/BSI.excelidraw.md#^frame=rpS2D6w2_nm4nHsMhZGId|700]]
+![[04_DSA/04_Sorting/visual/BSI.excalidraw.md#^frame=rpS2D6w2_nm4nHsMhZGId|700]]
 
 ---
 

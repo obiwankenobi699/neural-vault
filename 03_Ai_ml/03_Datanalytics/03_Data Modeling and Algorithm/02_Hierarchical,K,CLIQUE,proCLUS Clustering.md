@@ -9,7 +9,7 @@ updated:
 ---
 
 
-> **Subject:** {{Subject}}  
+> **Subject:** Data Analytics  
 > **Topic Type:** Concept / Process / Architecture / Example  
 > **Related Topics:** 
 ---

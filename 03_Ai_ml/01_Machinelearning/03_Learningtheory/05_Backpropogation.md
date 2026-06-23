@@ -10,7 +10,7 @@ updated:
 ---
 
 
-> **Subject:** {{Subject}}  
+> **Subject:** Machine Learning  
 > **Topic Type:** Concept / Process / Architecture / Example  
 > **Related Topics:** 
 ---

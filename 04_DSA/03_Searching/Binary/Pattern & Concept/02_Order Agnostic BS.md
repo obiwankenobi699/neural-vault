@@ -1,6 +1,6 @@
 ---
 title: 02_Order Agnostic BS
-tags: [coding, {{Language}}, {{Topic}}, notes]
+tags: [coding, Java, Searching, notes]
 created: 2026-02-23
 updated: 2026-02-23
 ---

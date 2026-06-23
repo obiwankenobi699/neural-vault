@@ -11,7 +11,7 @@ updated:
 
 # 🧠 01_Inductive Biase and infrence
 
-> **Subject:** {{Subject}}  
+> **Subject:** Machine Learning  
 > **Topic Type:** Concept / Process / Architecture / Example  
 > **Related Topics:** 
 

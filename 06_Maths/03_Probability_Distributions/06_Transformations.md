@@ -66,12 +66,12 @@ Neural networks with batch normalisation are largely robust to input scale issue
 
 ## Summary
 
-| Transform | Use Case | Constraint |
-|-----------|----------|------------|
-| Log | Right-skewed, positive data | x > 0 |
-| Log1p | Same, but with zeros | x ≥ 0 |
-| Square Root | Count data, mild skew | x ≥ 0 |
-| Box-Cox | Optimal power transform | x > 0 |
-| Yeo-Johnson | Optimal, handles negatives | No constraint |
+| Transform   | Use Case                    | Constraint    |
+| ----------- | --------------------------- | ------------- |
+| Log         | Right-skewed, positive data | x > 0         |
+| Log1p       | Same, but with zeros        | x ≥ 0         |
+| Square Root | Count data, mild skew       | x ≥ 0         |
+| Box-Cox     | Optimal power transform     | x > 0         |
+| Yeo-Johnson | Optimal, handles negatives  | No constraint |
 
 Proceed to `04_Statistical_Inference/01_Confidence_Intervals.md`.

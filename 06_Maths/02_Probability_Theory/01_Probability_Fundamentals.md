@@ -63,3 +63,58 @@ The Naive Bayes classifier assumes all features are conditionally independent gi
 ## Interview Questions
 
 What is the difference between independent and mutually exclusive events? Can two events be both mutually exclusive and independent? Define conditional probability and give a real-world example. What is Bayes' theorem and where is it used in ML?
+
+
+### Scenario A: Remove 51 cards, never look at any of them
+
+There is 1 card left on the table.
+
+You ask:
+
+> "What is the probability that the last remaining card is the Ace of Spades?"
+
+The answer is still:
+
+$$
+152\frac{1}{52}521​
+$$
+
+Why?
+
+Because from your perspective, the Ace could have been any of the 52 original positions. You have not learned anything. The last card is just one particular position out of 52.
+
+---
+
+### Scenario B: Reveal 51 cards and none is the Ace
+
+Now you've learned a lot.
+
+You know:
+
+- The Ace is not card 1
+- Not card 2
+- ...
+- Not card 51
+
+Only one possibility remains:
+
+$$
+P(last card is Ace)=1P(\text{last card is Ace}) = 1P(last card is Ace)=1
+$$
+
+or
+
+$$
+11\frac{1}{1}11​
+$$
+
+---
+
+This is a classic example of how **probability depends on information**.
+
+The physical situation can be identical (one card left), but your probability differs:
+
+| Information available          | Probability last card is Ace |
+| ------------------------------ | ---------------------------- |
+| 51 cards removed, unseen       | 1/521/521/52                 |
+| 51 cards revealed, none is Ace | 111                          |

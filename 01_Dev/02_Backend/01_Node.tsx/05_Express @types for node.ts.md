@@ -10,8 +10,8 @@ updated: 2025-11-02
 # 🚀 05_Express for node.ts
 
 > **Framework / Library:** Express.js  
-> **Language:** {{Language}}  
-> **Category:** {{Category}}  
+> **Language:** TypeScript  
+> **Category:** Backend  
 > **Level:** Beginner / Intermediate / Advanced
 
 ---

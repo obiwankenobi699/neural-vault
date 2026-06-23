@@ -8,7 +8,7 @@ updated: 2025-11-05
 ---
 
 
-> **Subject:** {{Subject}}  
+> **Subject:** Database (MongoDB)  
 > **Topic Type:** Concept / Process / Architecture / Example  
 > **Related Topics:** 
 Excellent 🔥 — this is one of those topics that separates a **junior dev** from a **real backend engineer**.

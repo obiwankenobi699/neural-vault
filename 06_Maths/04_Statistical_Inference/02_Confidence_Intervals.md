@@ -42,13 +42,210 @@ ci = (x_bar - z_star * se, x_bar + z_star * se)
 print(f"95% CI: {ci}")
 ```
 
+
+
+$$
+CI=xˉ±zα/2​n​σ​
+$$
+
+
+Let's connect **α (alpha)**, **Z**, and **Confidence Interval (CI)** in one picture.
+
+### Step 1: Start with the confidence level
+
+Suppose the question says:
+
+> Construct a **95% confidence interval**.
+
+That means:
+
+$$
+[  
+1-\alpha = 0.95  
+]
+$$
+
+So:
+
+$$
+[  
+\alpha = 1 - 0.95 = 0.05  
+]
+$$
+
+The total area outside the interval is 5%.
+
+---
+
+### Step 2: Split α into two tails
+
+For a two-sided confidence interval:
+
+$$
+[  
+\alpha/2 = 0.025  
+]
+$$
+
+So the normal curve looks like:
+
+```text
+ 2.5%        95%         2.5%
+<----|================|---->
+```
+
+The middle 95% is what we want to keep.
+
+---
+
+### Step 3: Find the Z-value
+
+We need the Z-score that leaves 2.5% in the right tail.
+
+That Z-score is:
+
+$$
+[  
+z = 1.96  
+]
+$$
+
+because:
+
+$$
+[  
+P(Z < 1.96) = 0.975  
+]
+$$
+
+and
+
+$$
+[  
+1 - 0.975 = 0.025  
+]
+$$
+
+So for 95% confidence:
+
+```text
+       95%
+<------|=======|------>
+      -1.96   1.96
+```
+
+The numbers (-1.96) and (1.96) are the **critical Z-values**.
+
+---
+
+### Step 4: Use Z in the confidence interval formula
+
+$$
+[  
+CI = \bar{x} \pm z\frac{\sigma}{\sqrt{n}}  
+]
+$$
+
+$$
+\bar{x}\pm z\frac{\sigma}{\sqrt{n}}
+$$
+
+Suppose:
+
+$$
+- (\bar{x}=75)
+$$
+    
+$$
+- (\sigma=10)
+$$
+    
+- (n=100)
+    
+
+Standard error:
+$$
+
+[  
+\frac{10}{\sqrt{100}}=1  
+]
+$$
+
+Margin of error:
+
+$$
+[  
+1.96 \times 1 = 1.96  
+]
+$$
+
+Confidence interval:
+
+$$
+[  
+75 \pm 1.96  
+]
+$$
+
+$$
+[  
+(73.04,;76.96)  
+]
+$$
+
+---
+
+### The whole flow
+
+```text
+Confidence Level
+       ↓
+    95%
+       ↓
+α = 0.05
+       ↓
+α/2 = 0.025
+       ↓
+Find Z from table
+       ↓
+Z = 1.96
+       ↓
+CI = x̄ ± Z × SE
+       ↓
+(73.04, 76.96)
+```
+
+### What to memorize
+
+For most exams and beginner data science:
+
+|Confidence|α|Z|
+|---|---|---|
+|90%|0.10|1.645|
+|95%|0.05|1.96|
+|99%|0.01|2.576|
+
+You usually don't calculate Z manually. You either:
+
+- remember these common values, or
+    
+- look them up in a Z-table/software.
+    
+
+The key idea is:
+
+> **Confidence level → α → Z-value → Margin of Error → Confidence Interval**.
+
+
 ## T-Procedure (Population Sigma Unknown)
 
 In practice sigma is almost never known. You estimate it from the sample using s (sample standard deviation with ddof=1). When sigma is unknown you use the t-distribution instead of the standard normal.
 
 The t-distribution has heavier tails than the normal distribution, accounting for the additional uncertainty from estimating sigma. Its shape depends on degrees of freedom = n - 1. As n increases, the t-distribution converges to the standard normal.
 
+$$
 CI = x-bar plus or minus t-star times s/sqrt(n)
+$$
 
 ```python
 from scipy import stats
